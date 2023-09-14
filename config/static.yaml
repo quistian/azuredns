@@ -1,0 +1,473 @@
+manager:
+  include_meta: false
+  max_workers: 2
+providers:
+  azure:
+    class: octodns_azure.AzurePrivateProvider
+    client_id: env/AZURE_APPLICATION_ID
+    directory_id: env/AZURE_DIRECTORY_ID
+    key: env/AZURE_AUTHENTICATION_KEY
+    resource_group: Q9011ADCO-CC-PvDNS-RG01
+    sub_id: env/AZURE_SUBSCRIPTION_ID
+  config:
+    class: octodns.provider.yaml.YamlProvider
+    default_ttl: 3600
+    directory: ./qa-zones
+    enforce_order: true
+zones:
+  canadacentral.privatelink.afs.azure.net.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  canadacentral.privatelink.azurecr.io.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  canadaeast.privatelink.afs.azure.net.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink-global.wvd.microsoft.com.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.adf.azure.com.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.agentsvc.azure-automation.net.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.analysis.windows.net.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.api.azureml.ms.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.azconfig.io.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.azure-api.net.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.azure-automation.net.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.azure-devices-provisioning.net.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.azure-devices.net.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.azurecr.io.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.azuredatabricks.net.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.azurehdinsight.net.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.azuresynapse.net.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.azurewebsites.net.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.blob.core.windows.net.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.canadacentral.azmk8s.io.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.canadacentral.batch.azure.com.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.canadacentral.kusto.windows.net.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.canadaeast.azmk8s.io.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.canadaeast.batch.azure.com.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.canadaeast.kusto.windows.net.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.cassandra.cosmos.azure.com.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.cnc.backup.windowsazure.com.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.cne.backup.windowsazure.com.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.cognitiveservices.azure.com.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.database.windows.net.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.datafactory.azure.net.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.dev.azuresynapse.net.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.dfs.core.windows.net.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.dicom.azurehealthcareapis.com.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.digitaltwins.azure.net.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.directline.botframework.com.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.documents.azure.com.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.eventgrid.azure.net.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.fhir.azurehealthcareapis.com.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.file.core.windows.net.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.gremlin.cosmos.azure.com.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.guestconfiguration.azure.com.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.his.arc.azure.com.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.kubernetesconfiguration.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.managedhsm.azure.net.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.mariadb.database.azure.com.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.media.azure.net.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.mongo.cosmos.azure.com.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.monitor.azure.com.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.mysql.database.azure.com.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.notebooks.azure.net.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.ods.opinsights.azure.com.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.oms.opinsights.azure.com.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.openai.azure.com.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.pbidedicated.windows.net.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.postgres.database.azure.com.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.prod.migration.windowsazure.com.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.purview.azure.com.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.purviewstudio.azure.com.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.queue.core.windows.net.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.redis.cache.windows.net.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.redisenterprise.cache.azure.net.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.search.windows.net.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.service.signalr.net.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.servicebus.windows.net.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.siterecovery.windowsazure.com.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.sql.azuresynapse.net.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.table.core.windows.net.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.table.cosmos.azure.com.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.tip1.powerquery.microsoft.com.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.token.botframework.com.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.vaultcore.azure.net.:
+    lenient: false
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.web.core.windows.net.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.workspace.azurehealthcareapis.com.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  privatelink.wvd.microsoft.com.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure
+  scm.privatelink.azurewebsites.net.:
+    lenient: true
+    sources:
+    - config
+    targets:
+    - azure

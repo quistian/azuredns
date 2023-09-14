@@ -1,0 +1,38 @@
+---
+manager:
+  include_meta: True
+  max_workers: 2
+
+providers:
+  config:
+    class: octodns.provider.yaml.YamlProvider
+    directory: ./bc-zones
+    default_ttl: 3600
+    enforce_order: True
+  bc:
+    class: octodns_bind.AxfrSource
+    host: ans3.utoronto.ca
+    port: 53
+    ipv6: false
+    timeout: 15
+  azure:
+    class: octodns_azure.AzurePrivateProvider
+    client_id: env/AZURE_APPLICATION_ID
+    key: env/AZURE_AUTHENTICATION_KEY
+    directory_id: env/AZURE_DIRECTORY_ID
+    sub_id: env/AZURE_SUBSCRIPTION_ID
+    resource_group: Q9011ADCO-CC-PvDNS-RG01
+  cloudflare:
+    class: octodns_cloudflare.CloudflareProvider
+    email: env/CLOUDFLARE_EMAIL
+    token: env/CLOUDFLARE_TOKEN
+
+zones:
+  # This is a dynamic config
+  # config will be set up with a list of files
+  # and will match
+  '*':
+    sources:
+      - bc
+    targets:
+      - config

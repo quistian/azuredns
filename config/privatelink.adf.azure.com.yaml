@@ -1,0 +1,16 @@
+---
+bozo:
+  ttl: 300
+  type: A
+  value: 10.141.1.1
+henry:
+  ttl: 600
+  type: A
+  value: 10.141.2.2
+info:
+  type: TXT
+  value: This is a very bad piece of literature
+octodns-meta:
+  ttl: 60
+  type: TXT
+  value: provider=config

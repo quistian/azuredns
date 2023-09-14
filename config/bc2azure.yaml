@@ -1,0 +1,25 @@
+---
+manager:
+  include_meta: False
+  max_workers: 2
+
+providers:
+  azure:
+    class: octodns_azure.AzurePrivateProvider
+    client_id: env/AZURE_APPLICATION_ID
+    key: env/AZURE_AUTHENTICATION_KEY
+    directory_id: env/AZURE_DIRECTORY_ID
+    sub_id: env/AZURE_SUBSCRIPTION_ID
+    resource_group: Q9011ADCO-CC-PvDNS-RG01
+  config:
+    class: octodns.provider.yaml.YamlProvider
+    directory: ./bc-zones
+    default_ttl: 3600
+    enforce_order: True
+
+zones:
+  privatelink.adf.azure.com.:
+    sources:
+      - config
+    targets:
+      - azure
