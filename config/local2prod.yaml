@@ -27,454 +27,454 @@ zones:
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   canadacentral.privatelink.azurecr.io.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   canadaeast.privatelink.afs.azure.net.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink-global.wvd.microsoft.com.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.adf.azure.com.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.agentsvc.azure-automation.net.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.analysis.windows.net.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.api.azureml.ms.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.azconfig.io.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.azure-api.net.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.azure-automation.net.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.azure-devices-provisioning.net.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.azure-devices.net.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.azurecr.io.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.azuredatabricks.net.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.azurehdinsight.net.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.azuresynapse.net.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.azurewebsites.net.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.blob.core.windows.net.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.canadacentral.azmk8s.io.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.canadacentral.batch.azure.com.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.canadacentral.kusto.windows.net.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.canadaeast.azmk8s.io.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.canadaeast.batch.azure.com.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.canadaeast.kusto.windows.net.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.cassandra.cosmos.azure.com.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
-  privatelink.cnc.backup.windowsazure-qa.com.:
+    - azure-prod
+  privatelink.cnc.backup.windowsazure-prod.com.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
-  privatelink.cne.backup.windowsazure-qa.com.:
+    - azure-prod
+  privatelink.cne.backup.windowsazure-prod.com.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.cognitiveservices.azure.com.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.database.windows.net.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.datafactory.azure.net.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.dev.azuresynapse.net.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.dfs.core.windows.net.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.dicom.azurehealthcareapis.com.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.digitaltwins.azure.net.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.directline.botframework.com.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.documents.azure.com.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.eventgrid.azure.net.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.fhir.azurehealthcareapis.com.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.file.core.windows.net.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.gremlin.cosmos.azure.com.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.guestconfiguration.azure.com.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.his.arc.azure.com.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.kubernetesconfiguration.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.managedhsm.azure.net.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.mariadb.database.azure.com.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.media.azure.net.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.mongo.cosmos.azure.com.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.monitor.azure.com.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.mysql.database.azure.com.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.notebooks.azure.net.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.ods.opinsights.azure.com.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.oms.opinsights.azure.com.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.openai.azure.com.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.pbidedicated.windows.net.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.postgres.database.azure.com.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
-  privatelink.prod.migration.windowsazure-qa.com.:
+    - azure-prod
+  privatelink.prod.migration.windowsazure-prod.com.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.purview.azure.com.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.purviewstudio.azure.com.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.queue.core.windows.net.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.redis.cache.windows.net.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.redisenterprise.cache.azure.net.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.search.windows.net.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.service.signalr.net.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.servicebus.windows.net.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
-  privatelink.siterecovery.windowsazure-qa.com.:
+    - azure-prod
+  privatelink.siterecovery.windowsazure-prod.com.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.sql.azuresynapse.net.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.table.core.windows.net.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.table.cosmos.azure.com.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.tip1.powerquery.microsoft.com.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.token.botframework.com.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.vaultcore.azure.net.:
     lenient: false
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.web.core.windows.net.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.workspace.azurehealthcareapis.com.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   privatelink.wvd.microsoft.com.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
   scm.privatelink.azurewebsites.net.:
     lenient: true
     sources:
     - config
     targets:
-    - azure-qa
+    - azure-prod
