@@ -22,8 +22,20 @@ Debug = False
 
 """ Higher level functions interacting with the BC API """
 
-# Normalize and merges BC data and returns a yaml/json structure for each of QA and PROD
+def has_subzones(zone):
+# ent: [{'id': 2865570, 'name': 'privatelink', 'type': 'Zone', 'properties': {'absoluteName': 'privatelink.openai.azure.com'}}]
+    zone_ent = api.get_zones_by_hint(zone)
+    zone_ent_id = zone_ent[0]['id']
+    sub_ents = api.get_entities(zone_ent_id, api.Z_Type)
+    if len(sub_ents):
+        return True
+    else:
+        return False
 
+def is_leaf(zone):
+    return not has_subzones(zone)
+
+# Normalize and merges BC data and returns a yaml/json structure for each of QA and PROD
 
 def normalize(zone):
     qa_yaml = dict()
@@ -66,15 +78,16 @@ def normalize(zone):
                     )
     return (qa_yaml, prod_yaml)
 
-
 # Return local yaml zone data as json
-
 
 def get_yaml_file(fname):
     with open(fname, "r") as fd:
         data = yaml.load(fd, Loader=SafeLoader)
     return data
 
+#
+# returns all defined HRID numbers
+#
 
 def get_hr_nums():
     hrids = []
@@ -100,16 +113,13 @@ def get_hr_nums():
     except psycopg2.Error as e:
         print(f"Database error: {e.pgerror}")
 
-
 #    conn = psycopg2.conn(dbname='obm', user='eng_ro_api', password='w7NDGTzm')
 
-
-def gen_azure_zones():
+def get_azure_zones():
     fname = f"{config.Path}/azure-resource-names.json"
     with open(fname) as fd:
         azones = json.load(fd)
     return azones
-
 
 def get_active_hrids():
     leafs = []
@@ -120,28 +130,47 @@ def get_active_hrids():
         leafs.append(f"{h:03}")
     return leafs
 
+# get all leaf_zones for active Azure HRIDS
 
 def get_leaf_zones():
     leafs = []
-    #   hrids = get_hr_nums()
-    fname = f"{config.Path}/hrids.json"
-    with open(fname, "r") as fd:
-        hrids = json.load(fd)
-    resources = gen_azure_zones()
+    hrids = get_active_hrids()
+    resources = get_azure_zones()
     for r in resources:
         for h in hrids:
             leafs.append(f"{h:03}.{r}")
     return leafs
 
+# returns the Zone Entity ID for a given Zone
+
+def get_zone_id(zone):
+    Iterative = False
+    if not Iterative:
+        return zone_exists(zone)
+    else:
+        toks = zone.split(".")
+        toks.reverse()
+        pid = config.ViewId
+        for tok in toks:
+            ents = api.get_entities(pid, Z_Type, 0, 999)
+            if config.Debug:
+                print(f'\nSubdomain: {tok}\n Child Entities')
+                pprint(ents)
+            cid = pid
+            for ent in ents:
+                if ent["name"] == tok:
+                    cid = ent["id"]
+                    break
+            pid = cid
+        return pid
 
 def print_leaf_zones():
-    leaves = gen_leaf_zones()
+    leaves = get_leaf_zones()
     for leaf in leaves:
         print(leaf)
 
-
 def create_leaf_zones():
-    leafs = gen_leaf_zones()
+    leafs = get_leaf_zones()
     cnt = len(leafs)
     pbar = ProgressBar(widgets=[Percentage(), Bar()], maxval=cnt).start()
     for i in range(cnt):
@@ -149,9 +178,8 @@ def create_leaf_zones():
         pbar.update(i + 1)
     pbar.finish()
 
-
 def create_test_A_records():
-    for zone in gen_leaf_zones():
+    for zone in get_leaf_zones():
         subnet = "10.141"
         b1 = random.randrange(1, 254, 1)
         b2 = random.randrange(1, 254, 1)
@@ -161,7 +189,6 @@ def create_test_A_records():
         fqdn = f"{hname}.{zone}"
         add_A_RR(fqdn, ip)
 
-
 def get_tlds(zones):
     tlds = []
     for z in zones:
@@ -170,9 +197,8 @@ def get_tlds(zones):
             tlds.append(tks[-1])
     return tlds
 
-
 def create_azure_zones():
-    azones = gen_azure_zones()
+    azones = get_azure_zones()
     cnt = len(azones)
     pbar = ProgressBar(widgets=[Percentage(), Bar()], maxval=cnt).start()
     for i in range(cnt):
@@ -181,9 +207,7 @@ def create_azure_zones():
         pbar.update(i + 1)
     pbar.finish()
 
-
 # create a Zone if it does not exist in a recursive way
-
 
 def create_zone_in_an_iterative_manner(zone):
     toks = zone.split(".")
@@ -199,7 +223,7 @@ def create_zone_in_an_iterative_manner(zone):
                 cid = ent["id"]
                 break
         if cid == pid:
-            apient = APIEntity(name=tok, type=Z_Type, properties=Z_Props)
+            apient = api.APIEntity(name=tok, type=Z_Type, properties=Z_Props)
             cid = api.add_entity(pid, apient)
             e = api.get_entity_by_id(cid)
             if Debug:
@@ -207,23 +231,40 @@ def create_zone_in_an_iterative_manner(zone):
         pid = cid
 
 
+# create cnamne inclusion file for unbound
+
+def get_cname_rrs():
+    for zone in get_azure_zones():
+        rrs = get_bc_azure_zone(zone)
+        for hname in rrs:
+            lname = hname.lower()
+            priv_fqdn = f'{lname}.{zone}'
+            toks = priv_fqdn.split(".")
+            toks.pop(1)
+            if toks[0] == 'vaultcore':
+                toks[0] = 'vault'
+            pub_fqdn = ".".join(toks)
+            ip = rrs[hname]['values'][0]
+            print(f'local-data: "{pub_fqdn}. CNAME {priv_fqdn}."')
+
 # gets a BC Azure zone, with all its associated HRIS leaf sub zone RRs
 # data able to be converted to json or yaml
+# return the merged data
 
-
-def get_bc_azure_zone(zone):
+def get_merged_bc_azure_zone(zone):
     zone_rrs = dict()
-    data = api.get_zones_by_hint(zone)
-    # ent: [{'id': 2865570, 'name': 'privatelink', 'type': 'Zone', 'properties': {'absoluteName': 'privatelink.openai.azure.com'}}]
-    if config.Debug:
-        print()
-        print(f"zone: {zone}\nent: {data}")
-    if len(data):
+    if has_subzones(zone):
+        data = api.get_zones_by_hint(zone)
+# ent: [{'id': 2865570, 'name': 'privatelink', 'type': 'Zone', 'properties': {'absoluteName': 'privatelink.openai.azure.com'}}]
+        if config.Debug:
+            print(f"\nzone: {zone}\nent: {data}")
         pid = data[0]["id"]
         leaf_zone_ents = api.get_entities(pid, api.Z_Type)
+        if config.Debug:
+            print(f"\nsubzones of {zone}:")
+            print(f"entities: {leaf_zone_ents}")
         if len(leaf_zone_ents):
             if config.Debug:
-                print()
                 print(f"There are {len(leaf_zone_ents)} Leaf zones of {zone}:")
                 print(leaf_zone_ents)
             for ent in leaf_zone_ents:
@@ -231,24 +272,35 @@ def get_bc_azure_zone(zone):
                 leaf_fqdn = ent["properties"]["absoluteName"]
                 rrs = get_leaf_zone_rrs(leaf_pid)
                 if len(rrs):
-                    if config.Debug:
-                        print()
-                        print(f"RRs for leaf zone: {leaf_fqdn}:")
-                        print(rrs)
-                    zone_rrs[leaf_fqdn] = rrs
-        else:
-            zone_rrs = get_leaf_zone_rrs(ent_id)
+                    for nm in rrs:
+                        zone_rrs[nm] = rrs[nm]
+
     else:
-        return f"No such zone: {zone}"
-    if config.Debug:
-        print()
-        print(f"Data Dictionary for zone: {zone} of length {len(zone_rrs)}")
-        print(zone_rrs)
+        print(f'Can not merge the leaf zone: {zone}')
     return zone_rrs
 
+def get_leaf_bc_azure_zone(zone):
+    rrs = dict()
+    if is_leaf(zone):
+        data = api.get_zones_by_hint(zone)
+        rrs = get_leaf_zone_rrs(data[0]['id'])
+    else:
+        print(f'{zone} is not a leaf zone')
+    return rrs
+
+def get_leaf_names(zone):
+    subzones = list()
+    if has_subzones(zone):
+        data = api.get_zones_by_hint(zone)
+        ents = api.get_entities(data[0]['id'], api.Z_Type)
+        for ent in ents:
+            subzones.append(ent['name'])
+    else:
+        print(f'{zone} has no leaf or subzones')
+    return subzones
 
 # get rrs from a leaf zone in yaml format
-
+# given the parent ID for a leaf zone
 
 def get_leaf_zone_rrs(pid):
     rrs = dict()
@@ -259,6 +311,16 @@ def get_leaf_zone_rrs(pid):
         rrs[name] = {"type": "A", "values": [ip]}
     return rrs
 
+# gets the FQDNs for a given zone, for all HRID subzones under it
+# returns a dictionary of { fqdn: A record IP }
+
+def get_zone_fqdns(zone):
+    rrs = dict()
+    zid = get_zone_id(zone)
+    leaf_ents = api.get_entities(zid, Z_type, 0, 999)
+    for ent in leaf_ents:
+        leaf_id = ent['id']
+        rr_ents = apt.get_entities(leaf_id, api.RR_type)
 
 def add_zone_if_new(zone):
     data = api.get_zones_by_hint(zone)
@@ -272,9 +334,7 @@ def add_zone_if_new(zone):
         zone_id = data[0]["id"]
     return zone_id
 
-
 # return entity Id if zone exists
-
 
 def zone_exists(zone):
     data = api.get_zones_by_hint(zone)
@@ -283,7 +343,90 @@ def zone_exists(zone):
     else:
         return False
 
+# adds an Azure record in the proper BlueCat Location
 
+def add_A_rr(fqdn, ip):
+    toks = fqdn.split(".")
+    host = toks.pop(0)
+    zone = ".".join(toks)
+    if not legit_hostname(host):
+        print(f'{host} is not an Azure qualified host name')
+    elif zone not in get_azure_zones():
+        print(f'{zone} is not an Azure resource/zone name')
+    else:
+        hrnum = host[1:4]
+        leaf_zone = f'{hrnum}.{zone}'
+        if zone_exists(leaf_zone):
+            rrs = get_leaf_bc_azure_zone(leaf_zone)
+            if host in rrs.keys():
+                print(f'{fqdn} already has an A record')
+            else:
+                a_rr_entity = api.apientity(host, ip)
+                zid = get_zone_id(leaf_zone)
+                eid = api.add_entity(zid, a_rr_entity)
+                print(f'Added A record for {fqdn} at {leaf_zone} with value {ip}')
+        else:
+            print(f'Leaf zone: {leaf_zone} does not yet exist')
+
+#
+# input does not include the leaf zone in the format
+# deletes a specific A record from BC leaf zone
+# e.g q301_test.privatelink.openai.azure.com
+#     will delete q301_test.301.privatelink.openai.azure.com if it exists
+
+def del_A_rr(fqdn, ip):
+    if config.Debug:
+        print(f'To delete: {fqdn}')
+    toks = fqdn.split(".")
+    host = toks.pop(0)
+    zone = ".".join(toks)
+    if not legit_hostname(host):
+        print(f'{host} is not an Azure qualified host name')
+    elif zone not in get_azure_zones():
+        print(f'{zone} is not an Azure resource/zone name')
+    else:
+        hrnum = host[1:4]
+        leaf_zone = f'{hrnum}.{zone}'
+        zid = zone_exists(leaf_zone)
+        if zid:
+            rr_ents = api.get_entities(zid, api.RR_Type)
+            found = False
+            for rr_ent in rr_ents:
+                if host == rr_ent['name']:
+                    found = True
+                    api.delete_entity(rr_ent['id'])
+                    print(f'Deleted A record {fqdn} which was in {leaf_zone}')
+                    break
+            if not found:
+                print(f'There are no {fqdn} A records in the leaf zone: {leaf_zone}')
+           
+        else:
+            print(f'No leaf zone: {leaf_zone} corresponds to {fqdn}')
+
+# output RRs in a form easily adapted to opencli arguments
+# takes yaml format as input
+
+def fmt(zone, data):
+    fdata = dict()
+    for hname in data:
+        hris_num = hname[1:4]
+        fqdn = f'{hname}.{hris_num}.{zone}'
+        ip = data[hname]['values'][0]
+        fdata[fqdn] = ip
+    return fdata
+
+def legit_hostname(name):
+    lname = name.lower()
+    fchars = "qapn"
+    l = len(lname)
+    if l < 4:
+        return False
+    if lname[0] not in "qapn":
+        return False
+    if not lname[1:4].isnumeric:
+        return False
+    return True
+    
 def delete_zone(zone):
     deleted = False
     ents = api.get_entities(config.ViewId, Z_Type)
@@ -317,38 +460,13 @@ Fetch an RR entity given a type, and property
 
 """
 
-
-def add_A_RR(fqdn, ip):
-    toks = fqdn.split(".")
-    hname = toks[0]
-    a_rr_entity = api.apientity(hname, ip)
-    zone = ".".join(toks[1:])
-    zid = add_zone_if_new(zone)
-    ents = api.get_entities(zid, RR_Type)
-    create_flag = True
-    for ent in ents:
-        if Debug:
-            print(f"Generic Record Entity: {ent}")
-        if ent["name"] == hname:
-            props = ent["properties"]
-            if props["type"] == "A" and props["rdata"] == ip:
-                create_flag = False
-                print(f'A Record with id: {ent["id"]} already exists')
-    if create_flag:
-        eid = api.add_entity(zid, a_rr_entity)
-        if Debug:
-            ent = api.get_entity_by_id(eid)
-            print(f"Added A Record {fqdn} {ip} with id: {eid} {ent}")
-
-
 def get_RRs(zone):
     zid = zone_exists(zone)
     if zid:
-        ents = api.get_entities(zid, RR_Type)
+        ents = api.get_entities(zid, api.RR_Type)
     return ents
 
-
-def del_A_RR(fqdn, ip):
+def old_del_A_rr(fqdn, ip):
     props = {
         "type": "A",
         "rdata": ip,
@@ -358,7 +476,7 @@ def del_A_RR(fqdn, ip):
     zone = ".".join(toks[1:])
     zid = zone_exists(zone)
     if zid:
-        ents = api.get_entities(zid, RR_Type)
+        ents = api.get_entities(zid, api.RR_Type)
         for ent in ents:
             if ent["name"] == hname:
                 props = ent["properties"]
@@ -366,7 +484,6 @@ def del_A_RR(fqdn, ip):
                     if Debug:
                         print(f"Deleting Generic Record Entity: {ent}")
                     api.delete_entity(ent["id"])
-
 
 def dump_dns_data():
     ents = api.get_entities(config.ViewId, Z_Type)
@@ -395,7 +512,7 @@ def gen_yaml():
     ydict = {}
     azone_dict = {}
     rr_dict = {}
-    zones = gen_leaf_zones()
+    zones = get_leaf_zones()
     for zone in zones:
         toks = zone.split(".")
         azone = ".".join(toks[1:])
@@ -423,7 +540,7 @@ def update_yaml_zone_file(yamlf, rr_dict):
         yaml_dict = get_yaml_file(yamlf)
         if yaml_dict == rr_dict:
             if config.Debug:
-                print(f"no need to update {yamlf}, data is the same")
+                print(f"No need to update {yamlf}, data is the same")
         else:
             print(f"Updating file: {yamlf}")
             with open(yamlf, "w") as fd:
@@ -466,5 +583,6 @@ def gen_octodns_static_config():
 def dns_init():
     view_id = api.bam_init()
     cwd = os.getcwd()
-    config.Root = cwd
-    config.Path = f"{cwd}/src/azuredns"
+    home_dir = os.path.expanduser("~")
+    config.Root = f"{home_dir}/src/azure/azuredns"
+    config.Path = f"{config.Root}/src/azuredns"

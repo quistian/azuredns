@@ -276,15 +276,13 @@ When the record is to be added:
        {'id': 163642, 'name': 'a', 'type': 'GenericRecord', 'properties': {'comments': 'A solo A Resource Record', 'absoluteName': 'a.b.c.d', 'type': 'A', 'rdata': '1.2.3.4'}}
 """
 
-
 def apientity(hname, ip):
     props = {
         "comments": "An Azure Private DNS A record",
         "type": "A",
         "rdata": ip,
     }
-    return APIEntity(hname, type="GenericRecord", properties=props)
-
+    return APIEntity(name=hname, type="GenericRecord", properties=props)
 
 """
 Looking for the following data structure to write out to the octodns yaml file

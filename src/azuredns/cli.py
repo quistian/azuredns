@@ -1,5 +1,6 @@
 import re
 from pprint import pprint
+from os.path import exists
 
 import click
 from click import Context, argument, group, option, pass_context
@@ -18,10 +19,18 @@ def validate_fqdn(ctx, param, value):
             raise click.BadParameter("Value must be in the form: hobo.utoronto.ca")
         return value
 
+def validate_ip(ctx, param, value):
+    if value == "rights":
+        return validate_value(ctx, param, value)
+    else:
+        pattern = "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]"
+        if not re.match(pattern, value):
+            raise click.BadParameter("Value must be in the form: 1.2.3.4")
+        return value
+
 
 def validate_value(ctx, param, value):
     return value
-
 
 @group()
 @option(
@@ -52,87 +61,133 @@ def run(ctx: Context, silent, verbose):
         click.echo(f"action: {ctx.invoked_subcommand}")
     util.dns_init()
 
-
 # common options to share between subcommands
+# the zone or leaf to act upon
 fqdn = argument(
     "fqdn",
     type=click.STRING,
-    #    required=True,
-    #    callback=validate_fqdn,
+    default='bozo.the.clown.ca',
+    required=True,
+    callback=validate_fqdn,
 )
 
-value = argument(
-    "value",
+addr = argument(
+    "addr",
     type=click.STRING,
-    default="defVAL",
-    callback=validate_value,
-)
-
-SUPPORTED_RR_TYPES = ["A", "TXT", "defRR"]
-rr_type = argument(
-    "rr_type",
-    type=click.Choice(SUPPORTED_RR_TYPES),
-    default="defRR",
+    default="10.141.141.141",
+    callback=validate_ip,
 )
 
 # @run commands: add, delete, list, modify, view,
 
+@run.command()
+@pass_context
+@fqdn
+@addr
+def test(ctx, fqdn, addr):
+    print(fqdn, addr)
+    if util.has_subzones(fqdn):
+        print(f"{fqdn} has subzones:")
+        leafs = util.get_leaf_names(fqdn)
+        print(leafs)
+    return
+    util.get_cname_rrs()
 
 @run.command()
 @pass_context
 @fqdn
-def hrids(ctx, fqdn):
+@addr
+def hrids(ctx, fqdn, addr):
     ids = util.get_hr_nums()
     print(ids)
-    print(fqdn)
-
+    print(fqdn, addr)
 
 # list subcommand
+
 @run.command()
 @pass_context
-@value
+@fqdn
 @option(
-    "-s",
-    "--src",
-    "source",
-    default="yaml",
+    "-t",
+    "--target",
+    "target",
+    default="test-yaml",
     type=click.STRING,
-    help="Where the data is to come from",
+    help="Where the data is to come from or to",
 )
-@option(
-    "-n",
-    "--name",
-    default="all.azure.resources",
-    type=click.STRING,
-    help="A Specific Zone, rather than all",
-)
-def list(ctx, value, source, name):
+
+def list(ctx, target, fqdn):
     if config.Debug:
-        print(f"value: {value} src: {source} name: {name}")
-    if value == "zone" or value == "resource":
-        if source == "yaml":
-            print("fetching yaml")
-            zone = util.get_yaml_zone(name)
-            pprint(zone)
-        elif source == "bc" or source == "bluecat":
-            zone = util.get_bc_azure_zone(name)
-            pprint(zone)
-    if value == "zones":
-        zones = util.gen_azure_zones()
+        print(f"fqdn: {fqdn} target: {target}")
+    if target == "bc" or target == "bluecat":
+        if util.is_leaf(fqdn):
+            rrs = util.get_leaf_bc_azure_zone(fqdn)
+            print(rrs)
+        else:
+            data = util.get_merged_bc_azure_zone(fqdn)
+            print(f'Merged content of {fqdn}')
+            zdata = util.fmt(fqdn, data)
+            for leaf_fqdn in zdata:
+                print(leaf_fqdn, zdata[leaf_fqdn]) 
+    elif target == "bc-yaml":
+        toks = fqdn.split(".")
+        hrids = util.get_active_hrids()
+        if toks[0] not in hrids:
+            print("All BC Yaml files are leaf zones starting with one of:")
+            print(hrids)
+            return
+        fname = f'{config.Root}/bc-zones/{fqdn}.yaml'
+        if exists(fname):
+            data = util.get_yaml_file(fname)
+            print(f'Local BC Yaml for: {fqdn}')
+            pprint(data)
+    elif target == "qa-yaml":
+        fname = f'{config.Root}/qa-zones/{fqdn}.yaml'
+        if exists(fname):
+            data = util.get_yaml_file(fname)
+            print(f'Local QA Yaml for: {fqdn}')
+            pprint(data)
+        else:
+            print(f'No QA exists yet for zone: {fqdn}')
+    elif target == 'prod-yaml' or target == 'prd-yaml':
+        fname = f'{config.Root}/prod-zones/{fqdn}.yaml'
+        if exists(fname):
+            data = util.get_yaml_file(fname)
+            print(f'Local PROD Yaml for: {fqdn}')
+            pprint(data)
+        else:
+            print(f'No PROD data for {fqdn} exists')
+    elif target == 'test-yaml' and fqdn == 'azure.zones':
+        for azone in util.get_azure_zones():
+            print(azone)
+
+@run.command()
+@pass_context
+@fqdn
+@option(
+    "-t",
+    "--target",
+    "target",
+    default="prod-yaml",
+    type=click.STRING,
+    help="Where the data is to come from or to",
+)
+def zones(ctx, target, fqdn):
+    if fqdn == "zones":
+        zones = util.get_azure_zones()
         for zone in zones:
             print(zone)
-    if value == "leafs" or value == "leaves":
-        leafs = util.gen_leaf_zones()
+    elif fqdn == "leafs" or fqdn == "leaves":
+        leafs = util.get_leaf_zones()
         for leaf in leafs:
             print(leaf)
-    if value == "tlds":
+    elif fqdn == "tlds":
         tlds = util.get_tlds(util.gen_azure_zones())
         for tld in tlds:
             print(tld)
 
-
 @run.command()
-@value
+@fqdn
 @pass_context
 @option(
     "-s",
@@ -152,53 +207,67 @@ def list(ctx, value, source, name):
     help="Where the data is to go to",
 )
 
-# there are 4 end points: bc -> bc-yaml -> yaml -> azure
+# there are 4 end points: bc -> bc-yaml -> yaml (qa + prod) -> azure
 
-
-def sync(ctx, value, source, destination):
+def sync(ctx, fqdn, source, destination):
     if config.Debug:
-        print(f"zone: {value}")
+        print(f"zone: {fqdn}")
         print(f"src: {source}")
         print(f"dst: {destination}")
     if source == "bc" and destination == "bc-yaml":
-        data = util.get_bc_azure_zone(value)
-        for leaf_zone in data:
+        leafs = util.get_leaf_names(fqdn)
+        for leaf in leafs:
+            leaf_zone = f'{leaf}.{fqdn}'
+            rrs = util.get_leaf_bc_azure_zone(leaf_zone)
             yamlf = f"{config.Root}/bc-zones/{leaf_zone}.yaml"
-            util.update_yaml_zone_file(yamlf, data[leaf_zone])
+            util.update_yaml_zone_file(yamlf, rrs)
     elif source == "bc-yaml" and destination == "yaml":
-        (qa_norm_yaml, prod_norm_yaml) = util.normalize(value)
-        yamlf = f"{config.Root}/qa-zones/{value}.yaml"
-        util.update_yaml_zone_file(yamlf, qa_norm_yaml)
-        yamlf = f"{config.Root}/prod-zones/{value}.yaml"
-        util.update_yaml_zone_file(yamlf, prod_norm_yaml)
+        (qa_norm_yaml, prod_norm_yaml) = util.normalize(fqdn)
+        if config.Debug:
+            print(f'Zone: {fqdn}')
+            print('QA YAML')
+            print(qa_norm_yaml)
+            print('PRD YAML')
+            print(prod_norm_yaml)
+        if len(qa_norm_yaml):
+            yamlf = f"{config.Root}/qa-zones/{fqdn}.yaml"
+            util.update_yaml_zone_file(yamlf, qa_norm_yaml)
+        else:
+            print(f'No QA A records yet for {value}')
+        if len(prod_norm_yaml):
+            yamlf = f"{config.Root}/prod-zones/{fqdn}.yaml"
+            util.update_yaml_zone_file(yamlf, prod_norm_yaml)
+        else:
+            print(f'No Prod A records yet for {fqdn}')
     return
     yaml_zone = dict()
     bc_zone = dict()
-    #    yaml_zone = util.get_yaml_zone(value)
+    #    yaml_zone = util.get_yaml_zone(fqdn)
     if bc_zone == yaml_zone:
         print("no need to sync, zones are the same")
     else:
         print("syncing from BC to YAML")
-        util.update_yaml_zone_file(value, bc_zone)
-
+        util.update_yaml_zone_file(fqdn, bc_zone)
 
 @run.command()
 @pass_context
 @fqdn
-@rr_type
-@value
-def view(ctx, fqdn, rr_type, value):
-    """View a RR or entity"""
+@addr
+def add(ctx, fqdn, addr):
+    """Add an Azure A record"""
     if ctx.obj["DEBUG"]:
-        click.echo(f"    fqdn: {fqdn} rr_type: {rr_type} value: {value}\n")
+        click.echo(f"    fqdn: {fqdn} value: {addr}\n")
+    util.add_A_rr(fqdn, addr)
 
-    if rr_type == "defRR":
-        util.view_RR(fqdn)
-    elif value == "defVAL":
-        util.view_rr(fqdn, rr_type)
-    else:
-        utile.view_rr(fqdn, rr_type, value)
-
+@run.command()
+@pass_context
+@fqdn
+@addr
+def delete(ctx, fqdn, addr):
+    """Delete an Azure A record"""
+    if ctx.obj["DEBUG"]:
+        click.echo(f"    fqdn: {fqdn} value: {addr}\n")
+    util.del_A_rr(fqdn, addr)
 
 if __name__ == "__run__":
     run()
