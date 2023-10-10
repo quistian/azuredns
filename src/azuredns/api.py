@@ -29,7 +29,12 @@ Txt_Type = ObjectType.TXT_RECORD
 Srv_Type = ObjectType.SRV_RECORD
 Ent_Type = ObjectType.ENTITY
 
-Z_Props = {
+Z_Props_Not_Deployable = {
+    "deployable": "false",
+    "dynamicUpdate": "false",
+}
+
+Z_Props_Deployable = {
     "deployable": "true",
     "dynamicUpdate": "false",
 }
@@ -71,8 +76,10 @@ def get_system_info():
     return Clnt.get_system_info()
 
 
+# get the parent entity of a given entity
+
 def get_parent(eid):
-    Clnt.get_parent(eid)
+    return Clnt.get_parent(eid)
 
 
 """
@@ -99,25 +106,31 @@ def add_entity(pid, ent):
     return new_ent_id
 
 
+# Returns None
+
 def delete_entity(eid):
     Clnt.delete_entity(eid)
 
+# Returns None
 
 def delete_entity_with_optipons(eid):
     Clnt.delete_entity_with_optipons(eid)
 
 
 """
+
 Gets a list of entities for a given parent object
+
 Parameters:
     parent_id (int):
     type (str): the type of object to return
     start (int, optional); where on the list to begin
     count (int, optional): the maximum child objects to return, default is 10
     include_ha (bool, optional) include HA info from server. default is True
-Returns a list of entities
-"""
 
+Returns a list of entities
+
+"""
 
 def get_entities(pid, typ):
     ents = Clnt.get_entities(parent_id=pid, type=typ, start=0, count=100)
@@ -140,13 +153,51 @@ def get_entity_by_name(pid, nm, typ):
     return Clnt.get_entity_by_name(pid, nm, typ)
 
 
+"""
+Updates an existing entity
+returns None
+
+Use:
+    ent = Clnt.get_entity_by_id(ent_id)
+    ent['name'] = 'bozo.quist.ca'
+    ent['properites']['comment'] = 'New name'
+    Clnt.update_entity(ent)
+
+"""
+
 def update_entity(ent):
-    return Clnt.update_entity(ent)
+    Clnt.update_entity(ent)
 
 
-def update_entity_with_options(ent):
-    return Clnt.update_entity_with_options(ent)
+"""
+Only applies to SRV MX records etc.
+"""
 
+def update_entity_with_options(ent, opts):
+    Clnt.update_entity_with_options(ent, opts)
+
+"""
+Adds a generic using an absolute name.
+
+type: string, one of:
+    A, A6, AAAA, AFSDB, APL, CAA, CERT, DHCID, DNAME,
+    DNSKEY, DS, ISDN, KEY, KX, LOC, MB, MG, MINFO, MR, NS, NSAP, PX, RP,
+    RT, SINK, SSHFP, TLSA, WKS, TXT, and X25.
+
+rdata: data of the resource in BIND format
+
+ttl: optional int
+
+properties: option, dictionary
+including comments and user-defined fields
+
+
+returns the id of the new RR
+
+"""
+
+def add_generic_record(viewid, fqdn, typ, rdata):
+    return Clnt.add_generic_record(viewid, fqdn, typ, rdata)
 
 """
 add a zone at the top level
@@ -175,11 +226,12 @@ These properties are supported by Address Manager v9.4.0:
         The default value is true.
 """
 
-
 def add_zone(zone):
     try:
         ent_id = Clnt.add_zone(
-            entity_id=config.ViewId, absolute_name=zone, properties=Z_Props
+            entity_id=config.ViewId,
+            absolute_name=zone,
+            properties=Z_Props_Not_Deployable
         )
         return ent_id
     except ErrorResponse as e:
@@ -210,7 +262,6 @@ count (int, optional):
     The maximum value is 10. The default value is 10.
 
 """
-
 
 def get_zones_by_hint(zone):
     opts = {
@@ -250,18 +301,17 @@ def bam_init():
             print()
             print(f'BAM Configuration: {conf_ent["name"]}')
             print(conf_ent)
+            print(f'Bam version: {Clnt.system_version}')
         config.ConfId = conf_ent["id"]
         view_ent = Clnt.get_entity_by_name(config.ConfId, config.View, V_Type)
         if config.Debug:
             print()
             print(f'BAM View: {view_ent["name"]}')
             print(view_ent)
-            print()
         config.ViewId = view_ent["id"]
         return config.ViewId
     except ErrorResponse as e:
         print(f"Top Level Error: {e.message}")
-
 
 """
 When the record is to be added:
@@ -272,8 +322,19 @@ When the record is to be added:
         }
         entity = APIEntity(name='bozo', type='GenericRecord', properties=props)
 
-       GenericRecord entity data structure
-       {'id': 163642, 'name': 'a', 'type': 'GenericRecord', 'properties': {'comments': 'A solo A Resource Record', 'absoluteName': 'a.b.c.d', 'type': 'A', 'rdata': '1.2.3.4'}}
+       GenericRecord entity data structure:
+       {
+           'id': 163642,
+           'name': 'a',
+           'type': 'GenericRecord',
+           'properties':
+                {
+                    'comments': 'A solo A Resource Record',
+                    'absoluteName': 'a.b.c.d',
+                    'type': 'A',
+                    'rdata': '1.2.3.4'
+                }
+        }
 """
 
 def apientity(hname, ip):

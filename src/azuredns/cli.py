@@ -5,7 +5,7 @@ from os.path import exists
 import click
 from click import Context, argument, group, option, pass_context
 
-from azuredns import config, util
+from azuredns import config, util, api
 
 SUPPORTED_SRCS = ["bc-yaml", "local", "yaml", "bc", "bam", "bluecat"]
 
@@ -78,6 +78,12 @@ addr = argument(
     callback=validate_ip,
 )
 
+value = argument(
+    "value",
+    type=click.STRING,
+    default="zones",
+)
+
 # @run commands: add, delete, list, modify, view,
 
 @run.command()
@@ -86,10 +92,9 @@ addr = argument(
 @addr
 def test(ctx, fqdn, addr):
     print(fqdn, addr)
-    if util.has_subzones(fqdn):
-        print(f"{fqdn} has subzones:")
-        leafs = util.get_leaf_names(fqdn)
-        print(leafs)
+    rrs = util.get_merged_bc_azure_zone(fqdn)
+    for rr,val in rrs.items():
+        print(rr, val)
     return
     util.get_cname_rrs()
 
@@ -163,7 +168,7 @@ def list(ctx, target, fqdn):
 
 @run.command()
 @pass_context
-@fqdn
+@value
 @option(
     "-t",
     "--target",
@@ -172,17 +177,17 @@ def list(ctx, target, fqdn):
     type=click.STRING,
     help="Where the data is to come from or to",
 )
-def zones(ctx, target, fqdn):
-    if fqdn == "zones":
+def zones(ctx, target, value):
+    if value == "zones":
         zones = util.get_azure_zones()
         for zone in zones:
             print(zone)
-    elif fqdn == "leafs" or fqdn == "leaves":
+    elif value == "leafs" or value == "leaves":
         leafs = util.get_leaf_zones()
         for leaf in leafs:
             print(leaf)
-    elif fqdn == "tlds":
-        tlds = util.get_tlds(util.gen_azure_zones())
+    elif value == "tlds":
+        tlds = util.get_tlds(util.get_azure_zones())
         for tld in tlds:
             print(tld)
 
@@ -268,6 +273,23 @@ def delete(ctx, fqdn, addr):
     if ctx.obj["DEBUG"]:
         click.echo(f"    fqdn: {fqdn} value: {addr}\n")
     util.del_A_rr(fqdn, addr)
+
+@run.command()
+@pass_context
+@option(
+    "-d",
+    "--deploy",
+    "deployable",
+    is_flag=True,
+    help="Set to make the zone is to be deployable"
+)
+@fqdn
+def modify(ctx, deployable, fqdn):
+    if deployable:
+        props = api.Z_Props_Deployable
+    else:
+        props = api.Z_Props_Not_Deployable
+    util.modify_zone(fqdn, props)
 
 if __name__ == "__run__":
     run()

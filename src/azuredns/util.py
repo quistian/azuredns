@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import traceback
 import json
 import os
 import random
@@ -22,18 +23,31 @@ Debug = False
 
 """ Higher level functions interacting with the BC API """
 
-def has_subzones(zone):
 # ent: [{'id': 2865570, 'name': 'privatelink', 'type': 'Zone', 'properties': {'absoluteName': 'privatelink.openai.azure.com'}}]
-    zone_ent = api.get_zones_by_hint(zone)
-    zone_ent_id = zone_ent[0]['id']
-    sub_ents = api.get_entities(zone_ent_id, api.Z_Type)
+
+def caller():
+    return traceback.extract_stack()[-2][2]
+
+def has_subzones(zone):
+    ent = api.get_zones_by_hint(zone)
+    if config.Debug:
+        print(f'\n{__name__}:', caller())
+        print(f'{zone} {ent}')
+    sub_ents = api.get_entities(ent[0]['id'], api.Z_Type)
     if len(sub_ents):
-        return True
+        if config.Debug:
+            for ent in sub_ents:
+                print(ent)
+        return sub_ents
     else:
         return False
 
+# returns true is zone is a leaf zone, that is the zone which only has A records and no subzones
 def is_leaf(zone):
-    return not has_subzones(zone)
+    if not has_subzones(zone):
+        return True
+    else:
+        return False
 
 # Normalize and merges BC data and returns a yaml/json structure for each of QA and PROD
 
@@ -51,12 +65,12 @@ def normalize(zone):
         resource = ".".join(toks[1:-1])
         if leaf in ids and zone == resource:
             data = get_yaml_file(f"{bc_dir}/{file}")
-            for name in data:
+            for name, value in data.items():
                 if Debug:
                     print
                     print(name)
                 lc_name = name.lower()
-                ip = data[name]["values"][0]
+                ip = value["values"][0]
                 t1 = lc_name[0]
                 num = lc_name[1:4]
                 octets = ip.split(".")
@@ -223,20 +237,19 @@ def create_zone_in_an_iterative_manner(zone):
                 cid = ent["id"]
                 break
         if cid == pid:
-            apient = api.APIEntity(name=tok, type=Z_Type, properties=Z_Props)
+            apient = api.APIEntity(name=tok, type=Z_Type, properties=api.Z_Props_Not_Deployable)
             cid = api.add_entity(pid, apient)
             e = api.get_entity_by_id(cid)
             if Debug:
                 print(f"Created zone {tok} with entity properties: {e}")
         pid = cid
 
-
 # create cnamne inclusion file for unbound
 
 def get_cname_rrs():
     for zone in get_azure_zones():
         rrs = get_bc_azure_zone(zone)
-        for hname in rrs:
+        for hname, value in rrs.items():
             lname = hname.lower()
             priv_fqdn = f'{lname}.{zone}'
             toks = priv_fqdn.split(".")
@@ -244,37 +257,32 @@ def get_cname_rrs():
             if toks[0] == 'vaultcore':
                 toks[0] = 'vault'
             pub_fqdn = ".".join(toks)
-            ip = rrs[hname]['values'][0]
+            ip = value['values'][0]
             print(f'local-data: "{pub_fqdn}. CNAME {priv_fqdn}."')
 
 # gets a BC Azure zone, with all its associated HRIS leaf sub zone RRs
 # data able to be converted to json or yaml
 # return the merged data
 
+# ent: [{'id': 2865570, 'name': 'privatelink', 'type': 'Zone', 'properties': {'absoluteName': 'privatelink.openai.azure.com'}}]
 def get_merged_bc_azure_zone(zone):
     zone_rrs = dict()
-    if has_subzones(zone):
-        data = api.get_zones_by_hint(zone)
-# ent: [{'id': 2865570, 'name': 'privatelink', 'type': 'Zone', 'properties': {'absoluteName': 'privatelink.openai.azure.com'}}]
+    ents = has_subzones(zone)
+    if ents:
         if config.Debug:
-            print(f"\nzone: {zone}\nent: {data}")
-        pid = data[0]["id"]
-        leaf_zone_ents = api.get_entities(pid, api.Z_Type)
-        if config.Debug:
-            print(f"\nsubzones of {zone}:")
-            print(f"entities: {leaf_zone_ents}")
-        if len(leaf_zone_ents):
-            if config.Debug:
-                print(f"There are {len(leaf_zone_ents)} Leaf zones of {zone}:")
-                print(leaf_zone_ents)
-            for ent in leaf_zone_ents:
-                leaf_pid = ent["id"]
-                leaf_fqdn = ent["properties"]["absoluteName"]
-                rrs = get_leaf_zone_rrs(leaf_pid)
-                if len(rrs):
-                    for nm in rrs:
-                        zone_rrs[nm] = rrs[nm]
-
+            print()
+            print(f"There are {len(ents)} Leaf zones of {zone}:")
+            print(f"subzones of {zone}:")
+            print(f"entities: {ents}")
+        for ent in ents:
+            leaf_pid = ent["id"]
+            leaf_fqdn = ent["properties"]["absoluteName"]
+            rrs = get_leaf_zone_rrs(leaf_pid)
+            if len(rrs):
+                if zone_rrs:
+                    zone_rrs.update(rrs)
+                else:
+                    zone_rrs = rrs
     else:
         print(f'Can not merge the leaf zone: {zone}')
     return zone_rrs
@@ -311,17 +319,6 @@ def get_leaf_zone_rrs(pid):
         rrs[name] = {"type": "A", "values": [ip]}
     return rrs
 
-# gets the FQDNs for a given zone, for all HRID subzones under it
-# returns a dictionary of { fqdn: A record IP }
-
-def get_zone_fqdns(zone):
-    rrs = dict()
-    zid = get_zone_id(zone)
-    leaf_ents = api.get_entities(zid, Z_type, 0, 999)
-    for ent in leaf_ents:
-        leaf_id = ent['id']
-        rr_ents = apt.get_entities(leaf_id, api.RR_type)
-
 def add_zone_if_new(zone):
     data = api.get_zones_by_hint(zone)
     if len(data) == 0:
@@ -333,6 +330,8 @@ def add_zone_if_new(zone):
             print(f"DNS zone: {zone} already exists with entity properties: {data}")
         zone_id = data[0]["id"]
     return zone_id
+
+
 
 # return entity Id if zone exists
 
@@ -346,6 +345,10 @@ def zone_exists(zone):
 # adds an Azure record in the proper BlueCat Location
 
 def add_A_rr(fqdn, ip):
+    ent_id = api.add_generic_record(config.ViewId, fqdn, 'A', ip)
+    return ent_id
+
+def long_form_add_A_rr(fqdn, ip):
     toks = fqdn.split(".")
     host = toks.pop(0)
     zone = ".".join(toks)
@@ -403,15 +406,27 @@ def del_A_rr(fqdn, ip):
         else:
             print(f'No leaf zone: {leaf_zone} corresponds to {fqdn}')
 
+# modify a given A record
+
+def mod_A_rr(fqdn, ip):
+    pass
+
+def fqdn_exists(fqdn):
+    toks = fqdn.split(".")
+    host = toks.pop(0)
+    zone = ".".join(toks)
+    if is_zone(fqdn):
+        return True
+
 # output RRs in a form easily adapted to opencli arguments
 # takes yaml format as input
 
 def fmt(zone, data):
     fdata = dict()
-    for hname in data:
+    for hname, value in data.items():
         hris_num = hname[1:4]
         fqdn = f'{hname}.{hris_num}.{zone}'
-        ip = data[hname]['values'][0]
+        ip = value['values'][0]
         fdata[fqdn] = ip
     return fdata
 
@@ -427,6 +442,22 @@ def legit_hostname(name):
         return False
     return True
     
+
+def modify_zone(zone, props):
+    zid = zone_exists(zone)
+    if zid:
+        ent = api.get_entity_by_id(zid)
+        if config.Debug:
+            print(ent)
+        before = ent['properties']['deployable']
+        after = props['deployable']
+        print(f'Before: deployable: {before}')
+        print(f'After:  deployable: {after}')
+        ent['properties']['deployable'] = after
+        api.update_entity(ent)
+    else:
+        print(f'{zone} does not exist')
+
 def delete_zone(zone):
     deleted = False
     ents = api.get_entities(config.ViewId, Z_Type)
@@ -506,7 +537,6 @@ Looking for the following data structure to write out to the octodns yaml file
     'www.sub': {'type': 'A', 'values': ['1.2.3.6', '1.2.3.7'] }
 }
 """
-
 
 def gen_yaml():
     ydict = {}

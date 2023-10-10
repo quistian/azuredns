@@ -18,3 +18,5 @@ Azure_Zone_Files = [
     "cePrivateDNSZones-parameters.json",
     "corePrivateDNSZones-parameters.json",
 ]
+
+Azure_Resource_URL = 'https://learn.microsoft.com/en-us/azure/private-link/private-endpoint-dns'
