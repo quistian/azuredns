@@ -1,0 +1,404 @@
+<tbody>
+<tr>
+<td>Azure Automation (Microsoft.Automation/automationAccounts)</td>
+<td>Webhook </br> DSCAndHybridWorker</td>
+<td>privatelink.azure-automation.net</td>
+<td>azure-automation.net</td>
+</tr>
+<tr>
+<td>Azure SQL Database (Microsoft.Sql/servers)</td>
+<td>sqlServer</td>
+<td>privatelink.database.windows.net</td>
+<td>database.windows.net</td>
+</tr>
+<tr>
+<td>Azure SQL Managed Instance (Microsoft.Sql/managedInstances)</td>
+<td>managedInstance</td>
+<td>privatelink.{dnsPrefix}.database.windows.net</td>
+<td>{instanceName}.{dnsPrefix}.database.windows.net</td>
+</tr>
+<tr>
+<td>Azure Synapse Analytics (Microsoft.Synapse/workspaces)</td>
+<td>Sql</td>
+<td>privatelink.sql.azuresynapse.net</td>
+<td>sql.azuresynapse.net</td>
+</tr>
+<tr>
+<td>Azure Synapse Analytics (Microsoft.Synapse/workspaces)</td>
+<td>SqlOnDemand</td>
+<td>privatelink.sql.azuresynapse.net</td>
+<td>{workspaceName}-ondemand.sql.azuresynapse.net</td>
+</tr>
+<tr>
+<td>Azure Synapse Analytics (Microsoft.Synapse/workspaces)</td>
+<td>Dev</td>
+<td>privatelink.dev.azuresynapse.net</td>
+<td>dev.azuresynapse.net</td>
+</tr>
+<tr>
+<td>Azure Synapse Studio (Microsoft.Synapse/privateLinkHubs)</td>
+<td>Web</td>
+<td>privatelink.azuresynapse.net</td>
+<td>azuresynapse.net</td>
+</tr>
+<tr>
+<td>Storage account (Microsoft.Storage/storageAccounts)</td>
+<td>blob </br> blob_secondary</td>
+<td>privatelink.blob.core.windows.net</td>
+<td>blob.core.windows.net</td>
+</tr>
+<tr>
+<td>Storage account (Microsoft.Storage/storageAccounts)</td>
+<td>table </br> table_secondary</td>
+<td>privatelink.table.core.windows.net</td>
+<td>table.core.windows.net</td>
+</tr>
+<tr>
+<td>Storage account (Microsoft.Storage/storageAccounts)</td>
+<td>queue </br> queue_secondary</td>
+<td>privatelink.queue.core.windows.net</td>
+<td>queue.core.windows.net</td>
+</tr>
+<tr>
+<td>Storage account (Microsoft.Storage/storageAccounts)</td>
+<td>file</td>
+<td>privatelink.file.core.windows.net</td>
+<td>file.core.windows.net</td>
+</tr>
+<tr>
+<td>Storage account (Microsoft.Storage/storageAccounts)</td>
+<td>web </br> web_secondary</td>
+<td>privatelink.web.core.windows.net</td>
+<td>web.core.windows.net</td>
+</tr>
+<tr>
+<td>Azure Data Lake File System Gen2 (Microsoft.Storage/storageAccounts)</td>
+<td>dfs </br> dfs_secondary</td>
+<td>privatelink.dfs.core.windows.net</td>
+<td>dfs.core.windows.net</td>
+</tr>
+<tr>
+<td>Azure Cosmos DB (Microsoft.AzureCosmosDB/databaseAccounts)</td>
+<td>Sql</td>
+<td>privatelink.documents.azure.com</td>
+<td>documents.azure.com</td>
+</tr>
+<tr>
+<td>Azure Cosmos DB (Microsoft.AzureCosmosDB/databaseAccounts)</td>
+<td>MongoDB</td>
+<td>privatelink.mongo.cosmos.azure.com</td>
+<td>mongo.cosmos.azure.com</td>
+</tr>
+<tr>
+<td>Azure Cosmos DB (Microsoft.AzureCosmosDB/databaseAccounts)</td>
+<td>Cassandra</td>
+<td>privatelink.cassandra.cosmos.azure.com</td>
+<td>cassandra.cosmos.azure.com</td>
+</tr>
+<tr>
+<td>Azure Cosmos DB (Microsoft.AzureCosmosDB/databaseAccounts)</td>
+<td>Gremlin</td>
+<td>privatelink.gremlin.cosmos.azure.com</td>
+<td>gremlin.cosmos.azure.com</td>
+</tr>
+<tr>
+<td>Azure Cosmos DB (Microsoft.AzureCosmosDB/databaseAccounts)</td>
+<td>Table</td>
+<td>privatelink.table.cosmos.azure.com</td>
+<td>table.cosmos.azure.com</td>
+</tr>
+<tr>
+<td>Azure Cosmos DB (Microsoft.DBforPostgreSQL/serverGroupsv2)</td>
+<td>coordinator</td>
+<td>privatelink.postgres.cosmos.azure.com</td>
+<td>postgres.cosmos.azure.com</td>
+</tr>
+<tr>
+<td>Azure Batch (Microsoft.Batch/batchAccounts)</td>
+<td>batchAccount</td>
+<td>{regionName}.privatelink.batch.azure.com</td>
+<td>{regionName}.batch.azure.com</td>
+</tr>
+<tr>
+<td>Azure Batch (Microsoft.Batch/batchAccounts)</td>
+<td>nodeManagement</td>
+<td>{regionName}.service.privatelink.batch.azure.com</td>
+<td>{regionName}.service.batch.azure.com</td>
+</tr>
+<tr>
+<td>Azure Database for PostgreSQL - Single server (Microsoft.DBforPostgreSQL/servers)</td>
+<td>postgresqlServer</td>
+<td>privatelink.postgres.database.azure.com</td>
+<td>postgres.database.azure.com</td>
+</tr>
+<tr>
+<td>Azure Database for MySQL (Microsoft.DBforMySQL/servers)</td>
+<td>mysqlServer</td>
+<td>privatelink.mysql.database.azure.com</td>
+<td>mysql.database.azure.com</td>
+</tr>
+<tr>
+<td>Azure Database for MariaDB (Microsoft.DBforMariaDB/servers)</td>
+<td>mariadbServer</td>
+<td>privatelink.mariadb.database.azure.com</td>
+<td>mariadb.database.azure.com</td>
+</tr>
+<tr>
+<td>Azure Key Vault (Microsoft.KeyVault/vaults)</td>
+<td>vault</td>
+<td>privatelink.vaultcore.azure.net</td>
+<td>vault.azure.net <br> vaultcore.azure.net</td>
+</tr>
+<tr>
+<td>Azure Key Vault (Microsoft.KeyVault/managedHSMs)</td>
+<td>managedhsm</td>
+<td>privatelink.managedhsm.azure.net</td>
+<td>managedhsm.azure.net</td>
+</tr>
+<tr>
+<td>Azure Kubernetes Service - Kubernetes API (Microsoft.ContainerService/managedClusters)</td>
+<td>management</td>
+<td>privatelink.{regionName}.azmk8s.io </br> {subzone}.privatelink.{regionName}.azmk8s.io</td>
+<td>{regionName}.azmk8s.io</td>
+</tr>
+<tr>
+<td>Azure Search (Microsoft.Search/searchServices)</td>
+<td>searchService</td>
+<td>privatelink.search.windows.net</td>
+<td>search.windows.net</td>
+</tr>
+<tr>
+<td>Azure Container Registry (Microsoft.ContainerRegistry/registries)</td>
+<td>registry</td>
+<td>privatelink.azurecr.io </br> {regionName}.privatelink.azurecr.io</td>
+<td>azurecr.io </br> {regionName}.azurecr.io</td>
+</tr>
+<tr>
+<td>Azure App Configuration (Microsoft.AppConfiguration/configurationStores)</td>
+<td>configurationStores</td>
+<td>privatelink.azconfig.io</td>
+<td>azconfig.io</td>
+</tr>
+<tr>
+<td>Azure Backup (Microsoft.RecoveryServices/vaults)</td>
+<td>AzureBackup</td>
+<td>privatelink.{regionCode}.backup.windowsazure.com</td>
+<td>{regionCode}.backup.windowsazure.com</td>
+</tr>
+<tr>
+<td>Azure Site Recovery (Microsoft.RecoveryServices/vaults)</td>
+<td>AzureSiteRecovery</td>
+<td>privatelink.siterecovery.windowsazure.com</td>
+<td>{regionCode}.siterecovery.windowsazure.com</td>
+</tr>
+<tr>
+<td>Azure Event Hubs (Microsoft.EventHub/namespaces)</td>
+<td>namespace</td>
+<td>privatelink.servicebus.windows.net</td>
+<td>servicebus.windows.net</td>
+</tr>
+<tr>
+<td>Azure Service Bus (Microsoft.ServiceBus/namespaces)</td>
+<td>namespace</td>
+<td>privatelink.servicebus.windows.net</td>
+<td>servicebus.windows.net</td>
+</tr>
+<tr>
+<td>Azure IoT Hub (Microsoft.Devices/IotHubs)</td>
+<td>iotHub</td>
+<td>privatelink.azure-devices.net<br/>privatelink.servicebus.windows.net<sup>1</sup></td>
+<td>azure-devices.net<br/>servicebus.windows.net</td>
+</tr>
+<tr>
+<td>Azure IoT Hub Device Provisioning Service (Microsoft.Devices/ProvisioningServices)</td>
+<td>iotDps</td>
+<td>privatelink.azure-devices-provisioning.net</td>
+<td>azure-devices-provisioning.net</td>
+</tr>
+<tr>
+<td>Azure Relay (Microsoft.Relay/namespaces)</td>
+<td>namespace</td>
+<td>privatelink.servicebus.windows.net</td>
+<td>servicebus.windows.net</td>
+</tr>
+<tr>
+<td>Azure Event Grid (Microsoft.EventGrid/topics)</td>
+<td>topic</td>
+<td>privatelink.eventgrid.azure.net</td>
+<td>eventgrid.azure.net</td>
+</tr>
+<tr>
+<td>Azure Event Grid (Microsoft.EventGrid/domains)</td>
+<td>domain</td>
+<td>privatelink.eventgrid.azure.net</td>
+<td>eventgrid.azure.net</td>
+</tr>
+<tr>
+<td>Azure Web Apps - Azure Function Apps (Microsoft.Web/sites)</td>
+<td>sites</td>
+<td>privatelink.azurewebsites.net </br> scm.privatelink.azurewebsites.net</td>
+<td>azurewebsites.net </br> scm.azurewebsites.net</td>
+</tr>
+<tr>
+<td>Azure Machine Learning (Microsoft.MachineLearningServices/workspaces)</td>
+<td>amlworkspace</td>
+<td>privatelink.api.azureml.ms<br/>privatelink.notebooks.azure.net</td>
+<td>api.azureml.ms<br/>notebooks.azure.net<br/>instances.azureml.ms<br/>aznbcontent.net<br/>inference.ml.azure.com</td>
+</tr>
+<tr>
+<td>SignalR (Microsoft.SignalRService/SignalR)</td>
+<td>signalR</td>
+<td>privatelink.service.signalr.net</td>
+<td>service.signalr.net</td>
+</tr>
+<tr>
+<td>Azure Monitor (Microsoft.Insights/privateLinkScopes)</td>
+<td>azuremonitor</td>
+<td>privatelink.monitor.azure.com<br/> privatelink.oms.opinsights.azure.com <br/> privatelink.ods.opinsights.azure.com <br/> privatelink.agentsvc.azure-automation.net <br/> privatelink.blob.core.windows.net</td>
+<td>monitor.azure.com<br/> oms.opinsights.azure.com<br/> ods.opinsights.azure.com<br/> agentsvc.azure-automation.net <br/> blob.core.windows.net</td>
+</tr>
+<tr>
+<td>Azure AI services (Microsoft.CognitiveServices/accounts)</td>
+<td>account</td>
+<td>privatelink.cognitiveservices.azure.com <br/> privatelink.openai.azure.com</td>
+<td>cognitiveservices.azure.com <br/> openai.azure.com</td>
+</tr>
+<tr>
+<td>Azure File Sync (Microsoft.StorageSync/storageSyncServices)</td>
+<td>afs</td>
+<td>{regionName}.privatelink.afs.azure.net</td>
+<td>{regionName}.afs.azure.net</td>
+</tr>
+<tr>
+<td>Azure Data Factory (Microsoft.DataFactory/factories)</td>
+<td>dataFactory</td>
+<td>privatelink.datafactory.azure.net</td>
+<td>datafactory.azure.net</td>
+</tr>
+<tr>
+<td>Azure Data Factory (Microsoft.DataFactory/factories)</td>
+<td>portal</td>
+<td>privatelink.adf.azure.com</td>
+<td>adf.azure.com</td>
+</tr>
+<tr>
+<td>Azure Cache for Redis (Microsoft.Cache/Redis)</td>
+<td>redisCache</td>
+<td>privatelink.redis.cache.windows.net</td>
+<td>redis.cache.windows.net</td>
+</tr>
+<tr>
+<td>Azure Cache for Redis Enterprise (Microsoft.Cache/RedisEnterprise)</td>
+<td>redisEnterprise</td>
+<td>privatelink.redisenterprise.cache.azure.net</td>
+<td>redisenterprise.cache.azure.net</td>
+</tr>
+<tr>
+<td>Microsoft Purview (Microsoft.Purview)</td>
+<td>account</td>
+<td>privatelink.purview.azure.com</td>
+<td>purview.azure.com</td>
+</tr>
+<tr>
+<td>Microsoft Purview (Microsoft.Purview)</td>
+<td>portal</td>
+<td>privatelink.purviewstudio.azure.com</td>
+<td>purview.azure.com </br> purviewstudio.azure.com</td>
+</tr>
+<tr>
+<td>Azure Digital Twins (Microsoft.DigitalTwins)</td>
+<td>digitalTwinsInstances</td>
+<td>privatelink.digitaltwins.azure.net</td>
+<td>digitaltwins.azure.net</td>
+</tr>
+<tr>
+<td>Azure HDInsight (Microsoft.HDInsight/clusters)</td>
+<td>N/A</td>
+<td>privatelink.azurehdinsight.net</td>
+<td>azurehdinsight.net</td>
+</tr>
+<tr>
+<td>Azure Arc (Microsoft.HybridCompute)</td>
+<td>hybridcompute</td>
+<td>privatelink.his.arc.azure.com <br/> privatelink.guestconfiguration.azure.com </br> privatelink.dp.kubernetesconfiguration.azure.com</td>
+<td>his.arc.azure.com <br/> guestconfiguration.azure.com </br> dp.kubernetesconfiguration.azure.com</td>
+</tr>
+<tr>
+<td>Azure Media Services (Microsoft.Media)</td>
+<td>keydelivery </br> liveevent </br> streamingendpoint</td>
+<td>privatelink.media.azure.net</td>
+<td>media.azure.net</td>
+</tr>
+<tr>
+<td>Azure Data Explorer (Microsoft.Kusto/Clusters)</td>
+<td>cluster</td>
+<td>privatelink.{regionName}.kusto.windows.net</td>
+<td>{regionName}.kusto.windows.net</td>
+</tr>
+<tr>
+<td>Azure Static Web Apps (Microsoft.Web/staticSites)</td>
+<td>staticSites</td>
+<td>privatelink.azurestaticapps.net </br> privatelink.{partitionId}.azurestaticapps.net</td>
+<td>azurestaticapps.net </br> {partitionId}.azurestaticapps.net</td>
+</tr>
+<tr>
+<td>Azure Migrate (Microsoft.Migrate/migrateProjects)</td>
+<td>Default</td>
+<td>privatelink.prod.migration.windowsazure.com</td>
+<td>prod.migration.windowsazure.com</td>
+</tr>
+<tr>
+<td>Azure Migrate (Microsoft.Migrate/assessmentProjects)</td>
+<td>Default</td>
+<td>privatelink.prod.migration.windowsazure.com</td>
+<td>prod.migration.windowsazure.com</td>
+</tr>
+<tr>
+<td>Azure API Management (Microsoft.ApiManagement/service)</td>
+<td>gateway</td>
+<td>privatelink.azure-api.net</td>
+<td>azure-api.net</td>
+</tr>
+<tr>
+<td>Microsoft PowerBI (Microsoft.PowerBI/privateLinkServicesForPowerBI)</td>
+<td>tenant</td>
+<td>privatelink.analysis.windows.net </br> privatelink.pbidedicated.windows.net </br> privatelink.tip1.powerquery.microsoft.com</td>
+<td>analysis.windows.net </br> pbidedicated.windows.net </br> tip1.powerquery.microsoft.com</td>
+</tr>
+<tr>
+<td>Azure Bot Service (Microsoft.BotService/botServices)</td>
+<td>Bot</td>
+<td>privatelink.directline.botframework.com</td>
+<td>directline.botframework.com </br> europe.directline.botframework.com</td>
+</tr>
+<tr>
+<td>Azure Bot Service (Microsoft.BotService/botServices)</td>
+<td>Token</td>
+<td>privatelink.token.botframework.com</td>
+<td>token.botframework.com </br> europe.token.botframework.com</td>
+</tr>
+<tr>
+<td>Azure Health Data Services (Microsoft.HealthcareApis/workspaces)</td>
+<td>healthcareworkspace</td>
+<td>privatelink.workspace.azurehealthcareapis.com </br> privatelink.fhir.azurehealthcareapis.com </br> privatelink.dicom.azurehealthcareapis.com</td>
+<td>workspace.azurehealthcareapis.com </br> fhir.azurehealthcareapis.com </br> dicom.azurehealthcareapis.com</td>
+</tr>
+<tr>
+<td>Azure Databricks (Microsoft.Databricks/workspaces)</td>
+<td>databricks_ui_api </br> browser_authentication</td>
+<td>privatelink.azuredatabricks.net</td>
+<td>azuredatabricks.net</td>
+</tr>
+<tr>
+<td>Azure Virtual Desktop (Microsoft.DesktopVirtualization/workspaces)</td>
+<td>global</td>
+<td>privatelink-global.wvd.microsoft.com</td>
+<td>wvd.microsoft.com</td>
+</tr>
+<tr>
+<td>Azure Virtual Desktop (Microsoft.DesktopVirtualization/workspaces </br> Microsoft.DesktopVirtualization/hostpools)</td>
+<td>feed <br> connection</td>
+<td>privatelink.wvd.microsoft.com</td>
+<td>wvd.microsoft.com</td>
+</tr>
+</tbody>
