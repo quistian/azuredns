@@ -1,0 +1,61 @@
+#!/bin/sh
+
+TMP_PRIV_ZONES=/tmp/azure-private-zones.$$
+LOG="./bc-current-scan.log"
+LOGDIR="./logs"
+TSTAMP_START=`date +"%Y-%m-%dT%H-%M-%S"`
+TSTAMP=$TSTAMP_START
+CHANGED="./zone-changes/changed-${TSTAMP}"
+OUT=/tmp/changed-zones.$$
+ENV=/tmp/env_vars.$$
+
+echo $TSTAMP_START > $LOG
+
+# check to see if the AZURE ENV variables have been loaded yet
+# Can also use .azureexportrc
+printenv | grep AZURE_ > $ENV
+if [ ! $? ]; then
+    echo "Azure Vars are being loaded" >> $LOG
+    . $HOME/.azurerc
+fi
+rm -f $ENV
+
+echo "Scanning BC zones for changes" | tee -a $LOG
+
+azurecli zones -t bc private > $TMP_PRIV_ZONES
+
+for z in `cat $TMP_PRIV_ZONES`
+do
+#    echo $z
+    echo -n "."
+    azurecli sync -s bc -d bc-leaf $z
+done | tee -a $LOG
+
+grep Updating $LOG > $OUT
+if [ -s $OUT ]; then
+    cat $OUT | awk '{print $NF}' | sort | uniq > $CHANGED
+    cat $CHANGED >> $LOG
+    for z in `cat $CHANGED`
+    do
+        echo "processing $z" | tee -a $LOG
+        azurecli sync -s bc-leaf -d bc-merged $z | tee -a $LOG
+        azurecli sync -s bc-merged -d bc-normalized $z | tee -a $LOG
+        octodns-sync --quiet --log-stream-stdout --config-file config/qa-dynamic.yaml $z. --force --doit | tee -a $LOG
+        gen-unbound-zone-data $z | tee -a $LOG
+#       octodns-sync --quiet --log-stream-stdout --config-file config/prod-dynamic.yaml $z. >> $LOG
+    done
+#   doas -u ansible ansible-playbook -K -v -t vars,unbound-data -l dns1,dns4,dns5 ~ansible/systems/dns.yaml | tee -a $LOG
+else
+    echo 'no changes' | tee -a $LOG
+fi
+
+TSTAMP_STOP=`date +"%Y-%m-%dT%H-%M-%S"`
+echo $TSTAMP_STOP >> $LOG
+
+TSTF="scan_${TSTAMP_START}_${TSTAMP_STOP}.log"
+cp $LOG $TSTF
+mv $TSTF $LOGDIR
+
+rm -f $ENV
+rm -f $OUT
+rm -f $TMP_PRIV_ZONES
