@@ -18,7 +18,6 @@ from azuredns import config
 
 # local configuration constants, variables and initial values
 
-
 V_Type = ObjectType.VIEW
 Z_Type = ObjectType.ZONE
 Cf_Type = ObjectType.CONFIGURATION
@@ -53,18 +52,24 @@ from azuredns import config
          '...","keyword":"*"}',
  'issue': 'Missing required parameter'}
 
+select_criteria is a dictionary:
+{
+    "selector": "search",
+    "startEntityID": int,
+    "children_only": True,
+    "types": "Configuration,View,Zone",
+    "keyword": "*"
+}
 """
 
 
 # returns an iterator, not the data itself
-def export_entities(start_id):
-    selection = {
-        "selector": "get_entitytree",
-        "types": "Zone,GenericRecord,HostRecord,SRVRecord,TXTRecord,ExternalHostRecord",
-        "startEntityId": start_id,
-        "keyword": "*",
-    }
-    ent_iterator = Clnt.export_entities(select_criteria=selection, start=0, count=55000)
+def export_entities(
+    selection={"selector": "search", "types": "Zone", "keyword": "*"},
+    start=0,
+    count=5000,
+):
+    ent_iterator = Clnt.export_entities(selection, start, count)
     return ent_iterator
 
 
@@ -77,6 +82,7 @@ def get_system_info():
 
 
 # get the parent entity of a given entity
+
 
 def get_parent(eid):
     return Clnt.get_parent(eid)
@@ -108,10 +114,13 @@ def add_entity(pid, ent):
 
 # Returns None
 
+
 def delete_entity(eid):
     Clnt.delete_entity(eid)
 
+
 # Returns None
+
 
 def delete_entity_with_optipons(eid):
     Clnt.delete_entity_with_optipons(eid)
@@ -132,8 +141,9 @@ Returns a list of entities
 
 """
 
-def get_entities(pid, typ):
-    ents = Clnt.get_entities(parent_id=pid, type=typ, start=0, count=100)
+
+def get_entities(pid, typ, start=0, count=999):
+    ents = Clnt.get_entities(pid, typ, start, count)
     return ents
 
 
@@ -165,6 +175,7 @@ Use:
 
 """
 
+
 def update_entity(ent):
     Clnt.update_entity(ent)
 
@@ -173,8 +184,10 @@ def update_entity(ent):
 Only applies to SRV MX records etc.
 """
 
+
 def update_entity_with_options(ent, opts):
     Clnt.update_entity_with_options(ent, opts)
+
 
 """
 Adds a generic using an absolute name.
@@ -196,8 +209,10 @@ returns the id of the new RR
 
 """
 
+
 def add_generic_record(viewid, fqdn, typ, rdata):
     return Clnt.add_generic_record(viewid, fqdn, typ, rdata)
+
 
 """
 add a zone at the top level
@@ -226,12 +241,13 @@ These properties are supported by Address Manager v9.4.0:
         The default value is true.
 """
 
+
 def add_zone(zone):
     try:
         ent_id = Clnt.add_zone(
             entity_id=config.ViewId,
             absolute_name=zone,
-            properties=Z_Props_Not_Deployable
+            properties=Z_Props_Not_Deployable,
         )
         return ent_id
     except ErrorResponse as e:
@@ -263,6 +279,7 @@ count (int, optional):
 
 """
 
+
 def get_zones_by_hint(zone):
     opts = {
         "hint": zone,
@@ -282,13 +299,18 @@ def get_zones_by_hint(zone):
 def bam_init():
     global Clnt
 
-    ca_bundle = "/etc/ssl/certs/USERTrust_RSA_Certification_Authority.pem"
+    unix_ver = os.uname().sysname
+    if unix_ver == "Linux":
+        ca_bundle = "/etc/ssl/certs/USERTrust_RSA_Certification_Authority.pem"
+    elif unix_ver == "OpenBSD":
+        ca_bundle = "/etc/ssl/Sectigo-AAA-chain.pem"
+    else:
+        ca_bundle = "/etc/group"
 
     home_dir = os.path.expanduser("~")
     load_dotenv(f"{home_dir}/.bamrc")
     #    load_dotenv(f"{home_dir}/.psqlrc")
     #    load_dotenv(f"{home_dir}/.azurerc")
-
     url = os.environ.get("BAM_API_URL")
     uname = os.environ.get("BAM_USER")
     pw = os.environ.get("BAM_PW")
@@ -297,21 +319,17 @@ def bam_init():
         Clnt = Client(url, verify=ca_bundle)
         Clnt.login(uname, pw)
         conf_ent = Clnt.get_entity_by_name(config.RootId, config.Conf, Cf_Type)
-        if config.Debug:
-            print()
-            print(f'BAM Configuration: {conf_ent["name"]}')
-            print(conf_ent)
-            print(f'Bam version: {Clnt.system_version}')
         config.ConfId = conf_ent["id"]
         view_ent = Clnt.get_entity_by_name(config.ConfId, config.View, V_Type)
         if config.Debug:
-            print()
-            print(f'BAM View: {view_ent["name"]}')
-            print(view_ent)
+            print(f"Bam version: {Clnt.system_version}")
+            print(f"BAM Configuration: {conf_ent}")
+            print(f"BAM View: {view_ent}")
         config.ViewId = view_ent["id"]
         return config.ViewId
     except ErrorResponse as e:
         print(f"Top Level Error: {e.message}")
+
 
 """
 When the record is to be added:
@@ -337,6 +355,7 @@ When the record is to be added:
         }
 """
 
+
 def apientity(hname, ip):
     props = {
         "comments": "An Azure Private DNS A record",
@@ -344,6 +363,7 @@ def apientity(hname, ip):
         "rdata": ip,
     }
     return APIEntity(name=hname, type="GenericRecord", properties=props)
+
 
 """
 Looking for the following data structure to write out to the octodns yaml file

@@ -1,17 +1,17 @@
 ---
 providers:
-  config:
-    class: octodns.provider.yaml.YamlProvider
-    directory: ./zones
-    default_ttl: 3600
-    enforce_order: True
-  azure:
+  azure-qa:
     class: octodns_azure.AzurePrivateProvider
-    client_id: env/AZURE_APPLICATION_ID
-    key: env/AZURE_AUTHENTICATION_KEY
-    directory_id: env/AZURE_DIRECTORY_ID
-    sub_id: env/AZURE_SUBSCRIPTION_ID
+    client_id: env/AZURE_QA_CLIENT_ID
+    directory_id: env/AZURE_QA_DIRECTORY_ID
+    key: env/AZURE_QA_AUTHENTICATION_KEY
     resource_group: Q9011ADCO-CC-PvDNS-RG01
+    sub_id: env/AZURE_QA_SUBSCRIPTION_ID
+  config-qa:
+    class: octodns.provider.yaml.YamlProvider
+    default_ttl: 3600
+    directory: ./qa-zones
+    enforce_order: true
 
 zones:
   # This is a dynamic zone config. The source(s), here `config`, will be
@@ -19,6 +19,6 @@ zones:
   # match the dynamic entry.
   '*':
     sources:
-      - config
+      - config-qa
     targets:
-      - azure
+      - azure-qa
