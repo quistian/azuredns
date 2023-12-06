@@ -7,6 +7,8 @@ TSTAMP=`date +"%Y-%m-%dT%H-%M-%S"`
 OUT=/tmp/changed-zones.$$
 
 # azurecli zones bc  > $TMP
+# will soon be changing the first step
+
 date > $LOG
 for z in $*
 do
