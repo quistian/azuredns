@@ -1,0 +1,4 @@
+---
+global.handler.control:
+  type: CNAME
+  value: amcs-prod-global-handler.trafficmanager.net.

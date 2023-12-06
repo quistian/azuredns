@@ -1,0 +1,45 @@
+---
+db4c0:
+  ttl: 10
+  type: A
+  value: 10.141.32.36
+db4c1:
+  ttl: 10
+  type: A
+  value: 10.141.32.37
+db4c2:
+  ttl: 10
+  type: A
+  value: 10.141.32.38
+q278eisutil1:
+  ttl: 10
+  type: A
+  value: 10.141.32.68
+vm000000:
+  ttl: 10
+  type: A
+  value: 10.141.32.132
+vm000001:
+  ttl: 10
+  type: A
+  value: 10.141.32.133
+wf2c0:
+  ttl: 10
+  type: A
+  value: 10.141.32.39
+wf2c1:
+  ttl: 10
+  type: A
+  value: 10.141.32.40
+wf2c2:
+  ttl: 10
+  type: A
+  value: 10.141.32.41
+wf2c3:
+  ttl: 10
+  type: A
+  value: 10.141.32.42
+wf2c4:
+  ttl: 10
+  type: A
+  value: 10.141.32.43

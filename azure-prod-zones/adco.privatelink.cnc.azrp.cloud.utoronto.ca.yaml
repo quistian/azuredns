@@ -1,0 +1,5 @@
+---
+rslvr-test-vm01:
+  ttl: 10
+  type: A
+  value: 10.140.126.148

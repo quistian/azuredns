@@ -1,0 +1,7 @@
+---
+n278-eisss-sqldns-sql:
+  type: A
+  value: 10.140.56.28
+p228aeadm-fase-fit-sql-rg02:
+  type: A
+  value: 10.140.37.4

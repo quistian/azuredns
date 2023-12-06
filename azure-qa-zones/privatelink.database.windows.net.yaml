@@ -1,0 +1,25 @@
+---
+q031_test:
+  type: A
+  value: 10.141.188.197
+q228_jc:
+  type: A
+  value: 10.141.110.52
+q228_test:
+  type: A
+  value: 10.141.110.51
+q234_test:
+  type: A
+  value: 10.141.246.136
+q277_test:
+  type: A
+  value: 10.141.122.125
+q278-eis-sharedsql-cc-sqlmi01.b674f74a0cf8:
+  type: A
+  value: 10.141.32.100
+q569_test:
+  type: A
+  value: 10.141.94.5
+q574_test:
+  type: A
+  value: 10.141.187.136

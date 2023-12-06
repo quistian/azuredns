@@ -1,0 +1,25 @@
+---
+q031_test:
+  type: A
+  value: 10.141.90.200
+q228_test:
+  type: A
+  value: 10.141.253.186
+q234_test:
+  type: A
+  value: 10.141.204.34
+q277_test:
+  type: A
+  value: 10.141.98.57
+q278_test:
+  type: A
+  value: 10.141.134.199
+q301dw2-cc-akv01:
+  type: A
+  value: 10.141.100.28
+q569_test:
+  type: A
+  value: 10.141.26.14
+q574_test:
+  type: A
+  value: 10.141.213.232

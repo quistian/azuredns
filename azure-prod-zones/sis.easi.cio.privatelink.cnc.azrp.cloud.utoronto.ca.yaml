@@ -1,0 +1,81 @@
+---
+db16c0:
+  ttl: 10
+  type: A
+  value: 10.140.14.7
+db16c1:
+  ttl: 10
+  type: A
+  value: 10.140.14.8
+db16c2:
+  ttl: 10
+  type: A
+  value: 10.140.14.9
+n301-df-vm01:
+  ttl: 10
+  type: A
+  value: 10.140.15.4
+n301-easi-mongo-db-vm-1:
+  ttl: 10
+  type: A
+  value: 10.140.15.10
+n301-easi-mongo-db-vm-2:
+  ttl: 10
+  type: A
+  value: 10.140.15.11
+n301-easi-mongo-db-vm-3:
+  ttl: 10
+  type: A
+  value: 10.140.15.12
+n301-easi-odata-vm-01:
+  ttl: 10
+  type: A
+  value: 10.140.15.69
+p301-easi-mongo-db-vm-1:
+  ttl: 10
+  type: A
+  value: 10.140.15.37
+p301-easi-mongo-db-vm-2:
+  ttl: 10
+  type: A
+  value: 10.140.15.38
+p301-easi-mongo-db-vm-3:
+  ttl: 10
+  type: A
+  value: 10.140.15.39
+p301-easi-power:
+  ttl: 10
+  type: A
+  value: 10.140.15.41
+p301-easi-qas-v:
+  ttl: 10
+  type: A
+  value: 10.140.15.84
+p301-easi-sftp-vm:
+  ttl: 10
+  type: A
+  value: 10.140.15.196
+p301easidfwin1:
+  ttl: 10
+  type: A
+  value: 10.140.15.36
+wf2c0:
+  ttl: 10
+  type: A
+  value: 10.140.14.15
+wf2c1:
+  ttl: 10
+  type: A
+  value: 10.140.14.16
+wf2c2:
+  ttl: 10
+  type: A
+  value: 10.140.14.17
+wf2c3:
+  ttl: 10
+  type: A
+  value: 10.140.14.18
+wf2c4:
+  ttl: 10
+  type: A
+  value: 10.140.14.19

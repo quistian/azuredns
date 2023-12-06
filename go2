@@ -1,0 +1,24 @@
+#!/bin/sh
+
+TMP=/tmp/azure-private-zones.$$
+CHANGED="./changed-zones.$$"
+LOG="./bc-zone-sync.log"
+TSTAMP=`date +"%Y-%m-%dT%H-%M-%S"`
+OUT=/tmp/changed-zones.$$
+
+# azurecli zones bc  > $TMP
+date > $LOG
+for z in $*
+do
+    echo $z
+    azurecli sync -s bc -d bc-leaf $z
+    azurecli sync -s bc-leaf -d bc-merged $z
+    azurecli sync -s bc-merged -d bc-normalized $z
+    octodns-sync --quiet --log-stream-stdout --config-file config/qa-dynamic.yaml $z. --doit
+done | tee -a $LOG
+
+date >> $LOG
+cp $LOG "bc-zones-update-${TSTAMP}.log"
+
+rm -f $OUT
+rm -f $TMP

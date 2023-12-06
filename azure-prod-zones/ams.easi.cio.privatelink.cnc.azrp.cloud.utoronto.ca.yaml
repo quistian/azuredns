@@ -1,0 +1,125 @@
+---
+d301amsdfm01s:
+  ttl: 10
+  type: A
+  value: 10.140.4.28
+d301amsdi101s:
+  ttl: 10
+  type: A
+  value: 10.140.4.68
+d301amsdpa01s:
+  ttl: 10
+  type: A
+  value: 10.140.4.45
+d301amsdpm01s:
+  ttl: 10
+  type: A
+  value: 10.140.4.20
+d301amsds101a:
+  ttl: 10
+  type: A
+  value: 10.140.4.133
+d301amsdwd01w:
+  ttl: 10
+  type: A
+  value: 10.140.4.52
+m301amsjmp01w:
+  ttl: 10
+  type: A
+  value: 10.140.8.132
+m301amsmsm01d:
+  ttl: 10
+  type: A
+  value: 10.140.8.148
+m301amsmsm01p:
+  ttl: 10
+  type: A
+  value: 10.140.8.134
+m301amsssm02m:
+  ttl: 10
+  type: A
+  value: 10.140.8.141
+p301amsams01s:
+  ttl: 10
+  type: A
+  value: 10.140.8.21
+p301amspfm01s:
+  ttl: 10
+  type: A
+  value: 10.140.8.76
+p301amsph101d:
+  ttl: 10
+  type: A
+  value: 10.140.8.180
+p301amsppa01s:
+  ttl: 10
+  type: A
+  value: 10.140.8.92
+p301amsppm01s:
+  ttl: 10
+  type: A
+  value: 10.140.8.68
+p301amspup01p:
+  ttl: 10
+  type: A
+  value: 10.140.8.52
+p301amspwd01w:
+  ttl: 10
+  type: A
+  value: 10.140.8.100
+p301amsrsd01r:
+  ttl: 10
+  type: A
+  value: 10.140.8.116
+q301amsqf101s:
+  ttl: 10
+  type: A
+  value: 10.140.6.54
+q301amsqh101d:
+  ttl: 10
+  type: A
+  value: 10.140.6.133
+q301amsqp101s:
+  ttl: 10
+  type: A
+  value: 10.140.6.45
+q301amsqpa01s:
+  ttl: 10
+  type: A
+  value: 10.140.6.68
+q301amsqs101a:
+  ttl: 10
+  type: A
+  value: 10.140.6.116
+q301amsqt101a:
+  ttl: 10
+  type: A
+  value: 10.140.6.149
+q301amsqwd01w:
+  ttl: 10
+  type: A
+  value: 10.140.6.76
+s301amssh101d:
+  ttl: 10
+  type: A
+  value: 10.140.4.164
+s301amssh102d:
+  ttl: 10
+  type: A
+  value: 10.140.4.165
+s301amssh103d:
+  ttl: 10
+  type: A
+  value: 10.140.4.166
+s301amsspm01s:
+  ttl: 10
+  type: A
+  value: 10.140.5.52
+s301amsss104p:
+  ttl: 10
+  type: A
+  value: 10.140.4.180
+s301amsss301p:
+  ttl: 10
+  type: A
+  value: 10.140.4.181

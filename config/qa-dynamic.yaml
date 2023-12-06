@@ -1,0 +1,24 @@
+---
+providers:
+  azure-qa:
+    class: octodns_azure.AzurePrivateProvider
+    client_id: env/AZURE_QA_CLIENT_ID
+    directory_id: env/AZURE_QA_DIRECTORY_ID
+    key: env/AZURE_QA_AUTHENTICATION_KEY
+    resource_group: Q9011ADCO-CC-PvDNS-RG01
+    sub_id: env/AZURE_QA_SUBSCRIPTION_ID
+  config-qa:
+    class: octodns.provider.yaml.YamlProvider
+    default_ttl: 3600
+    directory: ./qa-zones
+    enforce_order: true
+
+zones:
+  # This is a dynamic zone config. The source(s), here `config`, will be
+  # queried for a list of zone names and each will dynamically be set up to
+  # match the dynamic entry.
+  '*':
+    sources:
+      - config-qa
+    targets:
+      - azure-qa

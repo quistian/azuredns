@@ -1,0 +1,17 @@
+---
+n278-eisss-jumpbox-vm:
+  ttl: 10
+  type: A
+  value: 10.140.56.36
+n278-eisss-sqldns-vm1:
+  ttl: 10
+  type: A
+  value: 10.140.56.20
+vm000000:
+  ttl: 10
+  type: A
+  value: 10.140.56.68
+vm000001:
+  ttl: 10
+  type: A
+  value: 10.140.56.69

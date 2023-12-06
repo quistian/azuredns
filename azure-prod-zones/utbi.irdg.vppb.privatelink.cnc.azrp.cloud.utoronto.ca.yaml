@@ -1,0 +1,65 @@
+---
+db16c0:
+  ttl: 10
+  type: A
+  value: 10.140.16.4
+db16c1:
+  ttl: 10
+  type: A
+  value: 10.140.16.5
+db16c2:
+  ttl: 10
+  type: A
+  value: 10.140.16.6
+idhnccvmdfwin01:
+  ttl: 10
+  type: A
+  value: 10.140.3.4
+idhnccvmdfwin02:
+  ttl: 10
+  type: A
+  value: 10.140.3.5
+idhnccvmdfwin05:
+  ttl: 10
+  type: A
+  value: 10.140.3.8
+idhnccvmdfwin06:
+  ttl: 10
+  type: A
+  value: 10.140.3.9
+idhpccvmdfwin01:
+  ttl: 10
+  type: A
+  value: 10.140.17.5
+idhpccvmdfwin02:
+  ttl: 10
+  type: A
+  value: 10.140.17.4
+vm000000:
+  ttl: 10
+  type: A
+  value: 10.140.3.229
+vm000001:
+  ttl: 10
+  type: A
+  value: 10.140.3.228
+wf2c0:
+  ttl: 10
+  type: A
+  value: 10.140.16.7
+wf2c1:
+  ttl: 10
+  type: A
+  value: 10.140.16.8
+wf2c2:
+  ttl: 10
+  type: A
+  value: 10.140.16.9
+wf2c3:
+  ttl: 10
+  type: A
+  value: 10.140.16.10
+wf2c4:
+  ttl: 10
+  type: A
+  value: 10.140.16.11

@@ -1,0 +1,5 @@
+---
+resolver-test:
+  ttl: 10
+  type: A
+  value: 10.141.126.140

@@ -1,0 +1,45 @@
+---
+db4c0:
+  ttl: 10
+  type: A
+  value: 10.140.24.36
+db4c1:
+  ttl: 10
+  type: A
+  value: 10.140.24.37
+db4c2:
+  ttl: 10
+  type: A
+  value: 10.140.24.38
+vm000000:
+  ttl: 10
+  type: A
+  value: 10.140.25.4
+vm000001:
+  ttl: 10
+  type: A
+  value: 10.140.25.5
+vpp-az-adfs-001:
+  ttl: 10
+  type: A
+  value: 10.140.24.84
+wf2c0:
+  ttl: 10
+  type: A
+  value: 10.140.24.39
+wf2c1:
+  ttl: 10
+  type: A
+  value: 10.140.24.40
+wf2c2:
+  ttl: 10
+  type: A
+  value: 10.140.24.41
+wf2c3:
+  ttl: 10
+  type: A
+  value: 10.140.24.42
+wf2c4:
+  ttl: 10
+  type: A
+  value: 10.140.24.43
