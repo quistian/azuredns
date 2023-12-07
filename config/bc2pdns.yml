@@ -1,0 +1,21 @@
+providers:
+  bc:
+    class: octodns_bluecat.BlueCatProvider
+    endpoint: env/BAM_ENDPOINT
+    username: env/BAM_USER
+    password: env/BAM_PW
+    confname: env/BAM_CONF
+    viewname: env/BAM_VIEW
+  pdns:
+    class: octodns_powerdns.PowerDnsProvider
+    host: mirror.eis.utoronto.ca
+    port: 8081
+    api_key: env/POWERDNS_API_KEY
+    scheme: http
+
+zones:
+  '*':
+  sources:
+    - bc
+  targets:
+    - pdns

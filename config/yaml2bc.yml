@@ -1,0 +1,20 @@
+providers:
+  bluecat:
+    class: octodns_bluecat.BlueCatProvider
+    endpoint: env/BAM_ENDPOINT
+    username: env/BAM_USER
+    password: env/BAM_PW
+    confname: env/BAM_CONF
+    viewname: env/BAM_VIEW
+  yaml:
+    class: octodns.provider.yaml.YamlProvider
+    directory: ./bc-zones
+    default_ttl: 3600
+    enforce_order: True
+
+zones:
+  '*':
+    sources:
+      - yaml
+    targets:
+      - bluecat

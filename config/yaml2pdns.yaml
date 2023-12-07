@@ -1,0 +1,20 @@
+providers:
+  pdns:
+    class: octodns_powerdns.PowerDnsProvider
+      #    host: 128.100.103.158
+    host: mirror.eis.utoronto.ca
+    port: 8081
+    api_key: env/POWERDNS_API_KEY
+    scheme: http
+  yaml:
+    class: octodns.provider.yaml.YamlProvider
+    directory: ./pdns-zones
+    default_ttl: 3600
+    enforce_order: True
+
+zones:
+  '*':
+    sources:
+      - yaml
+    targets:
+      - pdns

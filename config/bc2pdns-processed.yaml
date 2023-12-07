@@ -1,0 +1,39 @@
+providers:
+  bluecat:
+    class: octodns_bluecat.BlueCatProvider
+    endpoint: env/BAM_ENDPOINT
+    username: env/BAM_USER
+    password: env/BAM_PW
+    confname: env/BAM_CONF
+    viewname: env/BAM_VIEW
+    token: env/BAM_TOKEN
+  pdns:
+    class: octodns_powerdns.PowerDnsProvider
+      #    host: 128.100.103.158
+    host: mirror.eis.utoronto.ca
+    port: 8081
+    api_key: env/POWERDNS_API_KEY
+    scheme: http
+
+processors:
+  no-root-ns:
+    class: octodns.processor.filter.IgnoreRootNsFilter
+      
+#  only-a-and-aaaa:
+#class: octodns.processor.filter.TypeAllowlistFilter
+#allowlist:
+#- A
+# - AAAA
+# Optional param that can be set to False to leave the target zone
+# alone, thus allowing deletion of existing records
+# (default: true)
+# include_target: True
+
+zones:
+  '*':
+  sources:
+    - bluecat
+  processors:
+    - no-root-ns
+  targets:
+    - pdns
