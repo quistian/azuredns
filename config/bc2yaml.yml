@@ -6,15 +6,32 @@ providers:
     password: env/BAM_PW
     confname: env/BAM_CONF
     viewname: env/BAM_VIEW
+  pdns:
+    class: octodns_powerdns.PowerDnsProvider
+    host: mirror.eis.utoronto.ca
+    port: 8081
+    api_key: env/POWERDNS_API_KEY
+    scheme: http
   yaml:
     class: octodns.provider.yaml.YamlProvider
-    directory: ./bc-zones
+    directory: ./leaf-zones
     default_ttl: 3600
     enforce_order: True
+
+processors:
+  only-a-and-aaaa:
+    class: octodns.processor.filter.TypeAllowlistFilter
+    allowlist:
+      - A
+      - AAAA
+  no-root-ns:
+    class: octodns.processor.filter.IgnoreRootNsFilter
 
 zones:
   '*':
     sources:
       - bluecat
+    processors:
+      - only-a-and-aaaa
     targets:
       - yaml

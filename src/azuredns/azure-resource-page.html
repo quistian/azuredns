@@ -1,0 +1,2006 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html class="hasSidebar hasPageActions hasBreadcrumb conceptual has-default-focus theme-light" lang="en-us" dir="ltr" data-css-variable-support="true" data-authenticated="false" data-auth-status-determined="false" data-target="docs" x-ms-format-detection="none">
+
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta property="og:title" content="Azure Private Endpoint DNS configuration" />
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content="https://learn.microsoft.com/en-us/azure/private-link/private-endpoint-dns" />
+			<meta property="og:description" content="Learn about Azure Private Endpoint DNS configuration." />
+
+	<meta property="og:image" content="https://learn.microsoft.com/en-us/media/open-graph-image.png" />
+
+	<meta property="og:image:alt" content="Microsoft Learn" />
+
+	<meta name="twitter:card" content="summary_large_image" />
+
+	<meta name="twitter:site" content="@MicrosoftLearn" />
+
+	<meta name="color-scheme" content="light dark">
+
+
+	<meta name="author" content="asudbring" />
+<meta name="breadcrumb_path" content="/azure/bread/toc.json" />
+<meta name="depot_name" content="Azure.azure-documents" />
+<meta name="description" content="Learn about Azure Private Endpoint DNS configuration." />
+<meta name="document_id" content="a88af182-32aa-a8f3-359d-b92ae1cfb8c7" />
+<meta name="document_version_independent_id" content="01ce07fc-4bc2-def5-9ecd-a80330ad9488" />
+<meta name="feedback_system" content="GitHub" />
+<meta name="git_commit_id" content="bd108d8c007774d52603cfbc3667d4d0ae7c18d0" />
+<meta name="gitcommit" content="https://github.com/MicrosoftDocs/azure-docs-pr/blob/bd108d8c007774d52603cfbc3667d4d0ae7c18d0/articles/private-link/private-endpoint-dns.md" />
+<meta name="learn_banner_products" content="azure" />
+<meta name="locale" content="en-us" />
+<meta name="ms.author" content="allensu" />
+<meta name="ms.collection" content="networking" />
+<meta name="ms.custom" content="fasttrack-edit" />
+<meta name="ms.date" content="10/11/2023" />
+<meta name="ms.service" content="private-link" />
+<meta name="ms.suite" content="office" />
+<meta name="ms.topic" content="conceptual" />
+<meta name="original_content_git_url" content="https://github.com/MicrosoftDocs/azure-docs-pr/blob/live/articles/private-link/private-endpoint-dns.md" />
+<meta name="page_type" content="conceptual" />
+<meta name="pdf_url_template" content="https://learn.microsoft.com/pdfstore/en-us/Azure.azure-documents/{branchName}{pdfName}" />
+<meta name="recommendation_types" content="Training" />
+<meta name="recommendation_types" content="Certification" />
+<meta name="recommendations" content="true" />
+<meta name="schema" content="Conceptual" />
+<meta name="services" content="private-link" />
+<meta name="site_name" content="Docs" />
+<meta name="toc_rel" content="toc.json" />
+<meta name="uhfHeaderId" content="azure" />
+<meta name="updated_at" content="2023-10-27 05:05 PM" />
+<meta name="word_count" content="2828" />
+
+
+	<meta name="recommendation_types" content="Training" />
+	<meta name="recommendation_types" content="Certification" />
+	
+
+	<meta name="persistent_id" content="4976a040-8f94-4197-2255-a41bc9cc838c" />
+	
+
+
+	<meta name="cmProducts" content="https://authoring-docs-microsoft.poolparty.biz/devrel/68ec7f3a-2bc6-459f-b959-19beb729907d" data-source="generated" />
+
+	<meta name="cmProducts" content="https://authoring-docs-microsoft.poolparty.biz/devrel/cd668c2f-f5b3-4573-8ad1-019570e3e2db" data-source="generated" />
+
+	<meta name="cmProducts" content="https://authoring-docs-microsoft.poolparty.biz/devrel/20ed8455-bc18-4537-87a4-83784e7b2a39" data-source="generated" />
+
+	
+
+
+	<meta name="spProducts" content="https://authoring-docs-microsoft.poolparty.biz/devrel/90370425-aca4-4a39-9533-d52e5e002a5d" data-source="generated" />
+
+	<meta name="spProducts" content="https://authoring-docs-microsoft.poolparty.biz/devrel/cc82e69d-afbe-4554-9f4c-6705fc860c42" data-source="generated" />
+
+	<meta name="spProducts" content="https://authoring-docs-microsoft.poolparty.biz/devrel/9a7f703b-30bb-4d62-9eb4-97213f571849" data-source="generated" />
+
+	
+
+	<meta name="scope" content="Azure" />
+	<meta name="github_feedback_content_git_url" content="https://github.com/MicrosoftDocs/azure-docs/blob/main/articles/private-link/private-endpoint-dns.md" />
+<link href="https://learn.microsoft.com/en-us/azure/private-link/private-endpoint-dns" rel="canonical">
+	<title>Azure Private Endpoint DNS configuration | Microsoft Learn</title>
+
+		<link rel="stylesheet" href="/_themes/docs.theme/master/en-us/_themes/styles/dce1d392.site-ltr.css ">
+
+	
+
+	<script id="msdocs-script">
+	var msDocs = {
+		data: {
+			timeOrigin: Date.now(),
+			contentLocale: 'en-us',
+			contentDir: 'ltr',
+			userLocale: 'en-us',
+			userDir: 'ltr',
+			pageTemplate: 'Conceptual',
+			brand: 'azure',
+			context: {
+			},
+			hasBinaryRating: true,
+			hasGithubIssues: true,
+			feedbackHelpLinkType:'',
+			feedbackHelpLinkUrl:'',
+			standardFeedback: false,
+			showFeedbackReport: false,
+			enableTutorialFeedback: false,
+			contentWellNotification: '',
+			feedbackSystem: 'GitHub',
+			feedbackGitHubRepo: 'MicrosoftDocs/azure-docs',
+			feedbackProductUrl: 'https://feedback.azure.com/d365community/forum/79b1327d-d925-ec11-b6e6-000d3a4f06a4',
+			extendBreadcrumb: false,
+			isEditDisplayable: true,
+			hideViewSource: false,
+			hasPageActions: true,
+			hasPrintButton: true,
+			hasBookmark: true,
+			hasShare: true,
+			isPermissioned: false,
+			isPrivateUnauthorized: false,
+			hasRecommendations: true,
+			contributors: [
+						{ name: "asudbring", url: "https://github.com/asudbring" },
+						{ name: "mmadrigal98", url: "https://github.com/mmadrigal98" },
+						{ name: "juanandmsft", url: "https://github.com/juanandmsft" },
+						{ name: "halkazwini", url: "https://github.com/halkazwini" },
+						{ name: "GitaraniSharma-MSFT", url: "https://github.com/GitaraniSharma-MSFT" },
+						{ name: "ivapplyr", url: "https://github.com/ivapplyr" },
+						{ name: "hanagapal", url: "https://github.com/hanagapal" },
+						{ name: "LaurentLesle", url: "https://github.com/LaurentLesle" },
+						{ name: "vmisson", url: "https://github.com/vmisson" },
+						{ name: "Heidilohr", url: "https://github.com/Heidilohr" },
+						{ name: "SherrySahni", url: "https://github.com/SherrySahni" },
+						{ name: "prmerger-automator[bot]", url: "https://github.com/prmerger-automator[bot]" },
+						{ name: "agray0232", url: "https://github.com/agray0232" },
+						{ name: "mrbullwinkle", url: "https://github.com/mrbullwinkle" },
+						{ name: "Blackmist", url: "https://github.com/Blackmist" },
+						{ name: "srajaramANP", url: "https://github.com/srajaramANP" },
+						{ name: "kgremban", url: "https://github.com/kgremban" },
+						{ name: "jcbrooks92", url: "https://github.com/jcbrooks92" },
+						{ name: "Jesusbar", url: "https://github.com/Jesusbar" },
+						{ name: "jpmicrosoft", url: "https://github.com/jpmicrosoft" },
+						{ name: "duongau", url: "https://github.com/duongau" },
+						{ name: "jamesgodden", url: "https://github.com/jamesgodden" },
+						{ name: "MrRoundRobin", url: "https://github.com/MrRoundRobin" },
+						{ name: "lilinvictorms", url: "https://github.com/lilinvictorms" },
+						{ name: "v-regandowner", url: "https://github.com/v-regandowner" },
+						{ name: "cosh", url: "https://github.com/cosh" },
+						{ name: "whhender", url: "https://github.com/whhender" },
+						{ name: "zeinab-mk", url: "https://github.com/zeinab-mk" },
+						{ name: "PRMerger15", url: "https://github.com/PRMerger15" },
+						{ name: "changeworld", url: "https://github.com/changeworld" },
+						{ name: "laghimp", url: "https://github.com/laghimp" },
+						{ name: "tsunami28", url: "https://github.com/tsunami28" },
+						{ name: "faister", url: "https://github.com/faister" },
+						{ name: "cloudchristoph", url: "https://github.com/cloudchristoph" },
+						{ name: "tullydwyer", url: "https://github.com/tullydwyer" },
+						{ name: "anchawl", url: "https://github.com/anchawl" },
+						{ name: "SaiKishor-MSFT", url: "https://github.com/SaiKishor-MSFT" },
+						{ name: "Hardstl", url: "https://github.com/Hardstl" },
+						{ name: "andyatwork", url: "https://github.com/andyatwork" },
+						{ name: "noakup", url: "https://github.com/noakup" },
+						{ name: "bwren", url: "https://github.com/bwren" },
+						{ name: "vaibhavgujral", url: "https://github.com/vaibhavgujral" },
+						{ name: "carlost-MSFT", url: "https://github.com/carlost-MSFT" },
+						{ name: "v-kents", url: "https://github.com/v-kents" },
+						{ name: "raunakjhawar", url: "https://github.com/raunakjhawar" },
+						{ name: "KalyanChanumolu-MSFT", url: "https://github.com/KalyanChanumolu-MSFT" },
+						{ name: "jlian", url: "https://github.com/jlian" },
+						{ name: "PRMerger13", url: "https://github.com/PRMerger13" },
+						{ name: "curib", url: "https://github.com/curib" },
+						{ name: "DCtheGeek", url: "https://github.com/DCtheGeek" },
+						{ name: "ShachafGoldstein", url: "https://github.com/ShachafGoldstein" },
+						{ name: "malopMSFT", url: "https://github.com/malopMSFT" },
+						{ name: "mblanco77", url: "https://github.com/mblanco77" },
+						{ name: "MGoedtel", url: "https://github.com/MGoedtel" },
+						{ name: "PRMerger6", url: "https://github.com/PRMerger6" }
+],
+		},
+		functions:{}
+	};
+	</script>
+	<script src="https://wcpstatic.microsoft.com/mscc/lib/v2/wcp-consent.js"></script>
+	<script src="https://js.monitor.azure.com/scripts/c/ms.jsll-3.min.js"></script>
+
+	<script src="/_themes/docs.theme/master/en-us/_themes/global/67a45209.deprecation.js"></script>
+		<link rel="preconnect" href="//mscom.demdex.net" crossorigin>
+		<link rel="dns-prefetch" href="//target.microsoft.com">
+		<link rel="dns-prefetch" href="//microsoftmscompoc.tt.omtrdc.net">
+		<link
+			rel="preload"
+			as="script"
+			href="/static/third-party/adobe-target/at-js/2.9.0/at.js"
+			integrity="sha384-1/viVM50hgc33O2gOgkWz3EjiD/Fy/ld1dKYXJRUyjNYVEjSUGcSN+iPiQF7e4cu"
+			crossorigin="anonymous"
+			id="adobe-target-script"
+			type="application/javascript"
+		/>
+		<script src="/_themes/docs.theme/master/en-us/_themes/scripts/b8710eec.index-docs.js"></script>
+</head>
+
+<body lang="en-us" dir="ltr">
+	<div class="header-holder has-default-focus">
+		<a href="#main" class="skip-to-main-link has-outline-color-text visually-hidden-until-focused position-fixed has-inner-focus focus-visible top-0 left-0 right-0 padding-xs has-text-centered has-body-background" tabindex="1">Skip to main content</a>
+
+		<div hidden id="cookie-consent-holder" data-test-id="cookie-consent-container"></div>
+
+		<div id="unsupported-browser" style="
+			background-color: white;
+			color: black;
+			padding: 16px;
+			border-bottom: 1px solid grey;"
+			hidden
+		>
+			<div style="max-width: 800px; margin: 0 auto;">
+				<p style="font-size: 24px">This browser is no longer supported.</p>
+				<p style="font-size: 16px; margin-top: 16px;">Upgrade to Microsoft Edge to take advantage of the latest features, security updates, and technical support.</p>
+				<div style="margin-top: 12px;">
+					<a href="https://go.microsoft.com/fwlink/p/?LinkID=2092881 "
+						style="
+						background-color: #0078d4;
+						border: 1px solid #0078d4;
+						color: white;
+						padding: 6px 12px;
+						border-radius: 2px;
+						display: inline-block;
+						">
+Download Microsoft Edge					</a>
+					<a href="https://learn.microsoft.com/en-us/lifecycle/faq/internet-explorer-microsoft-edge"
+						style="
+							background-color: white;
+							padding: 6px 12px;
+							border: 1px solid #505050;
+							color: #171717;
+							border-radius: 2px;
+							display: inline-block;
+							">
+More info about Internet Explorer and Microsoft Edge					</a>
+				</div>
+			</div>
+
+		</div>
+		<!-- liquid-tag banners global -->
+		<div id="headerAreaHolder" data-bi-name="header">
+<header role="banner" itemscope="itemscope" itemtype="http://schema.org/Organization">
+	<div class="nav-bar">
+		<div class="nav-bar-brand">
+			<a itemprop="url" href="https://www.microsoft.com" aria-label="Microsoft" class="nav-bar-button">
+				<div class="nav-bar-logo has-background-image theme-display is-light" role="presentation" aria-hidden="true" itemprop="logo" itemscope="itemscope"></div>
+				<div class="nav-bar-logo has-background-image theme-display is-dark is-high-contrast" role="presentation" aria-hidden="true" itemprop="logo" itemscope="itemscope"></div>
+			</a>
+		</div>
+	</div>
+	<div class="nav-bar border-top is-hidden-mobile"></div>
+</header>		</div>
+
+
+			<div id="content-header" class="content-header uhf-container has-padding has-default-focus border-bottom-none" data-bi-name="content-header">
+				<div class="content-header-controls margin-xxs margin-inline-sm-tablet">
+					<button type="button" class="contents-button button button-sm margin-right-xxs" data-bi-name="contents-expand" aria-haspopup="true" data-contents-button>
+						<span class="icon"><span class="docon docon-menu" aria-hidden="true"></span></span>
+						<span class="contents-expand-title">
+Table of contents						</span>
+					</button>
+					<button type="button" class="ap-collapse-behavior ap-expanded button button-sm" data-bi-name="ap-collapse" aria-controls="action-panel">
+						<span class="icon"><span class="docon docon-exit-mode" aria-hidden="true"></span></span>
+						<span>Exit focus mode</span>
+					</button>
+				</div>
+			</div>
+
+		<div id="disclaimer-holder" class="has-overflow-hidden has-default-focus">
+			<!-- liquid-tag banners sectional -->
+		</div>
+	</div>
+
+	<div class="mainContainer  uhf-container has-default-focus" data-bi-name="body">
+
+		<div class="columns has-large-gaps is-gapless-mobile ">
+
+			<div id="left-container" class="left-container is-hidden-mobile column is-one-third-tablet is-one-quarter-desktop">
+				<nav id="affixed-left-container" class="margin-top-sm-tablet position-sticky display-flex flex-direction-column" role="navigation" aria-label="Primary"></nav>
+			</div>
+
+			<!-- .primary-holder -->
+			<section class="primary-holder column is-two-thirds-tablet is-three-quarters-desktop">
+				<!--div.columns -->
+				<div class="columns is-gapless-mobile has-large-gaps ">
+
+
+					<div id="main-column" class="column  is-full is-8-desktop">
+
+						<main id="main" class="" role="main" data-bi-name="content" lang="en-us" dir="ltr">
+							<!-- article-header -->
+							<div id="article-header" class="background-color-body margin-top-sm-tablet margin-bottom-xs display-none-print">
+								<div class="display-flex align-items-center ">
+									<details id="article-header-breadcrumbs-overflow-popover" class="popover" data-for="article-header-breadcrumbs">
+										<summary class="button button-clear button-primary button-sm inner-focus" aria-label="All breadcrumbs">
+											<span class="icon">
+												<span class="docon docon-more"></span>
+											</span>
+										</summary>
+										<div id="article-header-breadcrumbs-overflow" class="popover-content padding-none">
+
+										</div>
+									</details>
+
+									<bread-crumbs id="article-header-breadcrumbs" data-test-id="article-header-breadcrumbs" class="overflow-hidden flex-grow-1 margin-right-sm margin-right-md-tablet margin-right-lg-desktop margin-left-negative-xxs padding-left-xxs"></bread-crumbs>
+
+									<div id="article-header-page-actions"  class="opacity-none margin-left-auto display-flex flex-wrap-no-wrap align-items-stretch">
+
+										<a
+											id="lang-link-tablet"
+											class="button button-primary button-clear button-sm display-none display-inline-flex-tablet"
+											title="Read in English" data-bi-name="language-toggle"
+											data-read-in-link
+											hidden>
+											<span class="icon margin-none" aria-hidden="true" data-read-in-link-icon>
+												<span class="docon docon-locale-globe"></span>
+											</span>
+											<span class="is-visually-hidden" data-read-in-link-text>Read in English</span>
+										</a>
+
+											<button
+												type="button"
+												class="collection button button-clear button-sm button-primary display-none display-inline-flex-tablet"
+												data-list-type="collection"
+												data-bi-name="collection"
+												title="Add to collection">
+												<span class="icon margin-none" aria-hidden="true">
+													<span class="docon docon-circle-addition"></span>
+												</span>
+												<span class="collection-status is-visually-hidden">Save</span>
+											</button>
+										
+
+											<a	data-contenteditbtn
+												class="button button-clear button-sm text-decoration-none button-primary display-none display-inline-flex-tablet"
+												aria-label="Edit"
+												title="Edit This Document"
+												data-bi-name="edit"
+
+														href="https://github.com/MicrosoftDocs/azure-docs/blob/main/articles/private-link/private-endpoint-dns.md"
+														data-original_content_git_url="https://github.com/MicrosoftDocs/azure-docs-pr/blob/live/articles/private-link/private-endpoint-dns.md"
+														data-original_content_git_url_template="{repo}/blob/{branch}/articles/private-link/private-endpoint-dns.md"
+														data-pr_repo=""
+														data-pr_branch=""
+											>
+												<span class="icon margin-none" aria-hidden="true">
+													<span class="docon docon-edit-outline"></span>
+												</span>
+											</a>
+										
+
+
+										
+										<details class="popover popover-right" id="article-header-page-actions-overflow">
+											<summary class="justify-content-flex-start button button-clear button-sm button-primary" aria-label="More actions">
+												<span class="icon" aria-hidden="true">
+													<span class="docon docon-more-vertical"></span>
+												</span>
+											</summary>
+											<div class="popover-content padding-none">
+													<button
+														data-page-action-item="overflow-mobile"
+														type="button"
+														class="justify-content-flex-start button-block button-sm has-inner-focus button button-clear display-none-tablet"
+														data-bi-name="contents-expand"
+														data-contents-button
+														data-popover-close>
+														<span class="icon">
+															<span class="docon docon-editor-list-bullet" aria-hidden="true"></span>
+														</span>
+															<span class="contents-expand-title">Table of contents</span>
+													</button>
+
+												<a
+													id="lang-link-overflow"
+													class="justify-content-flex-start button-sm has-inner-focus button button-clear button-block display-none-tablet"
+													title="Read in English" data-bi-name="language-toggle"
+													data-page-action-item="overflow-mobile"
+													data-check-hidden="true"
+													data-read-in-link
+													hidden
+													>
+													<span class="icon" aria-hidden="true" data-read-in-link-icon>
+														<span class="docon docon-locale-globe"></span>
+													</span>
+													<span data-read-in-link-text>Read in English</span>
+												</a>
+
+													<button
+														type="button"
+														class="collection justify-content-flex-start button button-clear button-sm has-inner-focus button-block display-none-tablet"
+														data-list-type="collection"
+														data-bi-name="collection"
+														title="Add to collection"
+														data-page-action-item="overflow-mobile"
+														data-check-hidden="true"
+														data-popover-close>
+														<span class="icon" aria-hidden="true">
+															<span class="docon docon-circle-addition"></span>
+														</span>
+														<span class="collection-status">Save</span>
+													</button>
+
+													<a	data-contenteditbtn
+														class="button button-clear button-block button-sm has-inner-focus justify-content-flex-start text-decoration-none display-none-tablet"
+														aria-label="Edit"
+														title="Edit This Document"
+														data-bi-name="edit"
+
+																href="https://github.com/MicrosoftDocs/azure-docs/blob/main/articles/private-link/private-endpoint-dns.md"
+																data-original_content_git_url="https://github.com/MicrosoftDocs/azure-docs-pr/blob/live/articles/private-link/private-endpoint-dns.md"
+																data-original_content_git_url_template="{repo}/blob/{branch}/articles/private-link/private-endpoint-dns.md"
+																data-pr_repo=""
+																data-pr_branch=""
+													>
+														<span class="icon" aria-hidden="true">
+															<span class="docon docon-edit-outline"></span>
+														</span>
+														<span>Edit</span>
+													</a>
+
+													<button
+														class="button button-block button-clear button-sm justify-content-flex-start has-inner-focus"
+														title="Print"
+														type="button"
+														aria-label="Print"
+														data-bi-name="print"
+														data-page-action-item="overflow-all"
+														data-popover-close
+														data-print-page
+														data-check-hidden="true">
+														<span class="icon" aria-hidden="true">
+															<span class="docon docon-print"></span>
+														</span>
+														<span>Print</span>
+													</button>
+
+													<div aria-hidden="true" class="margin-none
+														border-top" data-page-action-item="overflow-all"></div>
+
+													
+														<a class="button button-clear button-sm has-inner-focus button-block text-decoration-none justify-content-flex-start share-twitter" data-bi-name="twitter" data-page-action-item="overflow-all">
+															<span class="icon" aria-hidden="true">
+																<span class="docon docon-brand-twitter"></span>
+															</span>
+															<span>Twitter</span>
+														</a>
+														<a class="button button-clear button-sm has-inner-focus button-block text-decoration-none justify-content-flex-start share-linkedin" data-bi-name="linkedin" data-page-action-item="overflow-all">
+															<span class="icon" aria-hidden="true">
+																<span class="docon docon-brand-linkedin"></span>
+															</span>
+															<span>LinkedIn</span>
+														</a>
+														<a class="button button-clear button-sm button-block has-inner-focus text-decoration-none justify-content-flex-start share-facebook" data-bi-name="facebook" data-page-action-item="overflow-all">
+															<span class="icon" aria-hidden="true">
+																<span class="docon docon-brand-facebook"></span>
+															</span>
+															<span>Facebook</span>
+														</a>
+														<a class="button button-clear button-sm button-block has-inner-focus text-decoration-none justify-content-flex-start share-email" data-bi-name="email" data-page-action-item="overflow-all">
+															<span class="icon" aria-hidden="true">
+																<span class="docon docon-mail-message-fill"></span>
+															</span>
+															<span>Email</span>
+														</a>
+												
+											</div>
+										</details>
+										
+									</div>
+								</div>
+							</div>
+							<!-- end article-header -->
+
+
+							<div>
+								<button type="button" class="border contents-button button button-clear button-sm is-hidden-tablet has-inner-focus" data-bi-name="contents-expand" data-contents-button hidden>
+									<span class="icon">
+										<span class="docon docon-editor-list-bullet" aria-hidden="true"></span>
+									</span>
+										<span class="contents-expand-title">Table of contents</span>
+								</button>
+							</div>
+
+							<!-- end mobile-contents button  -->
+
+							<div class="content ">
+
+
+								<h1 id="azure-private-endpoint-dns-configuration">Azure Private Endpoint DNS configuration</h1>
+
+
+									<div class="display-flex justify-content-space-between align-items-center flex-wrap-wrap page-metadata-container">
+										<div class="margin-right-xxs">
+											<ul class="metadata page-metadata" data-bi-name="page info" lang="en-us" dir="ltr">
+													<li>
+Article													</li>
+
+													<li class="visibility-hidden-visual-diff">
+														<time class="is-invisible" data-article-date aria-label="Article review date" datetime="2023-10-11T08:00:00Z" data-article-date-source="calculated">10/11/2023</time>
+													</li>
+														<li class="contributors-holder display-none-print">
+															<button aria-label="View all contributors" class="contributors-button link-button" data-bi-name="contributors" title="View all contributors">
+																	55 contributors
+															</button>
+														</li>
+											</ul>
+										</div>
+
+<div id="user-feedback" class="margin-block-xxs display-none-print" data-hide-on-archived>
+	<button
+		id="user-feedback-button"
+		data-test-id="conceptual-feedback-button"
+		class="button button-sm button-clear button-primary"
+		type="button"
+		data-bi-name="user-feedback-button"
+		data-user-feedback-button
+	>
+		<span class="icon" aria-hidden="true">
+			<span class="docon docon-like"></span>
+		</span>
+		<span>Feedback</span>
+	</button>
+</div>
+									</div>
+
+									<div id="ms--inline-notifications" data-bi-name="inline-notification"></div>
+
+										<nav id="center-doc-outline" class="doc-outline is-hidden-desktop display-none-print margin-bottom-sm" data-bi-name="intopic toc" role="navigation" aria-label="In this article">
+											<h2 id="ms--in-this-article" class="title is-6 margin-block-xs">In this article</h2>
+										</nav>
+
+								<!-- <content> -->
+									<p>It's important to correctly configure your DNS settings to resolve the private endpoint IP address to the fully qualified domain name (FQDN) of the connection string.</p>
+<p>Existing Microsoft Azure services might already have a DNS configuration for a public endpoint. This configuration must be overridden to connect using your private endpoint.</p>
+<p>The network interface associated with the private endpoint contains the information to configure your DNS. The network interface information includes FQDN and private IP addresses for your private link resource.</p>
+<p>You can use the following options to configure your DNS settings for private endpoints:</p>
+<ul>
+<li><strong>Use the host file (only recommended for testing)</strong>. You can use the host file on a virtual machine to override the DNS.</li>
+<li><strong>Use a private DNS zone</strong>. You can use <a href="../dns/private-dns-privatednszone" data-linktype="relative-path">private DNS zones</a> to override the DNS resolution for a private endpoint. A private DNS zone can be linked to your virtual network to resolve specific domains.</li>
+<li><strong>Use your DNS forwarder (optional)</strong>. You can use your DNS forwarder to override the DNS resolution for a private link resource. Create a DNS forwarding rule to use a private DNS zone on your <a href="../virtual-network/virtual-networks-name-resolution-for-vms-and-role-instances#name-resolution-that-uses-your-own-dns-server" data-linktype="relative-path">DNS server</a> hosted in a virtual network.</li>
+</ul>
+<div class="IMPORTANT">
+<p>Important</p>
+<p>It is not recommended to override a zone that's actively in use to resolve public endpoints. Connections to resources won't be able to resolve correctly without DNS forwarding to the public DNS. To avoid issues, create a different domain name or follow the suggested name for each service below.</p>
+</div>
+<div class="IMPORTANT">
+<p>Important</p>
+<p>Existing Private DNS Zones linked to a single service should not be associated with two different Private Endpoints. This will cause a deletion of the initial A-record and result in resolution issue when attempting to access that service from each respective Private Endpoint. However, linking a Private DNS Zones with private endpoints associated with different services would not face this resolution constraint.</p>
+</div>
+<h2 id="azure-services-dns-zone-configuration">Azure services DNS zone configuration</h2>
+<p>Azure creates a canonical name DNS record (CNAME) on the public DNS. The CNAME record redirects the resolution to the private domain name. You can override the resolution with the private IP address of your private endpoints.</p>
+<p>Your applications don't need to change the connection URL. When resolving to a public DNS service, the DNS server will resolve to your private endpoints. The process doesn't affect your existing applications. If you are using Azure File shares, the share will need to be remounted if it's currently mounted using the public endpoint.</p>
+<div class="IMPORTANT">
+<p>Important</p>
+<ul>
+<li>Private networks already using the private DNS zone for a given type, can only connect to public resources if they don't have any private endpoint connections, otherwise a corresponding DNS configuration is required on the private DNS zone in order to complete the DNS resolution sequence.</li>
+<li>Private endpoint private DNS zone configurations will only automatically generate if you use the recommended naming scheme in the following table.</li>
+</ul>
+</div>
+<p>For Azure services, use the recommended zone names as described in the following table:</p>
+<table>
+<thead>
+<tr>
+<th>Private link resource type</th>
+<th>Subresource</th>
+<th>Private DNS zone name</th>
+<th>Public DNS zone forwarders</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Azure Automation (Microsoft.Automation/automationAccounts)</td>
+<td>Webhook <br> DSCAndHybridWorker</td>
+<td>privatelink.azure-automation.net</td>
+<td>{regionCode}.azure-automation.net</td>
+</tr>
+<tr>
+<td>Azure SQL Database (Microsoft.Sql/servers)</td>
+<td>sqlServer</td>
+<td>privatelink.database.windows.net</td>
+<td>database.windows.net</td>
+</tr>
+<tr>
+<td>Azure SQL Managed Instance (Microsoft.Sql/managedInstances)</td>
+<td>managedInstance</td>
+<td>privatelink.{dnsPrefix}.database.windows.net</td>
+<td>{instanceName}.{dnsPrefix}.database.windows.net</td>
+</tr>
+<tr>
+<td>Azure Synapse Analytics (Microsoft.Synapse/workspaces)</td>
+<td>Sql</td>
+<td>privatelink.sql.azuresynapse.net</td>
+<td>sql.azuresynapse.net</td>
+</tr>
+<tr>
+<td>Azure Synapse Analytics (Microsoft.Synapse/workspaces)</td>
+<td>SqlOnDemand</td>
+<td>privatelink.sql.azuresynapse.net</td>
+<td>{workspaceName}-ondemand.sql.azuresynapse.net</td>
+</tr>
+<tr>
+<td>Azure Synapse Analytics (Microsoft.Synapse/workspaces)</td>
+<td>Dev</td>
+<td>privatelink.dev.azuresynapse.net</td>
+<td>dev.azuresynapse.net</td>
+</tr>
+<tr>
+<td>Azure Synapse Studio (Microsoft.Synapse/privateLinkHubs)</td>
+<td>Web</td>
+<td>privatelink.azuresynapse.net</td>
+<td>azuresynapse.net</td>
+</tr>
+<tr>
+<td>Storage account (Microsoft.Storage/storageAccounts)</td>
+<td>blob </br> blob_secondary</td>
+<td>privatelink.blob.core.windows.net</td>
+<td>blob.core.windows.net</td>
+</tr>
+<tr>
+<td>Storage account (Microsoft.Storage/storageAccounts)</td>
+<td>table </br> table_secondary</td>
+<td>privatelink.table.core.windows.net</td>
+<td>table.core.windows.net</td>
+</tr>
+<tr>
+<td>Storage account (Microsoft.Storage/storageAccounts)</td>
+<td>queue </br> queue_secondary</td>
+<td>privatelink.queue.core.windows.net</td>
+<td>queue.core.windows.net</td>
+</tr>
+<tr>
+<td>Storage account (Microsoft.Storage/storageAccounts)</td>
+<td>file</td>
+<td>privatelink.file.core.windows.net</td>
+<td>file.core.windows.net</td>
+</tr>
+<tr>
+<td>Storage account (Microsoft.Storage/storageAccounts)</td>
+<td>web </br> web_secondary</td>
+<td>privatelink.web.core.windows.net</td>
+<td>web.core.windows.net</td>
+</tr>
+<tr>
+<td>Azure Data Lake File System Gen2 (Microsoft.Storage/storageAccounts)</td>
+<td>dfs </br> dfs_secondary</td>
+<td>privatelink.dfs.core.windows.net</td>
+<td>dfs.core.windows.net</td>
+</tr>
+<tr>
+<td>Azure Cosmos DB (Microsoft.AzureCosmosDB/databaseAccounts)</td>
+<td>Sql</td>
+<td>privatelink.documents.azure.com</td>
+<td>documents.azure.com</td>
+</tr>
+<tr>
+<td>Azure Cosmos DB (Microsoft.AzureCosmosDB/databaseAccounts)</td>
+<td>MongoDB</td>
+<td>privatelink.mongo.cosmos.azure.com</td>
+<td>mongo.cosmos.azure.com</td>
+</tr>
+<tr>
+<td>Azure Cosmos DB (Microsoft.AzureCosmosDB/databaseAccounts)</td>
+<td>Cassandra</td>
+<td>privatelink.cassandra.cosmos.azure.com</td>
+<td>cassandra.cosmos.azure.com</td>
+</tr>
+<tr>
+<td>Azure Cosmos DB (Microsoft.AzureCosmosDB/databaseAccounts)</td>
+<td>Gremlin</td>
+<td>privatelink.gremlin.cosmos.azure.com</td>
+<td>gremlin.cosmos.azure.com</td>
+</tr>
+<tr>
+<td>Azure Cosmos DB (Microsoft.AzureCosmosDB/databaseAccounts)</td>
+<td>Table</td>
+<td>privatelink.table.cosmos.azure.com</td>
+<td>table.cosmos.azure.com</td>
+</tr>
+<tr>
+<td>Azure Cosmos DB (Microsoft.DBforPostgreSQL/serverGroupsv2)</td>
+<td>coordinator</td>
+<td>privatelink.postgres.cosmos.azure.com</td>
+<td>postgres.cosmos.azure.com</td>
+</tr>
+<tr>
+<td>Azure Batch (Microsoft.Batch/batchAccounts)</td>
+<td>batchAccount</td>
+<td>{regionName}.privatelink.batch.azure.com</td>
+<td>{regionName}.batch.azure.com</td>
+</tr>
+<tr>
+<td>Azure Batch (Microsoft.Batch/batchAccounts)</td>
+<td>nodeManagement</td>
+<td>{regionName}.service.privatelink.batch.azure.com</td>
+<td>{regionName}.service.batch.azure.com</td>
+</tr>
+<tr>
+<td>Azure Database for PostgreSQL - Single server (Microsoft.DBforPostgreSQL/servers)</td>
+<td>postgresqlServer</td>
+<td>privatelink.postgres.database.azure.com</td>
+<td>postgres.database.azure.com</td>
+</tr>
+<tr>
+<td>Azure Database for MySQL - Single Server (Microsoft.DBforMySQL/servers)</td>
+<td>mysqlServer</td>
+<td>privatelink.mysql.database.azure.com</td>
+<td>mysql.database.azure.com</td>
+</tr>
+<tr>
+<td>Azure Database for MySQL - Flexible Server (Microsoft.DBforMySQL/flexibleServers)</td>
+<td>mysqlServer</td>
+<td>privatelink.mysql.database.azure.com</td>
+<td>mysql.database.azure.com</td>
+</tr>
+<tr>
+<td>Azure Database for MariaDB (Microsoft.DBforMariaDB/servers)</td>
+<td>mariadbServer</td>
+<td>privatelink.mariadb.database.azure.com</td>
+<td>mariadb.database.azure.com</td>
+</tr>
+<tr>
+<td>Azure Key Vault (Microsoft.KeyVault/vaults)</td>
+<td>vault</td>
+<td>privatelink.vaultcore.azure.net</td>
+<td>vault.azure.net <br> vaultcore.azure.net</td>
+</tr>
+<tr>
+<td>Azure Key Vault (Microsoft.KeyVault/managedHSMs)</td>
+<td>managedhsm</td>
+<td>privatelink.managedhsm.azure.net</td>
+<td>managedhsm.azure.net</td>
+</tr>
+<tr>
+<td>Azure Kubernetes Service - Kubernetes API (Microsoft.ContainerService/managedClusters)</td>
+<td>management</td>
+<td>privatelink.{regionName}.azmk8s.io </br> {subzone}.privatelink.{regionName}.azmk8s.io</td>
+<td>{regionName}.azmk8s.io</td>
+</tr>
+<tr>
+<td>Azure Search (Microsoft.Search/searchServices)</td>
+<td>searchService</td>
+<td>privatelink.search.windows.net</td>
+<td>search.windows.net</td>
+</tr>
+<tr>
+<td>Azure Container Registry (Microsoft.ContainerRegistry/registries)</td>
+<td>registry</td>
+<td>privatelink.azurecr.io </br> {regionName}.privatelink.azurecr.io</td>
+<td>azurecr.io </br> {regionName}.azurecr.io</td>
+</tr>
+<tr>
+<td>Azure App Configuration (Microsoft.AppConfiguration/configurationStores)</td>
+<td>configurationStores</td>
+<td>privatelink.azconfig.io</td>
+<td>azconfig.io</td>
+</tr>
+<tr>
+<td>Azure Backup (Microsoft.RecoveryServices/vaults)</td>
+<td>AzureBackup</td>
+<td>privatelink.{regionCode}.backup.windowsazure.com</td>
+<td>{regionCode}.backup.windowsazure.com</td>
+</tr>
+<tr>
+<td>Azure Site Recovery (Microsoft.RecoveryServices/vaults)</td>
+<td>AzureSiteRecovery</td>
+<td>privatelink.siterecovery.windowsazure.com</td>
+<td>{regionCode}.siterecovery.windowsazure.com</td>
+</tr>
+<tr>
+<td>Azure Event Hubs (Microsoft.EventHub/namespaces)</td>
+<td>namespace</td>
+<td>privatelink.servicebus.windows.net</td>
+<td>servicebus.windows.net</td>
+</tr>
+<tr>
+<td>Azure Service Bus (Microsoft.ServiceBus/namespaces)</td>
+<td>namespace</td>
+<td>privatelink.servicebus.windows.net</td>
+<td>servicebus.windows.net</td>
+</tr>
+<tr>
+<td>Azure IoT Hub (Microsoft.Devices/IotHubs)</td>
+<td>iotHub</td>
+<td>privatelink.azure-devices.net<br/>privatelink.servicebus.windows.net<sup>1</sup></td>
+<td>azure-devices.net<br/>servicebus.windows.net</td>
+</tr>
+<tr>
+<td>Azure IoT Hub Device Provisioning Service (Microsoft.Devices/ProvisioningServices)</td>
+<td>iotDps</td>
+<td>privatelink.azure-devices-provisioning.net</td>
+<td>azure-devices-provisioning.net</td>
+</tr>
+<tr>
+<td>Azure Relay (Microsoft.Relay/namespaces)</td>
+<td>namespace</td>
+<td>privatelink.servicebus.windows.net</td>
+<td>servicebus.windows.net</td>
+</tr>
+<tr>
+<td>Azure Event Grid (Microsoft.EventGrid/topics)</td>
+<td>topic</td>
+<td>privatelink.eventgrid.azure.net</td>
+<td>eventgrid.azure.net</td>
+</tr>
+<tr>
+<td>Azure Event Grid (Microsoft.EventGrid/domains)</td>
+<td>domain</td>
+<td>privatelink.eventgrid.azure.net</td>
+<td>eventgrid.azure.net</td>
+</tr>
+<tr>
+<td>Azure Web Apps - Azure Function Apps (Microsoft.Web/sites)</td>
+<td>sites</td>
+<td>privatelink.azurewebsites.net </br> scm.privatelink.azurewebsites.net</td>
+<td>azurewebsites.net </br> scm.azurewebsites.net</td>
+</tr>
+<tr>
+<td>Azure Machine Learning (Microsoft.MachineLearningServices/workspaces)</td>
+<td>amlworkspace</td>
+<td>privatelink.api.azureml.ms<br/>privatelink.notebooks.azure.net</td>
+<td>api.azureml.ms<br/>notebooks.azure.net<br/>instances.azureml.ms<br/>aznbcontent.net<br/>inference.ml.azure.com</td>
+</tr>
+<tr>
+<td>SignalR (Microsoft.SignalRService/SignalR)</td>
+<td>signalR</td>
+<td>privatelink.service.signalr.net</td>
+<td>service.signalr.net</td>
+</tr>
+<tr>
+<td>Azure Monitor (Microsoft.Insights/privateLinkScopes)</td>
+<td>azuremonitor</td>
+<td>privatelink.monitor.azure.com<br/> privatelink.oms.opinsights.azure.com <br/> privatelink.ods.opinsights.azure.com <br/> privatelink.agentsvc.azure-automation.net <br/> privatelink.blob.core.windows.net</td>
+<td>monitor.azure.com<br/> oms.opinsights.azure.com<br/> ods.opinsights.azure.com<br/> agentsvc.azure-automation.net <br/> blob.core.windows.net</td>
+</tr>
+<tr>
+<td>Azure AI services (Microsoft.CognitiveServices/accounts)</td>
+<td>account</td>
+<td>privatelink.cognitiveservices.azure.com <br/> privatelink.openai.azure.com</td>
+<td>cognitiveservices.azure.com <br/> openai.azure.com</td>
+</tr>
+<tr>
+<td>Azure File Sync (Microsoft.StorageSync/storageSyncServices)</td>
+<td>afs</td>
+<td>privatelink.afs.azure.net</td>
+<td>afs.azure.net</td>
+</tr>
+<tr>
+<td>Azure Data Factory (Microsoft.DataFactory/factories)</td>
+<td>dataFactory</td>
+<td>privatelink.datafactory.azure.net</td>
+<td>datafactory.azure.net</td>
+</tr>
+<tr>
+<td>Azure Data Factory (Microsoft.DataFactory/factories)</td>
+<td>portal</td>
+<td>privatelink.adf.azure.com</td>
+<td>adf.azure.com</td>
+</tr>
+<tr>
+<td>Azure Cache for Redis (Microsoft.Cache/Redis)</td>
+<td>redisCache</td>
+<td>privatelink.redis.cache.windows.net</td>
+<td>redis.cache.windows.net</td>
+</tr>
+<tr>
+<td>Azure Cache for Redis Enterprise (Microsoft.Cache/RedisEnterprise)</td>
+<td>redisEnterprise</td>
+<td>privatelink.redisenterprise.cache.azure.net</td>
+<td>redisenterprise.cache.azure.net</td>
+</tr>
+<tr>
+<td>Microsoft Purview (Microsoft.Purview)</td>
+<td>account</td>
+<td>privatelink.purview.azure.com</td>
+<td>purview.azure.com</td>
+</tr>
+<tr>
+<td>Microsoft Purview (Microsoft.Purview)</td>
+<td>portal</td>
+<td>privatelink.purviewstudio.azure.com</td>
+<td>purview.azure.com </br> purviewstudio.azure.com</td>
+</tr>
+<tr>
+<td>Azure Digital Twins (Microsoft.DigitalTwins)</td>
+<td>digitalTwinsInstances</td>
+<td>privatelink.digitaltwins.azure.net</td>
+<td>digitaltwins.azure.net</td>
+</tr>
+<tr>
+<td>Azure HDInsight (Microsoft.HDInsight/clusters)</td>
+<td>N/A</td>
+<td>privatelink.azurehdinsight.net</td>
+<td>azurehdinsight.net</td>
+</tr>
+<tr>
+<td>Azure Arc (Microsoft.HybridCompute)</td>
+<td>hybridcompute</td>
+<td>privatelink.his.arc.azure.com <br/> privatelink.guestconfiguration.azure.com </br> privatelink.dp.kubernetesconfiguration.azure.com</td>
+<td>his.arc.azure.com <br/> guestconfiguration.azure.com </br> dp.kubernetesconfiguration.azure.com</td>
+</tr>
+<tr>
+<td>Azure Media Services (Microsoft.Media)</td>
+<td>keydelivery </br> liveevent </br> streamingendpoint</td>
+<td>privatelink.media.azure.net</td>
+<td>media.azure.net</td>
+</tr>
+<tr>
+<td>Azure Data Explorer (Microsoft.Kusto/Clusters)</td>
+<td>cluster</td>
+<td>privatelink.{regionName}.kusto.windows.net</td>
+<td>{regionName}.kusto.windows.net</td>
+</tr>
+<tr>
+<td>Azure Static Web Apps (Microsoft.Web/staticSites)</td>
+<td>staticSites</td>
+<td>privatelink.azurestaticapps.net </br> privatelink.{partitionId}.azurestaticapps.net</td>
+<td>azurestaticapps.net </br> {partitionId}.azurestaticapps.net</td>
+</tr>
+<tr>
+<td>Azure Migrate (Microsoft.Migrate/migrateProjects)</td>
+<td>Default</td>
+<td>privatelink.prod.migration.windowsazure.com</td>
+<td>prod.migration.windowsazure.com</td>
+</tr>
+<tr>
+<td>Azure Migrate (Microsoft.Migrate/assessmentProjects)</td>
+<td>Default</td>
+<td>privatelink.prod.migration.windowsazure.com</td>
+<td>prod.migration.windowsazure.com</td>
+</tr>
+<tr>
+<td>Azure API Management (Microsoft.ApiManagement/service)</td>
+<td>gateway</td>
+<td>privatelink.azure-api.net</td>
+<td>azure-api.net</td>
+</tr>
+<tr>
+<td>Microsoft PowerBI (Microsoft.PowerBI/privateLinkServicesForPowerBI)</td>
+<td>tenant</td>
+<td>privatelink.analysis.windows.net </br> privatelink.pbidedicated.windows.net </br> privatelink.tip1.powerquery.microsoft.com</td>
+<td>analysis.windows.net </br> pbidedicated.windows.net </br> tip1.powerquery.microsoft.com</td>
+</tr>
+<tr>
+<td>Azure Bot Service (Microsoft.BotService/botServices)</td>
+<td>Bot</td>
+<td>privatelink.directline.botframework.com</td>
+<td>directline.botframework.com </br> europe.directline.botframework.com</td>
+</tr>
+<tr>
+<td>Azure Bot Service (Microsoft.BotService/botServices)</td>
+<td>Token</td>
+<td>privatelink.token.botframework.com</td>
+<td>token.botframework.com </br> europe.token.botframework.com</td>
+</tr>
+<tr>
+<td>Azure Health Data Services (Microsoft.HealthcareApis/workspaces)</td>
+<td>healthcareworkspace</td>
+<td>privatelink.workspace.azurehealthcareapis.com </br> privatelink.fhir.azurehealthcareapis.com </br> privatelink.dicom.azurehealthcareapis.com</td>
+<td>workspace.azurehealthcareapis.com </br> fhir.azurehealthcareapis.com </br> dicom.azurehealthcareapis.com</td>
+</tr>
+<tr>
+<td>Azure Databricks (Microsoft.Databricks/workspaces)</td>
+<td>databricks_ui_api </br> browser_authentication</td>
+<td>privatelink.azuredatabricks.net</td>
+<td>azuredatabricks.net</td>
+</tr>
+<tr>
+<td>Azure Virtual Desktop (Microsoft.DesktopVirtualization/workspaces)</td>
+<td>global</td>
+<td>privatelink-global.wvd.microsoft.com</td>
+<td>wvd.microsoft.com</td>
+</tr>
+<tr>
+<td>Azure Virtual Desktop (Microsoft.DesktopVirtualization/workspaces </br> Microsoft.DesktopVirtualization/hostpools)</td>
+<td>feed <br> connection</td>
+<td>privatelink.wvd.microsoft.com</td>
+<td>wvd.microsoft.com</td>
+</tr>
+<tr>
+<td>Azure Resource Manager (Microsoft.Authorization/resourceManagementPrivateLinks)</td>
+<td>ResourceManagement</td>
+<td>privatelink.azure.com</td>
+<td>azure.com</td>
+</tr>
+</tbody>
+</table>
+<p><sup>1</sup>To use with IoT Hub's built-in Event Hub compatible endpoint. To learn more, see <a href="../iot-hub/virtual-network-support#built-in-event-hubs-compatible-endpoint" data-linktype="relative-path">private link support for IoT Hub's built-in endpoint</a></p>
+<div class="NOTE">
+<p>Note</p>
+<p>In the above text, <strong><code>{regionCode}</code></strong> refers to the region code (for example, <strong>eus</strong> for East US and <strong>ne</strong> for North Europe). Refer to the following lists for regions codes:</p>
+<ul>
+<li><a href="https://download.microsoft.com/download/1/2/6/126a410b-0e06-45ed-b2df-84f353034fa1/AzureRegionCodesList.docx" data-linktype="external">All public clouds</a></li>
+<li><a href="/en-us/azure/backup/scripts/geo-code-list" data-linktype="absolute-path">Geo Code list in XML</a></li>
+</ul>
+<p><strong><code>{regionName}</code></strong> refers to the full region name (for example, <strong>eastus</strong> for East US and <strong>northeurope</strong> for North Europe). To retrieve a current list of Azure regions and their names and display names, use <strong><code>az account list-locations -o table</code></strong>.</p>
+</div>
+<h3 id="government">Government</h3>
+<table>
+<thead>
+<tr>
+<th>Private link resource type</th>
+<th>Subresource</th>
+<th>Private DNS zone name</th>
+<th>Public DNS zone forwarders</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Azure Automation / (Microsoft.Automation/automationAccounts)</td>
+<td>Webhook </br> DSCAndHybridWorker</td>
+<td>privatelink.azure-automation.us</td>
+<td>azure-automation.us</td>
+</tr>
+<tr>
+<td>Azure SQL Database (Microsoft.Sql/servers)</td>
+<td>sqlServer</td>
+<td>privatelink.database.usgovcloudapi.net</td>
+<td>database.usgovcloudapi.net</td>
+</tr>
+<tr>
+<td>Azure SQL Managed Instance (Microsoft.Sql/managedInstances)</td>
+<td>managedInstance</td>
+<td>privatelink.{dnsPrefix}.database.usgovcloudapi.net</td>
+<td>{instanceName}.{dnsPrefix}.database.usgovcloudapi.net</td>
+</tr>
+<tr>
+<td>Storage account (Microsoft.Storage/storageAccounts)</td>
+<td>blob </br> blob_secondary</td>
+<td>privatelink.blob.core.usgovcloudapi.net</td>
+<td>blob.core.usgovcloudapi.net</td>
+</tr>
+<tr>
+<td>Storage account (Microsoft.Storage/storageAccounts)</td>
+<td>table </br> table_secondary</td>
+<td>privatelink.table.core.usgovcloudapi.net</td>
+<td>table.core.usgovcloudapi.net</td>
+</tr>
+<tr>
+<td>Storage account (Microsoft.Storage/storageAccounts)</td>
+<td>queue </br> queue_secondary</td>
+<td>privatelink.queue.core.usgovcloudapi.net</td>
+<td>queue.core.usgovcloudapi.net</td>
+</tr>
+<tr>
+<td>Storage account (Microsoft.Storage/storageAccounts)</td>
+<td>file </br> file_secondary</td>
+<td>privatelink.file.core.usgovcloudapi.net</td>
+<td>file.core.usgovcloudapi.net</td>
+</tr>
+<tr>
+<td>Storage account (Microsoft.Storage/storageAccounts)</td>
+<td>web </br> web_secondary</td>
+<td>privatelink.web.core.usgovcloudapi.net</td>
+<td>web.core.usgovcloudapi.net</td>
+</tr>
+<tr>
+<td>Azure Cosmos DB (Microsoft.AzureCosmosDB/databaseAccounts)</td>
+<td>Sql</td>
+<td>privatelink.documents.azure.us</td>
+<td>documents.azure.us</td>
+</tr>
+<tr>
+<td>Azure Batch (Microsoft.Batch/batchAccounts)</td>
+<td>batchAccount</td>
+<td>privatelink.batch.usgovcloudapi.net</td>
+<td>{regionName}.batch.usgovcloudapi.net</td>
+</tr>
+<tr>
+<td>Azure Batch (Microsoft.Batch/batchAccounts)</td>
+<td>nodeManagement</td>
+<td>privatelink.batch.usgovcloudapi.net</td>
+<td>{regionName}.service.batch.usgovcloudapi.net</td>
+</tr>
+<tr>
+<td>Azure Database for PostgreSQL - Single server (Microsoft.DBforPostgreSQL/servers)</td>
+<td>postgresqlServer</td>
+<td>privatelink.postgres.database.usgovcloudapi.net</td>
+<td>postgres.database.usgovcloudapi.net</td>
+</tr>
+<tr>
+<td>Azure Database for MySQL - Single Server (Microsoft.DBforMySQL/servers)</td>
+<td>mysqlServer</td>
+<td>privatelink.mysql.database.usgovcloudapi.net</td>
+<td>mysql.database.usgovcloudapi.net</td>
+</tr>
+<tr>
+<td>Azure Database for MySQL - Flexible Server (Microsoft.DBforMySQL/flexibleServers)</td>
+<td>mysqlServer</td>
+<td>privatelink.mysql.database.usgovcloudapi.net</td>
+<td>mysql.database.usgovcloudapi.net</td>
+</tr>
+<tr>
+<td>Azure Database for MariaDB (Microsoft.DBforMariaDB/servers)</td>
+<td>mariadbServer</td>
+<td>privatelink.mariadb.database.usgovcloudapi.net</td>
+<td>mariadb.database.usgovcloudapi.net</td>
+</tr>
+<tr>
+<td>Azure Key Vault (Microsoft.KeyVault/vaults)</td>
+<td>vault</td>
+<td>privatelink.vaultcore.usgovcloudapi.net</td>
+<td>vault.usgovcloudapi.net <br> vaultcore.usgovcloudapi.net</td>
+</tr>
+<tr>
+<td>Azure Search (Microsoft.Search/searchServices)</td>
+<td>searchService</td>
+<td>privatelink.search.windows.us</td>
+<td>search.windows.us</td>
+</tr>
+<tr>
+<td>Azure App Configuration (Microsoft.AppConfiguration/configurationStores)</td>
+<td>configurationStores</td>
+<td>privatelink.azconfig.azure.us</td>
+<td>azconfig.azure.us</td>
+</tr>
+<tr>
+<td>Azure Backup (Microsoft.RecoveryServices/vaults)</td>
+<td>AzureBackup</td>
+<td>privatelink.{regionCode}.backup.windowsazure.us</td>
+<td>{regionCode}.backup.windowsazure.us</td>
+</tr>
+<tr>
+<td>Azure Site Recovery (Microsoft.RecoveryServices/vaults)</td>
+<td>AzureSiteRecovery</td>
+<td>privatelink.siterecovery.windowsazure.us</td>
+<td>{regionCode}.siterecovery.windowsazure.us</td>
+</tr>
+<tr>
+<td>Azure Event Hubs (Microsoft.EventHub/namespaces)</td>
+<td>namespace</td>
+<td>privatelink.servicebus.usgovcloudapi.net</td>
+<td>servicebus.usgovcloudapi.net</td>
+</tr>
+<tr>
+<td>Azure Service Bus (Microsoft.ServiceBus/namespaces)</td>
+<td>namespace</td>
+<td>privatelink.servicebus.usgovcloudapi.net</td>
+<td>servicebus.usgovcloudapi.net</td>
+</tr>
+<tr>
+<td>Azure IoT Hub (Microsoft.Devices/IotHubs)</td>
+<td>iotHub</td>
+<td>privatelink.azure-devices.us<br/>privatelink.servicebus.windows.us<sup>1</sup></td>
+<td>azure-devices.us<br/>servicebus.usgovcloudapi.net</td>
+</tr>
+<tr>
+<td>Azure IoT Hub Device Provisioning Service (Microsoft.Devices/ProvisioningServices)</td>
+<td>iotDps</td>
+<td>privatelink.azure-devices-provisioning.us</td>
+<td>azure-devices-provisioning.us</td>
+</tr>
+<tr>
+<td>Azure Relay (Microsoft.Relay/namespaces)</td>
+<td>namespace</td>
+<td>privatelink.servicebus.usgovcloudapi.net</td>
+<td>servicebus.usgovcloudapi.net</td>
+</tr>
+<tr>
+<td>Azure Web Apps (Microsoft.Web/sites)</td>
+<td>sites</td>
+<td>privatelink.azurewebsites.us </br> scm.privatelink.azurewebsites.us</td>
+<td>azurewebsites.us </br> scm.azurewebsites.us</td>
+</tr>
+<tr>
+<td>Azure Monitor (Microsoft.Insights/privateLinkScopes)</td>
+<td>azuremonitor</td>
+<td>privatelink.monitor.azure.us <br/> privatelink.adx.monitor.azure.us <br/> privatelink.oms.opinsights.azure.us <br/> privatelink.ods.opinsights.azure.us <br/> privatelink.agentsvc.azure-automation.us <br/> privatelink.blob.core.usgovcloudapi.net</td>
+<td>monitor.azure.us <br/> adx.monitor.azure.us <br/> oms.opinsights.azure.us<br/> ods.opinsights.azure.us<br/> agentsvc.azure-automation.us <br/> blob.core.usgovcloudapi.net</td>
+</tr>
+<tr>
+<td>Azure AI services (Microsoft.CognitiveServices/accounts)</td>
+<td>account</td>
+<td>privatelink.cognitiveservices.azure.us</td>
+<td>cognitiveservices.azure.us</td>
+</tr>
+<tr>
+<td>Azure Cache for Redis (Microsoft.Cache/Redis)</td>
+<td>redisCache</td>
+<td>privatelink.redis.cache.usgovcloudapi.net</td>
+<td>redis.cache.usgovcloudapi.net</td>
+</tr>
+<tr>
+<td>Azure HDInsight (Microsoft.HDInsight)</td>
+<td>N/A</td>
+<td>privatelink.azurehdinsight.us</td>
+<td>azurehdinsight.us</td>
+</tr>
+<tr>
+<td>Azure Machine Learning (Microsoft.MachineLearningServices/workspaces)</td>
+<td>amlworkspace</td>
+<td>privatelink.api.ml.azure.us<br/>privatelink.notebooks.usgovcloudapi.net</td>
+<td>api.ml.azure.us<br/>notebooks.usgovcloudapi.net <br/> instances.azureml.us<br/>aznbcontent.net <br/> inference.ml.azure.us</td>
+</tr>
+<tr>
+<td>Azure Virtual Desktop (Microsoft.DesktopVirtualization/workspaces)</td>
+<td>global</td>
+<td>privatelink-global.wvd.azure.us</td>
+<td>wvd.azure.us</td>
+</tr>
+<tr>
+<td>Azure Virtual Desktop (Microsoft.DesktopVirtualization/workspaces </br> Microsoft.DesktopVirtualization/hostpools)</td>
+<td>feed <br> connection</td>
+<td>privatelink.wvd.azure.us</td>
+<td>wvd.azure.us</td>
+</tr>
+</tbody>
+</table>
+<div class="NOTE">
+<p>Note</p>
+<p>In the above text, <code>{regionCode}</code> refers to the region code (for example, <strong>eus</strong> for East US and <strong>ne</strong> for North Europe). Refer to the following lists for regions codes:</p>
+<ul>
+<li><a href="../azure-government/documentation-government-developer-guide" data-linktype="relative-path">US Gov</a></li>
+<li><a href="/en-us/azure/backup/scripts/geo-code-list" data-linktype="absolute-path">Geo Code list in XML</a></li>
+</ul>
+<p><strong><code>{regionName}</code></strong> refers to the full region name (for example, <strong>eastus</strong> for East US and <strong>northeurope</strong> for North Europe). To retrieve a current list of Azure regions and their names and display names, use <strong><code>az account list-locations -o table</code></strong>.</p>
+</div>
+<h3 id="china">China</h3>
+<table>
+<thead>
+<tr>
+<th>Private link resource type</th>
+<th>Subresource</th>
+<th>Private DNS zone name</th>
+<th>Public DNS zone forwarders</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Azure Automation / (Microsoft.Automation/automationAccounts)</td>
+<td>Webhook </br> DSCAndHybridWorker</td>
+<td>privatelink.azure-automation.cn</td>
+<td>azure-automation.cn</td>
+</tr>
+<tr>
+<td>Azure SQL Database (Microsoft.Sql/servers)</td>
+<td>sqlServer</td>
+<td>privatelink.database.chinacloudapi.cn</td>
+<td>database.chinacloudapi.cn</td>
+</tr>
+<tr>
+<td>Storage account (Microsoft.Storage/storageAccounts)</td>
+<td>blob </br> blob_secondary</td>
+<td>privatelink.blob.core.chinacloudapi.cn</td>
+<td>blob.core.chinacloudapi.cn</td>
+</tr>
+<tr>
+<td>Storage account (Microsoft.Storage/storageAccounts)</td>
+<td>table </br> table_secondary</td>
+<td>privatelink.table.core.chinacloudapi.cn</td>
+<td>table.core.chinacloudapi.cn</td>
+</tr>
+<tr>
+<td>Storage account (Microsoft.Storage/storageAccounts)</td>
+<td>queue </br> queue_secondary</td>
+<td>privatelink.queue.core.chinacloudapi.cn</td>
+<td>queue.core.chinacloudapi.cn</td>
+</tr>
+<tr>
+<td>Storage account (Microsoft.Storage/storageAccounts)</td>
+<td>file </br> file_secondary</td>
+<td>privatelink.file.core.chinacloudapi.cn</td>
+<td>file.core.chinacloudapi.cn</td>
+</tr>
+<tr>
+<td>Storage account (Microsoft.Storage/storageAccounts)</td>
+<td>web </br> web_secondary</td>
+<td>privatelink.web.core.chinacloudapi.cn</td>
+<td>web.core.chinacloudapi.cn</td>
+</tr>
+<tr>
+<td>Azure Data Lake File System Gen2 (Microsoft.Storage/storageAccounts)</td>
+<td>dfs </br> dfs_secondary</td>
+<td>privatelink.dfs.core.chinacloudapi.cn</td>
+<td>dfs.core.chinacloudapi.cn</td>
+</tr>
+<tr>
+<td>Azure Cosmos DB (Microsoft.AzureCosmosDB/databaseAccounts)</td>
+<td>Sql</td>
+<td>privatelink.documents.azure.cn</td>
+<td>documents.azure.cn</td>
+</tr>
+<tr>
+<td>Azure Cosmos DB (Microsoft.AzureCosmosDB/databaseAccounts)</td>
+<td>MongoDB</td>
+<td>privatelink.mongo.cosmos.azure.cn</td>
+<td>mongo.cosmos.azure.cn</td>
+</tr>
+<tr>
+<td>Azure Cosmos DB (Microsoft.AzureCosmosDB/databaseAccounts)</td>
+<td>Cassandra</td>
+<td>privatelink.cassandra.cosmos.azure.cn</td>
+<td>cassandra.cosmos.azure.cn</td>
+</tr>
+<tr>
+<td>Azure Cosmos DB (Microsoft.AzureCosmosDB/databaseAccounts)</td>
+<td>Gremlin</td>
+<td>privatelink.gremlin.cosmos.azure.cn</td>
+<td>gremlin.cosmos.azure.cn</td>
+</tr>
+<tr>
+<td>Azure Cosmos DB (Microsoft.AzureCosmosDB/databaseAccounts)</td>
+<td>Table</td>
+<td>privatelink.table.cosmos.azure.cn</td>
+<td>table.cosmos.azure.cn</td>
+</tr>
+<tr>
+<td>Azure Batch (Microsoft.Batch/batchAccounts)</td>
+<td>batchAccount</td>
+<td>privatelink.batch.chinacloudapi.cn</td>
+<td>{region}.batch.chinacloudapi.cn</td>
+</tr>
+<tr>
+<td>Azure Batch (Microsoft.Batch/batchAccounts)</td>
+<td>nodeManagement</td>
+<td>privatelink.batch.chinacloudapi.cn</td>
+<td>{region}.service.batch.chinacloudapi.cn</td>
+</tr>
+<tr>
+<td>Azure Database for PostgreSQL - Single server (Microsoft.DBforPostgreSQL/servers)</td>
+<td>postgresqlServer</td>
+<td>privatelink.postgres.database.chinacloudapi.cn</td>
+<td>postgres.database.chinacloudapi.cn</td>
+</tr>
+<tr>
+<td>Azure Database for MySQL - Single Server (Microsoft.DBforMySQL/servers)</td>
+<td>mysqlServer</td>
+<td>privatelink.mysql.database.chinacloudapi.cn</td>
+<td>mysql.database.chinacloudapi.cn</td>
+</tr>
+<tr>
+<td>Azure Database for MySQL - Flexible Server (Microsoft.DBforMySQL/flexibleServers)</td>
+<td>mysqlServer</td>
+<td>privatelink.mysql.database.chinacloudapi.cn</td>
+<td>mysql.database.chinacloudapi.cn</td>
+</tr>
+<tr>
+<td>Azure Database for MariaDB (Microsoft.DBforMariaDB/servers)</td>
+<td>mariadbServer</td>
+<td>privatelink.mariadb.database.chinacloudapi.cn</td>
+<td>mariadb.database.chinacloudapi.cn</td>
+</tr>
+<tr>
+<td>Azure Key Vault (Microsoft.KeyVault/vaults)</td>
+<td>vault</td>
+<td>privatelink.vaultcore.azure.cn</td>
+<td>vaultcore.azure.cn</td>
+</tr>
+<tr>
+<td>Azure Event Hubs (Microsoft.EventHub/namespaces)</td>
+<td>namespace</td>
+<td>privatelink.servicebus.chinacloudapi.cn</td>
+<td>servicebus.chinacloudapi.cn</td>
+</tr>
+<tr>
+<td>Azure Service Bus (Microsoft.ServiceBus/namespaces)</td>
+<td>namespace</td>
+<td>privatelink.servicebus.chinacloudapi.cn</td>
+<td>servicebus.chinacloudapi.cn</td>
+</tr>
+<tr>
+<td>Azure IoT Hub (Microsoft.Devices/IotHubs)</td>
+<td>iotHub</td>
+<td>privatelink.azure-devices.cn <br/> privatelink.servicebus.chinacloudapi.cn <sup>1</sup></td>
+<td>azure-devices.cn<br/>servicebus.chinacloudapi.cn</td>
+</tr>
+<tr>
+<td>Azure IoT Hub Device Provisioning Service (Microsoft.Devices/ProvisioningServices)</td>
+<td>iotDps</td>
+<td>privatelink.azure-devices-provisioning.cn</td>
+<td>azure-devices-provisioning.cn</td>
+</tr>
+<tr>
+<td>Azure Relay (Microsoft.Relay/namespaces)</td>
+<td>namespace</td>
+<td>privatelink.servicebus.chinacloudapi.cn</td>
+<td>servicebus.chinacloudapi.cn</td>
+</tr>
+<tr>
+<td>Azure Event Grid (Microsoft.EventGrid/topics)</td>
+<td>topic</td>
+<td>privatelink.eventgrid.azure.cn</td>
+<td>eventgrid.azure.cn</td>
+</tr>
+<tr>
+<td>Azure Event Grid (Microsoft.EventGrid/domains)</td>
+<td>domain</td>
+<td>privatelink.eventgrid.azure.cn</td>
+<td>eventgrid.azure.cn</td>
+</tr>
+<tr>
+<td>Azure Web Apps (Microsoft.Web/sites)</td>
+<td>sites</td>
+<td>privatelink.chinacloudsites.cn</td>
+<td>chinacloudsites.cn</td>
+</tr>
+<tr>
+<td>Azure Machine Learning (Microsoft.MachineLearningServices/workspaces)</td>
+<td>amlworkspace</td>
+<td>privatelink.api.ml.azure.cn<br/>privatelink.notebooks.chinacloudapi.cn</td>
+<td>api.ml.azure.cn<br/>notebooks.chinacloudapi.cn <br/> instances.azureml.cn <br/> aznbcontent.net <br/> inference.ml.azure.cn</td>
+</tr>
+<tr>
+<td>SignalR (Microsoft.SignalRService/SignalR)</td>
+<td>signalR</td>
+<td>privatelink.signalr.azure.cn</td>
+<td>service.signalr.azure.cn</td>
+</tr>
+<tr>
+<td>Azure File Sync (Microsoft.StorageSync/storageSyncServices)</td>
+<td>afs</td>
+<td>privatelink.afs.azure.cn</td>
+<td>afs.azure.cn</td>
+</tr>
+<tr>
+<td>Azure Data Factory (Microsoft.DataFactory/factories)</td>
+<td>dataFactory</td>
+<td>privatelink.datafactory.azure.cn</td>
+<td>datafactory.azure.cn</td>
+</tr>
+<tr>
+<td>Azure Data Factory (Microsoft.DataFactory/factories)</td>
+<td>portal</td>
+<td>privatelink.adf.azure.cn</td>
+<td>adf.azure.cn</td>
+</tr>
+<tr>
+<td>Azure Cache for Redis (Microsoft.Cache/Redis)</td>
+<td>redisCache</td>
+<td>privatelink.redis.cache.chinacloudapi.cn</td>
+<td>redis.cache.chinacloudapi.cn</td>
+</tr>
+<tr>
+<td>Azure HDInsight (Microsoft.HDInsight)</td>
+<td>N/A</td>
+<td>privatelink.azurehdinsight.cn</td>
+<td>azurehdinsight.cn</td>
+</tr>
+<tr>
+<td>Azure Data Explorer (Microsoft.Kusto/Clusters)</td>
+<td>cluster</td>
+<td>privatelink.{regionName}.kusto.windows.cn</td>
+<td>{regionName}.kusto.windows.cn</td>
+</tr>
+<tr>
+<td>Azure Virtual Desktop (Microsoft.DesktopVirtualization/workspaces)</td>
+<td>global</td>
+<td>privatelink-global.wvd.azure.cn</td>
+<td>wvd.azure.cn</td>
+</tr>
+<tr>
+<td>Azure Virtual Desktop (Microsoft.DesktopVirtualization/workspaces and Microsoft.DesktopVirtualization/hostpools)</td>
+<td>feed </br> connection</td>
+<td>privatelink.wvd.azure.cn</td>
+<td>wvd.azure.cn</td>
+</tr>
+</tbody>
+</table>
+<p><sup>1</sup>To use with IoT Hub's built-in Event Hub compatible endpoint. To learn more, see <a href="../iot-hub/virtual-network-support#built-in-event-hubs-compatible-endpoint" data-linktype="relative-path">private link support for IoT Hub's built-in endpoint</a></p>
+<h2 id="dns-configuration-scenarios">DNS configuration scenarios</h2>
+<p>The FQDN of the services resolves automatically to a public IP address. To resolve to the private IP address of the private endpoint, change your DNS configuration.</p>
+<p>DNS is a critical component to make the application work correctly by successfully resolving the private endpoint IP address.</p>
+<p>Based on your preferences, the following scenarios are available with DNS resolution integrated:</p>
+<ul>
+<li><a href="#azure-private-endpoint-dns-configuration" data-linktype="self-bookmark">Azure Private Endpoint DNS configuration</a>
+<ul>
+<li><a href="#azure-services-dns-zone-configuration" data-linktype="self-bookmark">Azure services DNS zone configuration</a>
+<ul>
+<li><a href="#government" data-linktype="self-bookmark">Government</a></li>
+<li><a href="#china" data-linktype="self-bookmark">China</a></li>
+</ul>
+</li>
+<li><a href="#dns-configuration-scenarios" data-linktype="self-bookmark">DNS configuration scenarios</a></li>
+<li><a href="#virtual-network-workloads-without-custom-dns-server" data-linktype="self-bookmark">Virtual network workloads without custom DNS server</a></li>
+<li><a href="#on-premises-workloads-using-a-dns-forwarder" data-linktype="self-bookmark">On-premises workloads using a DNS forwarder</a></li>
+<li><a href="#virtual-network-and-on-premises-workloads-using-a-dns-forwarder" data-linktype="self-bookmark">Virtual network and on-premises workloads using a DNS forwarder</a></li>
+<li><a href="#private-dns-zone-group" data-linktype="self-bookmark">Private DNS zone group</a></li>
+<li><a href="#next-steps" data-linktype="self-bookmark">Next steps</a></li>
+</ul>
+</li>
+</ul>
+<div class="NOTE">
+<p>Note</p>
+<p><a href="../firewall/dns-settings#dns-proxy" data-linktype="relative-path">Azure Firewall DNS proxy</a> can be used as DNS forwarder for <a href="#on-premises-workloads-using-a-dns-forwarder" data-linktype="self-bookmark">On-premises workloads</a> and <a href="#virtual-network-and-on-premises-workloads-using-a-dns-forwarder" data-linktype="self-bookmark">Virtual network workloads using a DNS forwarder</a>.</p>
+</div>
+<h2 id="virtual-network-workloads-without-custom-dns-server">Virtual network workloads without custom DNS server</h2>
+<p>This configuration is appropriate for virtual network workloads without a custom DNS server. In this scenario, the client queries for the private endpoint IP address to the Azure-provided DNS service <a href="../virtual-network/what-is-ip-address-168-63-129-16" data-linktype="relative-path">168.63.129.16</a>. Azure DNS is responsible for DNS resolution of the private DNS zones.</p>
+<div class="NOTE">
+<p>Note</p>
+<p>This scenario uses the Azure SQL Database-recommended private DNS zone. For other services, you can adjust the model using the following reference: <a href="#azure-services-dns-zone-configuration" data-linktype="self-bookmark">Azure services DNS zone configuration</a>.</p>
+</div>
+<p>To configure properly, you need the following resources:</p>
+<ul>
+<li><p>Client virtual network</p>
+</li>
+<li><p>Private DNS zone <a href="../dns/private-dns-privatednszone" data-linktype="relative-path">privatelink.database.windows.net</a>  with <a href="../dns/dns-zones-records#record-types" data-linktype="relative-path">type A record</a></p>
+</li>
+<li><p>Private endpoint information (FQDN record name and private IP address)</p>
+</li>
+</ul>
+<p>The following screenshot illustrates the DNS resolution sequence from virtual network workloads using the private DNS zone:</p>
+<p><span class="mx-imgBorder">
+<img src="media/private-endpoint-dns/single-vnet-azure-dns.png" alt="Single virtual network and Azure-provided DNS" data-linktype="relative-path">
+</span>
+</p>
+<p>You can extend this model to peered virtual networks associated to the same private endpoint. <a href="../dns/private-dns-virtual-network-links" data-linktype="relative-path">Add new virtual network links</a> to the private DNS zone for all peered virtual networks.</p>
+<div class="IMPORTANT">
+<p>Important</p>
+<p>A single private DNS zone is required for this configuration. Creating multiple zones with the same name for different virtual networks would need manual operations to merge the DNS records.</p>
+</div>
+<div class="IMPORTANT">
+<p>Important</p>
+<p>If you're using a private endpoint in a hub-and-spoke model from a different subscription or even within the same subscription, link the same private DNS zones to all spokes and hub virtual networks that contain clients that need DNS resolution from the zones.</p>
+</div>
+<p>In this scenario, there's a <a href="/en-us/azure/architecture/reference-architectures/hybrid-networking/hub-spoke" data-linktype="absolute-path">hub and spoke</a> networking topology. The spoke networks share a private endpoint. The spoke virtual networks are linked to the same private DNS zone.</p>
+<p><span class="mx-imgBorder">
+<img src="media/private-endpoint-dns/hub-and-spoke-azure-dns.png" alt="Hub and spoke with Azure-provided DNS" data-linktype="relative-path">
+</span>
+</p>
+<h2 id="on-premises-workloads-using-a-dns-forwarder">On-premises workloads using a DNS forwarder</h2>
+<p>For on-premises workloads to resolve the FQDN of a private endpoint, use a DNS forwarder to resolve the Azure service <a href="#azure-services-dns-zone-configuration" data-linktype="self-bookmark">public DNS zone</a> in Azure. A <a href="/en-us/windows-server/identity/ad-ds/plan/reviewing-dns-concepts#resolving-names-by-using-forwarding" data-linktype="absolute-path">DNS forwarder</a> is a Virtual Machine running on the Virtual Network linked to the Private DNS Zone that can proxy DNS queries coming from other Virtual Networks or from on-premises. This is required as the query must be originated from the Virtual Network to Azure DNS. A few options for DNS proxies are: Windows running DNS services, Linux running DNS services, <a href="../firewall/dns-settings" data-linktype="relative-path">Azure Firewall</a>.</p>
+<p>The following scenario is forÂ anÂ on-premisesÂ networkÂ thatÂ has a DNS forwarder in Azure. This forwarder resolves DNS queries via a server-level forwarder to the Azure provided DNS <a href="../virtual-network/what-is-ip-address-168-63-129-16" data-linktype="relative-path">168.63.129.16</a>.</p>
+<div class="NOTE">
+<p>Note</p>
+<p>ThisÂ scenarioÂ uses theÂ AzureÂ SQLÂ Database-recommendedÂ privateÂ DNSÂ zone.Â ForÂ otherÂ services,Â youÂ canÂ adjustÂ theÂ modelÂ usingÂ theÂ followingÂ reference:Â <a href="#azure-services-dns-zone-configuration" data-linktype="self-bookmark">AzureÂ servicesÂ DNSÂ zoneÂ configuration</a>.</p>
+</div>
+<p>ToÂ configureÂ properly,Â youÂ needÂ theÂ followingÂ resources:</p>
+<ul>
+<li>On-premisesÂ network</li>
+<li>VirtualÂ networkÂ <a href="/en-us/azure/architecture/reference-architectures/hybrid-networking/" data-linktype="absolute-path">connectedÂ toÂ on-premises</a></li>
+<li>DNS forwarder deployed in AzureÂ </li>
+<li>PrivateÂ DNSÂ zonesÂ <a href="../dns/private-dns-privatednszone" data-linktype="relative-path">privatelink.database.windows.net</a>Â withÂ <a href="../dns/dns-zones-records#record-types" data-linktype="relative-path">type AÂ record</a></li>
+<li>PrivateÂ endpointÂ informationÂ (FQDNÂ recordÂ nameÂ andÂ privateÂ IPÂ address)</li>
+</ul>
+<p>TheÂ followingÂ diagramÂ illustratesÂ theÂ DNSÂ resolutionÂ sequenceÂ fromÂ anÂ on-premisesÂ network. The configuration uses a DNS forwarder deployed in Azure. TheÂ resolutionÂ isÂ madeÂ byÂ aÂ privateÂ DNSÂ zone <a href="../dns/private-dns-virtual-network-links" data-linktype="relative-path">linkedÂ toÂ aÂ virtualÂ network</a>:</p>
+<p><span class="mx-imgBorder">
+<img src="media/private-endpoint-dns/on-premises-using-azure-dns.png" alt="On-premises using Azure DNS" data-linktype="relative-path">
+</span>
+</p>
+<p>ThisÂ configurationÂ can be extendedÂ forÂ anÂ on-premisesÂ networkÂ thatÂ alreadyÂ has aÂ DNSÂ solution in place.Â 
+The on-premises DNSÂ solutionÂ is configuredÂ toÂ forwardÂ DNSÂ trafficÂ to AzureÂ DNSÂ viaÂ aÂ <a href="../virtual-network/virtual-networks-name-resolution-for-vms-and-role-instances#name-resolution-that-uses-your-own-dns-server" data-linktype="relative-path">conditionalÂ forwarder</a>. The conditional forwarder references the DNS forwarder deployed in Azure.</p>
+<div class="NOTE">
+<p>Note</p>
+<p>Â ThisÂ scenarioÂ usesÂ the AzureÂ SQLÂ Database-recommendedÂ privateÂ DNSÂ zone. ForÂ otherÂ services,Â youÂ canÂ adjustÂ theÂ modelÂ usingÂ theÂ followingÂ reference:Â <a href="#azure-services-dns-zone-configuration" data-linktype="self-bookmark">AzureÂ servicesÂ DNSÂ zoneÂ configuration</a></p>
+</div>
+<p>ToÂ configureÂ properly,Â youÂ needÂ theÂ followingÂ resources:</p>
+<ul>
+<li>On-premisesÂ networkÂ withÂ aÂ customÂ DNSÂ solutionÂ inÂ placeÂ </li>
+<li>VirtualÂ networkÂ <a href="/en-us/azure/architecture/reference-architectures/hybrid-networking/" data-linktype="absolute-path">connectedÂ toÂ on-premises</a></li>
+<li>DNS forwarder deployed in Azure</li>
+<li>PrivateÂ DNSÂ zonesÂ <a href="../dns/private-dns-privatednszone" data-linktype="relative-path">privatelink.database.windows.net</a>Â Â withÂ <a href="../dns/dns-zones-records#record-types" data-linktype="relative-path">type AÂ record</a></li>
+<li>PrivateÂ endpointÂ informationÂ (FQDNÂ recordÂ nameÂ andÂ privateÂ IPÂ address)</li>
+</ul>
+<p>TheÂ followingÂ diagramÂ illustratesÂ theÂ DNSÂ resolutionÂ fromÂ anÂ on-premisesÂ network. DNS resolution is conditionally forwarded to Azure. TheÂ resolutionÂ isÂ madeÂ byÂ aÂ privateÂ DNSÂ zoneÂ <a href="../dns/private-dns-virtual-network-links" data-linktype="relative-path">linkedÂ toÂ aÂ virtualÂ network</a>.</p>
+<div class="IMPORTANT">
+<p>Important</p>
+<p>Â TheÂ conditionalÂ forwardingÂ mustÂ beÂ madeÂ toÂ the recommended <a href="#azure-services-dns-zone-configuration" data-linktype="self-bookmark">publicÂ DNSÂ zone forwarder</a>.Â For example:Â <code>database.windows.net</code>Â insteadÂ ofÂ <strong>privatelink</strong>.database.windows.net.</p>
+</div>
+<p><span class="mx-imgBorder">
+<img src="media/private-endpoint-dns/on-premises-forwarding-to-azure.png" alt="On-premises forwarding to Azure DNS" data-linktype="relative-path">
+</span>
+</p>
+<h2 id="virtual-network-and-on-premises-workloads-using-a-dns-forwarder">Virtual network and on-premises workloads using a DNS forwarder</h2>
+<p>For workloads accessing a private endpoint from virtual and on-premises networks, use a DNS forwarder to resolve the Azure service <a href="#azure-services-dns-zone-configuration" data-linktype="self-bookmark">public DNS zone</a> deployed in Azure.</p>
+<p>The following scenario is for an on-premises network with virtual networks in Azure. Both networks access the private endpoint located in a shared hub network.</p>
+<p>This DNS forwarder is responsible for resolving all the DNS queries via a server-level forwarder to the Azure-provided DNS service <a href="../virtual-network/what-is-ip-address-168-63-129-16" data-linktype="relative-path">168.63.129.16</a>.</p>
+<div class="IMPORTANT">
+<p>Important</p>
+<p>A single private DNS zone is required for this configuration. All client connections made from on-premises and <a href="../virtual-network/virtual-network-peering-overview" data-linktype="relative-path">peered virtual networks</a> must Â also use the same private DNS zone.</p>
+</div>
+<div class="NOTE">
+<p>Note</p>
+<p>ThisÂ scenarioÂ uses the AzureÂ SQLÂ Database-recommendedÂ privateÂ DNSÂ zone. ForÂ otherÂ services,Â youÂ canÂ adjustÂ theÂ modelÂ usingÂ theÂ followingÂ reference:Â <a href="#azure-services-dns-zone-configuration" data-linktype="self-bookmark">AzureÂ servicesÂ DNSÂ zoneÂ configuration</a>.</p>
+</div>
+<p>ToÂ configureÂ properly,Â youÂ needÂ theÂ followingÂ resources:</p>
+<ul>
+<li>On-premisesÂ network</li>
+<li>VirtualÂ networkÂ <a href="/en-us/azure/architecture/reference-architectures/hybrid-networking/" data-linktype="absolute-path">connectedÂ toÂ on-premises</a></li>
+<li><a href="../virtual-network/virtual-network-peering-overview" data-linktype="relative-path">Peered virtual network</a>Â </li>
+<li>DNS forwarder deployed in Azure</li>
+<li>PrivateÂ DNSÂ zonesÂ <a href="../dns/private-dns-privatednszone" data-linktype="relative-path">privatelink.database.windows.net</a>Â Â withÂ <a href="../dns/dns-zones-records#record-types" data-linktype="relative-path">type AÂ record</a></li>
+<li>PrivateÂ endpointÂ informationÂ (FQDNÂ recordÂ nameÂ andÂ privateÂ IPÂ address)</li>
+</ul>
+<p>TheÂ followingÂ diagramÂ showsÂ theÂ DNSÂ resolutionÂ for both networks, on-premises and virtual networks. The resolution is using a DNS forwarder. TheÂ resolutionÂ isÂ madeÂ byÂ aÂ privateÂ DNSÂ zoneÂ <a href="../dns/private-dns-virtual-network-links" data-linktype="relative-path">linkedÂ toÂ aÂ virtualÂ network</a>:</p>
+<p><span class="mx-imgBorder">
+<img src="media/private-endpoint-dns/hybrid-scenario.png" alt="Hybrid scenario" data-linktype="relative-path">
+</span>
+</p>
+<h2 id="private-dns-zone-group">Private DNS zone group</h2>
+<p>If you choose to integrate your private endpoint with a private DNS zone, a private DNS zone group is also created. The DNS zone group has a strong association between the private DNS zone and the private endpoint. It helps with managing the private DNS zone records when there's an update on the private endpoint. For example, when you add or remove regions, the private DNS zone is automatically updated with the correct number of records.</p>
+<p>Previously, the DNS records for the private endpoint were created via scripting (retrieving certain information about the private endpoint and then adding it on the DNS zone). With the DNS zone group, there is no need to write any additional CLI/PowerShell lines for every DNS zone. Also, when you delete the private endpoint, all the DNS records within the DNS zone group will be deleted as well.</p>
+<p>A common scenario for DNS zone group is in a hub-and-spoke topology, where it allows the private DNS zones to be created only once in the hub and allows the spokes to register to it, rather than creating different zones in each spoke.</p>
+<div class="NOTE">
+<p>Note</p>
+<p>Each DNS zone group can support up to 5 DNS zones.</p>
+</div>
+<div class="NOTE">
+<p>Note</p>
+<p>Adding multiple DNS zone groups to a single Private Endpoint is not supported.</p>
+</div>
+<div class="NOTE">
+<p>Note</p>
+<p>Delete and update operations for DNS records can be seen performed by &quot;Azure Traffic Manager and DNS.&quot; This is a normal platform operation necessary for managing your DNS Records.</p>
+</div>
+<h2 id="next-steps">Next steps</h2>
+<ul>
+<li><a href="private-endpoint-overview" data-linktype="relative-path">Learn about private endpoints</a></li>
+</ul>
+
+							</div>
+
+							<div id="assertive-live-region" role="alert" aria-live="assertive" class="visually-hidden" aria-relevant="additions" aria-atomic="true"></div>
+							<div id="polite-live-region" role="status" aria-live="polite" class="visually-hidden" aria-relevant="additions" aria-atomic="true"></div>
+							<!-- </content> -->
+
+						</main>
+
+
+
+
+
+						<!-- recommendations section -->
+						<!-- end recommendations section -->
+
+						<!-- feedback section -->
+<section class="feedback-section position-relative" data-bi-name="feedback-section">
+    <h2 id="feedback" class="title is-3 margin-top-sm">Feedback</h2>
+
+    <div class="alert choose-feedback-type padding-bottom-sm">
+        <p id="send-feedback-about">Submit and view feedback for</p>
+
+        <div class="choose-feedback-buttons buttons margin-top-xs">
+                <a class="button has-external-link-indicator feedback-type-product" aria-label="Send feedback about this product" href="https://feedback.azure.com/d365community/forum/79b1327d-d925-ec11-b6e6-000d3a4f06a4" data-bi-name="product-feedback">
+                    <span>This product</span>
+                </a>
+			<a class="button feedback-type-product github-link" aria-label="Send feedback about this page" data-bi-name="create-issue-on-github">
+				<span class="icon" aria-hidden="true">
+					<span class="docon docon-brand-github"></span>
+				</span>
+				<span>This page</span>
+			</a>
+        </div>
+    </div>
+
+    <div class="action-container display-flex justify-content-flex-end margin-block-xxs">
+        <a class="view-on-github has-external-link-indicator" data-bi-name="view-on-github" href="https://github.com/MicrosoftDocs/azure-docs/issues">
+            <span aria-hidden="true" class="docon docon-brand-github"></span>
+            <span>View all page feedback</span>
+        </a>
+    </div>
+</section>
+						<!-- end feedback section -->
+
+						<!-- feedback report section -->
+						<!-- end feedback report section -->
+
+							<div
+								id="ms--additional-resources-mobile"
+								role="complementary"
+								aria-label="Additional resources"
+								class="display-none-desktop display-none-print"
+							>
+								<hr class="hr" hidden />
+								<h2 id="ms--additional-resources-mobile-heading" class="title is-3" hidden>Additional resources</h2>
+								<section id="right-rail-recommendations-mobile" data-bi-name="recommendations" hidden></section>
+								<section id="right-rail-training-mobile" data-bi-name="learning-resources-card" hidden></section>
+								<section id="right-rail-events-mobile" data-bi-name="events-card" hidden></section>
+								<section id="right-rail-qna-mobile" data-bi-name="qna-link-card" hidden></section>
+							</div>
+
+						<div class="border-top is-visible-interactive has-default-focus margin-top-sm ">
+
+
+
+	<footer id="footer-interactive" data-bi-name="footer" class="footer-layout">
+	<div class="display-flex gap-xs flex-wrap-wrap is-full-height padding-right-lg-desktop">
+			<a
+				data-mscc-ic="false"
+				class="locale-selector-link button button-sm button-clear flex-shrink-0"
+				href="#"
+				data-bi-name="select-locale">
+					<span class="icon" aria-hidden="true">
+						<span class="docon docon-world"></span>
+					</span>
+					<span class="local-selector-link-text"></span></a>
+		<div class="flex-shrink-0">
+<div class="dropdown has-caret-up">
+	<button class="dropdown-trigger button button-clear button-sm has-inner-focus theme-dropdown-trigger"
+		aria-controls="theme-menu-interactive" aria-expanded="false" title="Theme" data-bi-name="theme">
+		<span class="icon">
+			<span class="docon docon-sun" aria-hidden="true"></span>
+		</span>
+		<span>Theme</span>
+		<span class="icon expanded-indicator" aria-hidden="true">
+			<span class="docon docon-chevron-down-light"></span>
+		</span>
+	</button>
+	<div class="dropdown-menu" id="theme-menu-interactive" role="menu">
+		<ul class="theme-selector padding-xxs" role="none">
+			<li class="theme display-block" role="menuitem">
+				<button class="button button-clear button-sm theme-control button-block justify-content-flex-start"
+					data-theme-to="light">
+					<span class="theme-light margin-right-xxs">
+						<span
+							class="theme-selector-icon css-variable-support border display-inline-block has-body-background"
+							aria-hidden="true">
+							<svg class="svg" xmlns="http://www.w3.org/2000/svg"
+								viewBox="0 0 22 14">
+								<rect width="22" height="14" class="has-fill-body-background" />
+								<rect x="5" y="5" width="12" height="4" class="has-fill-secondary" />
+								<rect x="5" y="2" width="2" height="1" class="has-fill-secondary" />
+								<rect x="8" y="2" width="2" height="1" class="has-fill-secondary" />
+								<rect x="11" y="2" width="3" height="1" class="has-fill-secondary" />
+								<rect x="1" y="1" width="2" height="2" class="has-fill-secondary" />
+								<rect x="5" y="10" width="7" height="2" rx="0.3" class="has-fill-primary" />
+								<rect x="19" y="1" width="2" height="2" rx="1" class="has-fill-secondary" />
+							</svg>
+						</span>
+					</span>
+					<span>
+Light					</span>
+				</button>
+			</li>
+			<li class="theme display-block" role="menuitem">
+				<button class="button button-clear button-sm theme-control button-block justify-content-flex-start"
+					data-theme-to="dark">
+					<span class="theme-dark margin-right-xxs">
+						<span
+							class="border theme-selector-icon css-variable-support display-inline-block has-body-background"
+							aria-hidden="true">
+							<svg class="svg" xmlns="http://www.w3.org/2000/svg"
+								viewBox="0 0 22 14">
+								<rect width="22" height="14" class="has-fill-body-background" />
+								<rect x="5" y="5" width="12" height="4" class="has-fill-secondary" />
+								<rect x="5" y="2" width="2" height="1" class="has-fill-secondary" />
+								<rect x="8" y="2" width="2" height="1" class="has-fill-secondary" />
+								<rect x="11" y="2" width="3" height="1" class="has-fill-secondary" />
+								<rect x="1" y="1" width="2" height="2" class="has-fill-secondary" />
+								<rect x="5" y="10" width="7" height="2" rx="0.3" class="has-fill-primary" />
+								<rect x="19" y="1" width="2" height="2" rx="1" class="has-fill-secondary" />
+							</svg>
+						</span>
+					</span>
+					<span>
+Dark					</span>
+				</button>
+			</li>
+			<li class="theme display-block" role="menuitem">
+				<button class="button button-clear button-sm theme-control button-block justify-content-flex-start"
+					data-theme-to="high-contrast">
+					<span class="theme-high-contrast margin-right-xxs">
+						<span
+							class="border theme-selector-icon css-variable-support display-inline-block has-body-background"
+							aria-hidden="true">
+							<svg class="svg" xmlns="http://www.w3.org/2000/svg"
+								viewBox="0 0 22 14">
+								<rect width="22" height="14" class="has-fill-body-background" />
+								<rect x="5" y="5" width="12" height="4" class="has-fill-secondary" />
+								<rect x="5" y="2" width="2" height="1" class="has-fill-secondary" />
+								<rect x="8" y="2" width="2" height="1" class="has-fill-secondary" />
+								<rect x="11" y="2" width="3" height="1" class="has-fill-secondary" />
+								<rect x="1" y="1" width="2" height="2" class="has-fill-secondary" />
+								<rect x="5" y="10" width="7" height="2" rx="0.3" class="has-fill-primary" />
+								<rect x="19" y="1" width="2" height="2" rx="1" class="has-fill-secondary" />
+							</svg>
+						</span>
+					</span>
+					<span>
+High contrast					</span>
+				</button>
+			</li>
+		</ul>
+	</div>
+</div>
+		</div>
+	</div>
+	<ul class="links" data-bi-name="footerlinks">
+		<li class="manage-cookies-holder" hidden></li>
+				<li><a class="external-link-indicator" data-mscc-ic="false" href="/en-us/previous-versions/" data-bi-name="archivelink">Previous Versions</a></li>
+				<li><a class="external-link-indicator" data-mscc-ic="false" href="https://techcommunity.microsoft.com/t5/microsoft-learn-blog/bg-p/MicrosoftLearnBlog" data-bi-name="bloglink">Blog</a></li>
+				<li><a class="external-link-indicator" data-mscc-ic="false" href="/en-us/contribute/" data-bi-name="contributorGuide">Contribute</a></li>
+					<li><a class="external-link-indicator" data-mscc-ic="false" href="https://go.microsoft.com/fwlink/?LinkId=521839" data-bi-name="privacy">Privacy</a></li>
+				<li><a class="external-link-indicator" data-mscc-ic="false" href="/en-us/legal/termsofuse" data-bi-name="termsofuse">Terms of Use</a></li>
+				<li><a class="external-link-indicator" data-mscc-ic="false" href="https://www.microsoft.com/legal/intellectualproperty/Trademarks/" data-bi-name="trademarks">Trademarks</a></li>
+		<li>&copy; Microsoft 2023</li>
+	</ul>
+</footer>
+						</div>
+
+					</div>
+
+						<div
+							id="ms--additional-resources"
+							class="right-container column is-4-desktop display-none display-block-desktop"
+							data-bi-name="pageactions"
+							role="complementary"
+							aria-label="Additional resources"
+						>
+							<div id="affixed-right-container" class="margin-top-sm-tablet" data-bi-name="right-column">
+								<h2 id="ms--additional-resources-heading" class="title is-6 margin-top-md" hidden>Additional resources</h2>
+								<section id="right-rail-events" data-bi-name="events-card" hidden></section>
+								<section id="right-rail-training" data-bi-name="learning-resources-card" hidden></section>
+								<section id="right-rail-recommendations" data-bi-name="recommendations" hidden></section>
+								<nav id="side-doc-outline" class="doc-outline" data-bi-name="intopic toc" role="navigation" aria-label="In this article">
+									<h3>In this article</h3>
+								</nav>
+								<section id="right-rail-qna" class="margin-top-xxs" data-bi-name="qna-link-card" hidden></section>
+							</div>
+						</div>
+
+				</div>
+				<!--end of div.columns -->
+
+			</section>
+			<!--end of .primary-holder -->
+
+			<!-- interactive container -->
+			<aside id="interactive-container" class="interactive-container is-visible-interactive column has-body-background-dark ">
+			</aside>
+			<!-- end of interactive container -->
+		</div>
+
+	</div>
+	<!--end of .mainContainer -->
+
+	<section class="border-top has-default-focus is-hidden-interactive margin-top-sm ">
+
+
+
+	<footer id="footer" data-bi-name="footer" class="footer-layout uhf-container has-padding" role="contentinfo">
+	<div class="display-flex gap-xs flex-wrap-wrap is-full-height padding-right-lg-desktop">
+			<a
+				data-mscc-ic="false"
+				class="locale-selector-link button button-sm button-clear flex-shrink-0"
+				href="#"
+				data-bi-name="select-locale">
+					<span class="icon" aria-hidden="true">
+						<span class="docon docon-world"></span>
+					</span>
+					<span class="local-selector-link-text"></span></a>
+		<div class="flex-shrink-0">
+<div class="dropdown has-caret-up">
+	<button class="dropdown-trigger button button-clear button-sm has-inner-focus theme-dropdown-trigger"
+		aria-controls="theme-menu" aria-expanded="false" title="Theme" data-bi-name="theme">
+		<span class="icon">
+			<span class="docon docon-sun" aria-hidden="true"></span>
+		</span>
+		<span>Theme</span>
+		<span class="icon expanded-indicator" aria-hidden="true">
+			<span class="docon docon-chevron-down-light"></span>
+		</span>
+	</button>
+	<div class="dropdown-menu" id="theme-menu" role="menu">
+		<ul class="theme-selector padding-xxs" role="none">
+			<li class="theme display-block" role="menuitem">
+				<button class="button button-clear button-sm theme-control button-block justify-content-flex-start"
+					data-theme-to="light">
+					<span class="theme-light margin-right-xxs">
+						<span
+							class="theme-selector-icon css-variable-support border display-inline-block has-body-background"
+							aria-hidden="true">
+							<svg class="svg" xmlns="http://www.w3.org/2000/svg"
+								viewBox="0 0 22 14">
+								<rect width="22" height="14" class="has-fill-body-background" />
+								<rect x="5" y="5" width="12" height="4" class="has-fill-secondary" />
+								<rect x="5" y="2" width="2" height="1" class="has-fill-secondary" />
+								<rect x="8" y="2" width="2" height="1" class="has-fill-secondary" />
+								<rect x="11" y="2" width="3" height="1" class="has-fill-secondary" />
+								<rect x="1" y="1" width="2" height="2" class="has-fill-secondary" />
+								<rect x="5" y="10" width="7" height="2" rx="0.3" class="has-fill-primary" />
+								<rect x="19" y="1" width="2" height="2" rx="1" class="has-fill-secondary" />
+							</svg>
+						</span>
+					</span>
+					<span>
+Light					</span>
+				</button>
+			</li>
+			<li class="theme display-block" role="menuitem">
+				<button class="button button-clear button-sm theme-control button-block justify-content-flex-start"
+					data-theme-to="dark">
+					<span class="theme-dark margin-right-xxs">
+						<span
+							class="border theme-selector-icon css-variable-support display-inline-block has-body-background"
+							aria-hidden="true">
+							<svg class="svg" xmlns="http://www.w3.org/2000/svg"
+								viewBox="0 0 22 14">
+								<rect width="22" height="14" class="has-fill-body-background" />
+								<rect x="5" y="5" width="12" height="4" class="has-fill-secondary" />
+								<rect x="5" y="2" width="2" height="1" class="has-fill-secondary" />
+								<rect x="8" y="2" width="2" height="1" class="has-fill-secondary" />
+								<rect x="11" y="2" width="3" height="1" class="has-fill-secondary" />
+								<rect x="1" y="1" width="2" height="2" class="has-fill-secondary" />
+								<rect x="5" y="10" width="7" height="2" rx="0.3" class="has-fill-primary" />
+								<rect x="19" y="1" width="2" height="2" rx="1" class="has-fill-secondary" />
+							</svg>
+						</span>
+					</span>
+					<span>
+Dark					</span>
+				</button>
+			</li>
+			<li class="theme display-block" role="menuitem">
+				<button class="button button-clear button-sm theme-control button-block justify-content-flex-start"
+					data-theme-to="high-contrast">
+					<span class="theme-high-contrast margin-right-xxs">
+						<span
+							class="border theme-selector-icon css-variable-support display-inline-block has-body-background"
+							aria-hidden="true">
+							<svg class="svg" xmlns="http://www.w3.org/2000/svg"
+								viewBox="0 0 22 14">
+								<rect width="22" height="14" class="has-fill-body-background" />
+								<rect x="5" y="5" width="12" height="4" class="has-fill-secondary" />
+								<rect x="5" y="2" width="2" height="1" class="has-fill-secondary" />
+								<rect x="8" y="2" width="2" height="1" class="has-fill-secondary" />
+								<rect x="11" y="2" width="3" height="1" class="has-fill-secondary" />
+								<rect x="1" y="1" width="2" height="2" class="has-fill-secondary" />
+								<rect x="5" y="10" width="7" height="2" rx="0.3" class="has-fill-primary" />
+								<rect x="19" y="1" width="2" height="2" rx="1" class="has-fill-secondary" />
+							</svg>
+						</span>
+					</span>
+					<span>
+High contrast					</span>
+				</button>
+			</li>
+		</ul>
+	</div>
+</div>
+		</div>
+	</div>
+	<ul class="links" data-bi-name="footerlinks">
+		<li class="manage-cookies-holder" hidden></li>
+				<li><a class="external-link-indicator" data-mscc-ic="false" href="/en-us/previous-versions/" data-bi-name="archivelink">Previous Versions</a></li>
+				<li><a class="external-link-indicator" data-mscc-ic="false" href="https://techcommunity.microsoft.com/t5/microsoft-learn-blog/bg-p/MicrosoftLearnBlog" data-bi-name="bloglink">Blog</a></li>
+				<li><a class="external-link-indicator" data-mscc-ic="false" href="/en-us/contribute/" data-bi-name="contributorGuide">Contribute</a></li>
+					<li><a class="external-link-indicator" data-mscc-ic="false" href="https://go.microsoft.com/fwlink/?LinkId=521839" data-bi-name="privacy">Privacy</a></li>
+				<li><a class="external-link-indicator" data-mscc-ic="false" href="/en-us/legal/termsofuse" data-bi-name="termsofuse">Terms of Use</a></li>
+				<li><a class="external-link-indicator" data-mscc-ic="false" href="https://www.microsoft.com/legal/intellectualproperty/Trademarks/" data-bi-name="trademarks">Trademarks</a></li>
+		<li>&copy; Microsoft 2023</li>
+	</ul>
+</footer>
+	</section>
+
+	<div id="action-panel" role="region" aria-label="Action Panel" class="action-panel has-default-focus" tabindex="-1"></div>
+</body>
+</html>

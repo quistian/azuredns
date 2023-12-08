@@ -12,14 +12,9 @@ providers:
     port: 8081
     api_key: env/POWERDNS_API_KEY
     scheme: http
-  pdns-yaml:
+  yaml:
     class: octodns.provider.yaml.YamlProvider
-    directory: ./pdns-zones
-    default_ttl: 3600
-    enforce_order: True
-  bc-yaml:
-    class: octodns.provider.yaml.YamlProvider
-    directory: ./bc-zones
+    directory: ./leaf-zones
     default_ttl: 3600
     enforce_order: True
 
@@ -33,8 +28,8 @@ processors:
 zones:
   '*':
     sources:
-      - bluecat
+      - pdns
     processors:
       - only-a-and-aaaa
     targets:
-      - pdns
+      - yaml

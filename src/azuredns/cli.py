@@ -140,14 +140,14 @@ def list(ctx, target, fqdn):
             zdata = util.fmt(fqdn, data)
             for leaf_fqdn in zdata:
                 print(leaf_fqdn, zdata[leaf_fqdn])
-    elif target == "bc-yaml":
+    elif target == "leaf":
         toks = fqdn.split(".")
         hrids = util.get_active_hrids()
         if toks[0] not in hrids:
             print("All BC Yaml files are leaf zones starting with one of:")
             print(hrids)
             return
-        fname = f"{config.Root}/bc-zones/{fqdn}.yaml"
+        fname = f"{config.Root}/zones/{fqdn}.yaml"
         if exists(fname):
             data = util.get_yaml_file(fname)
             print(f"Local BC Yaml for: {fqdn}")
@@ -245,18 +245,18 @@ def zones(ctx, target, value):
 def sync(ctx, fqdn, source, destination):
     if config.Debug:
         print(f"zone: {fqdn} src: {source} dst: {destination}")
-    if source == "bc" and destination == "bc-leaf":
+    if source == "bc" and destination == "leaf":
         leafs = util.get_leaf_names(fqdn)
         for leaf in leafs:
             leaf_zone = f"{leaf}.{fqdn}"
             rrs = util.get_leaf_bc_azure_zone(leaf_zone)
-            yamlf = f"{config.Root}/bc-leaf-zones/{leaf_zone}.yaml"
+            yamlf = f"{config.Root}/leaf-zones/{leaf_zone}.yaml"
             util.update_yaml_zone_file(yamlf, rrs)
-    elif source == "bc-leaf" and destination == "bc-merged":
+    elif source == "leaf" and destination == "merged":
         util.merge(fqdn)
-    elif source == "bc-merged" and destination == "bc-normalized":
+    elif source == "merged" and destination == "normalized":
         util.canonical(fqdn)
-    elif source == "bc-yaml" and destination == "yaml":
+    elif source == "yaml" and destination == "yaml":
         (qa_norm_yaml, prod_norm_yaml) = util.normalize(fqdn)
         if config.Debug:
             print(f"Zone: {fqdn}")

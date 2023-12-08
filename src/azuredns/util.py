@@ -121,8 +121,8 @@ def is_leaf(zone):
 # Merges BC leaf zones into a combined BC equivalent of the Azure zone
 def merge(zone):
     merged_yaml = dict()
-    leaf_dir = f"{config.Root}/bc-leaf-zones"
-    dst_yamlf = f"{config.Root}/bc-merged-zones/{zone}.yaml"
+    leaf_dir = f"{config.Root}/leaf-zones"
+    dst_yamlf = f"{config.Root}/merged-zones/{zone}.yaml"
     ids = get_active_hrids()
     bc_leaf_files = os.listdir(leaf_dir)
     for leaf_file in bc_leaf_files:
@@ -148,8 +148,8 @@ def canonical(zone):
     qa_yaml = dict()
     prod_yaml = dict()
     normal_yaml = dict()
-    merged_yamlf = f"{config.Root}/bc-merged-zones/{zone}.yaml"
-    normal_yamlf = f"{config.Root}/bc-normalized-zones/{zone}.yaml"
+    merged_yamlf = f"{config.Root}/merged-zones/{zone}.yaml"
+    normal_yamlf = f"{config.Root}/normalized-zones/{zone}.yaml"
     qa_yamlf = f"{config.Root}/qa-zones/{zone}.yaml"
     prod_yamlf = f"{config.Root}/prod-zones/{zone}.yaml"
     prod_pattern = "[qds]301ams.*"
@@ -187,7 +187,7 @@ def canonical(zone):
 def normalize(zone):
     qa_yaml = dict()
     prod_yaml = dict()
-    bc_dir = f"{config.Root}/bc-zones"
+    bc_dir = f"{config.Root}/leaf-zones"
     dst_yamlf = f"{config.Root}/qa-yaml/{zone}.yaml"
     prod_pattern = "[qds]301ams.*"
     ids = get_active_hrids()
