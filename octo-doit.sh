@@ -33,21 +33,28 @@ rm -f $ENV
 echo "Scanning BC zones for changes" | tee -a $LOG
 
 # relatively slow process ~ 2 minutes
+# used to find out which records in which zones have changed since the last
+# sweep
 octodns-sync --quiet --log-stream-stdout --config-file config/bc2pdns.yml --doit | tee -a $LOG
 # pdns to yaml is much faster than bc to yaml
 
 if ! grep -s 'No changes were planned' $LOG; then
-    cat $LOG | awk '/^\* [1-9]+/ {print $2}' > $TMP_CHANGED_ZONES
+    cat $LOG | sed -n 's/^\* [0-9][0-9][0-9]\.//p' | sort | uniq > $TMP_CHANGED_ZONES
+    cat $TMP_CHANGED_ZONES
+
+#       Old method for moving RRs:
+#       azurecli sync -s leaf -d merged $z | tee -a $LOG
+#       azurecli sync -s merged -d normalized $z | tee -a $LOG
 
     for zdot in `cat $TMP_CHANGED_ZONES`
     do
         z=`echo $zdot | sed 's/\.$//'`
         echo "processing $z" | tee -a $LOG
-        octodns-sync --quiet --log-stream-stdout --config-file config/pdns2yaml.yml $zdot --doit
-        azurecli sync -s leaf -d merged $z | tee -a $LOG
-        azurecli sync -s merged -d normalized $z | tee -a $LOG
-        octodns-sync --quiet --log-stream-stdout --config-file config/qa-dynamic.yaml $zdot --force --doit | tee -a $LOG
-    #   gen-unbound-zone-data $z | tee -a $LOG
+        # move data from powerdns -> merge it -> local yaml directory
+        octodns-sync --quiet --log-stream-stdout --config-file config/pdns2yaml.yml $zdot --doit | tee -a $LOG
+        octodns-sync --quiet --log-stream-stdout --config-file config/merged2qa.yaml $zdot --doit | tee -a $LOG
+        octodns-sync --quiet --log-stream-stdout --config-file config/qa2azure.yaml $zdot --force --doit | tee -a $LOG
+        gen-unbound-zone-data.sh $z | tee -a $LOG
     #   octodns-sync --quiet --log-stream-stdout --config-file config/prod-dynamic.yaml $z. >> $LOG
     done
     #   doas -u ansible ansible-playbook -K -v -t vars,unbound-data -l dns1,dns4,dns5 ~ansible/systems/dns.yaml | tee -a $LOG

@@ -12,9 +12,15 @@ providers:
     port: 8081
     api_key: env/POWERDNS_API_KEY
     scheme: http
+  pdnsmerge:
+    class: octodns_powerdnsmerge.PowerDnsMergeProvider
+    host: mirror.eis.utoronto.ca
+    port: 8081
+    api_key: env/POWERDNS_API_KEY
+    scheme: http
   yaml:
     class: octodns.provider.yaml.YamlProvider
-    directory: ./leaf-zones
+    directory: ./merged-zones
     default_ttl: 3600
     enforce_order: True
 
@@ -28,7 +34,7 @@ processors:
 zones:
   '*':
     sources:
-      - pdns
+      - pdnsmerge
     processors:
       - only-a-and-aaaa
     targets:

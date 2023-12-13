@@ -149,7 +149,7 @@ def canonical(zone):
     prod_yaml = dict()
     normal_yaml = dict()
     merged_yamlf = f"{config.Root}/merged-zones/{zone}.yaml"
-    normal_yamlf = f"{config.Root}/normalized-zones/{zone}.yaml"
+    normal_yamlf = f"{config.Root}/merged-zones/{zone}.yaml"
     qa_yamlf = f"{config.Root}/qa-zones/{zone}.yaml"
     prod_yamlf = f"{config.Root}/prod-zones/{zone}.yaml"
     prod_pattern = "[qds]301ams.*"
@@ -425,7 +425,7 @@ def gen_cname_rrs(zone):
     with open(f"{config.Path}/azure-priv-pub.json") as fd:
         priv_pub = json.load(fd)
     if zone in priv_pub.keys():
-        yamlf = f"{config.Root}/bc-normalized-zones/{zone}.yaml"
+        yamlf = f"{config.Root}/merged-zones/{zone}.yaml"
         if exists(yamlf):
             pub_zone = priv_pub[zone]
             data = get_yaml_file(yamlf)
