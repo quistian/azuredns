@@ -1,0 +1,30 @@
+---
+providers:
+  config-merged:
+    class: octodns.provider.yaml.YamlProvider
+    default_ttl: 3600
+    directory: ./merged-zones
+    enforce_order: true
+  config-prod:
+    class: octodns.provider.yaml.YamlProvider
+    default_ttl: 3600
+    directory: ./prod-zones
+    enforce_order: true
+
+processors:
+  only-these:
+    class: octodns.processor.filter.NameAllowlistFilter
+    allowlist:
+      - /^[np]\d{3}[_-a-z]*/
+
+zones:
+  # This is a dynamic zone config. The source(s), here `config`, will be
+  # queried for a list of zone names and each will dynamically be set up to
+  # match the dynamic entry.
+  '*':
+    sources:
+      - config-merged
+    processors:
+      - only-these
+    targets:
+      - config-prod

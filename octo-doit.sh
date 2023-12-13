@@ -51,11 +51,17 @@ if ! grep -s 'No changes were planned' $LOG; then
         z=`echo $zdot | sed 's/\.$//'`
         echo "processing $z" | tee -a $LOG
         # move data from powerdns -> merge it -> local yaml directory
+        echo "PowerDNS to merged Yaml"
         octodns-sync --quiet --log-stream-stdout --config-file config/pdns2yaml.yml $zdot --doit | tee -a $LOG
+        echo "merged to QA Yaml"
         octodns-sync --quiet --log-stream-stdout --config-file config/merged2qa.yaml $zdot --doit | tee -a $LOG
+        echo "merged to PROD Yaml"
+        octodns-sync --quiet --log-stream-stdout --config-file config/merged2prod.yaml $zdot --doit | tee -a $LOG
+        echo "QA Yaml to Azure QA"
         octodns-sync --quiet --log-stream-stdout --config-file config/qa2azure.yaml $zdot --force --doit | tee -a $LOG
         gen-unbound-zone-data.sh $z | tee -a $LOG
-    #   octodns-sync --quiet --log-stream-stdout --config-file config/prod-dynamic.yaml $z. >> $LOG
+    #   echo "QA Yaml to Azure QA"
+    #   octodns-sync --quiet --log-stream-stdout --config-file config/prod2azure.yaml $z. >> $LOG
     done
     #   doas -u ansible ansible-playbook -K -v -t vars,unbound-data -l dns1,dns4,dns5 ~ansible/systems/dns.yaml | tee -a $LOG
 fi
