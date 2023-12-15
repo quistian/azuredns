@@ -3,18 +3,19 @@
 # azurecli zones bc > bc-zones
 
 TMP=/tmp/unbound-local-zone-data.$$
+UNBOUND_DIR=/home/ansible/systems/files/unbound
+LOCAL_DATA_DIR="$UNBOUND_DIR/local-zone-data"
 
 for z in "$*"
 do
     echo $z
-    DST=/home/ansible/systems/files/unbound/local-zone-data/$z
+    DST="$LOCAL_DATA_DIR/$z"
     test -f $DST || touch $DST
-    azurecli list -t cnames $z  > $TMP
-    if ! cmp -s $TMP $DST; then
-        mv $TMP $DST
-        cd /home/ansible/systems/files/unbound
-        cat local-zone-data/* > local-zone-data.conf
-    fi
+    azurecli list -t cnames $z  > $DST
+    cd $LOCAL_DATA_DIR
+    cat *.io *.com *.net *.ms  > $UNBOUND_DIR/local-zone-data.conf
 done
 
-rm -f $TMP
+#if [ "${CHANGED_DATA+1}" ]; then
+#    cat $LOCAL_DATA_DIR/* > $UNBOUND_DIR/zone-data.conf
+#fi
