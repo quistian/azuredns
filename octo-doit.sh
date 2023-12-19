@@ -5,7 +5,6 @@ LOG="./bc-current-scan.log"
 LOGDIR="./logs"
 TSTAMP_START=`date +"%Y-%m-%dT%H-%M-%S"`
 TSTAMP=$TSTAMP_START
-CHANGED="./zone-changes/changed-${TSTAMP}"
 ENV=/tmp/env_vars.$$
 
 echo $TSTAMP_START > $LOG
@@ -69,8 +68,6 @@ TSTAMP_STOP=`date +"%Y-%m-%dT%H-%M-%S"`
 echo $TSTAMP_STOP >> $LOG
 
 TSTF="scan_${TSTAMP_START}_${TSTAMP_STOP}.log"
-cp $LOG $TSTF
-mv $TSTF $LOGDIR
+cp $LOG $LOGDIR/$TSTF
 
-rm -f $ENV
-rm -f $TMP_PRIV_ZONES
+rm -f $TMP_CHANGED_ZONES
