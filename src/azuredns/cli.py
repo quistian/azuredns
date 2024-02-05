@@ -335,6 +335,11 @@ def mod_zone(ctx, deployable, fqdn):
         props = api.Z_Props_Not_Deployable
     util.modify_zone(fqdn, props)
 
+@run.command()
+@pass_context
+@fqdn
+def dump(ctx,fqdn):
+    util.dump_dns_data()
 
 if __name__ == "__run__":
     run()

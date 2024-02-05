@@ -828,15 +828,18 @@ def old_del_A_rr(fqdn, ip):
 
 
 def dump_dns_data():
-    ents = api.get_entities(config.ViewId, api.Z_Type)
-    for ent in ents:
-        zid = ent["id"]
-        zname = ent["name"]
-        rrs = []
-        for e in api.export_entities(zid):
-            rrs.append(e)
-        with open(f"{config.Path}/{zname}-rrs.json", "w") as rr_fd:
-            json.dump(rrs, rr_fd, indent=4, sort_keys=True)
+    rrs = list()
+    select = {
+        "selector": "get_entitytree",
+        "startEntityId": config.ViewId,
+        "types": "GenericRecord,HostRecord,AliasRecord,TXTRecord,MXRecord",
+        "children_only": False,
+    }
+    for e in api.export_entities(selection=select):
+        print(e)
+        rrs.append(e)
+    with open(f"{config.Path}/rrs.json", "w") as rr_fd:
+        json.dump(rrs, rr_fd, indent=4, sort_keys=True)
 
 
 """

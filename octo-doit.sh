@@ -5,29 +5,24 @@ LOG="./bc-current-scan.log"
 LOGDIR="./logs"
 TSTAMP_START=`date +"%Y-%m-%dT%H-%M-%S"`
 TSTAMP=$TSTAMP_START
-ENV=/tmp/env_vars.$$
 
-echo $TSTAMP_START > $LOG
-
-# check to see if the AZURE ENV variables have been loaded yet
-# Can also use .azureexportrc
-printenv | grep AZURE_ > $ENV
-if [ ! $? ]; then
+# Load in the appropriate environment variables for octodns modules
+#
+if [ -z "${AZURE_QA_USER_ID}"  ]; then
     echo "Azure Vars are being loaded" >> $LOG
     . $HOME/.azureexportrc
 fi
-printenv | grep BAM_ > $ENV
-if [ ! $? ]; then
+
+if [ -z "${BAM_VIEW}" ]; then
     echo "BlueCat Vars are being loaded" >> $LOG
     . $HOME/.bamrc
 fi
-printenv | grep POWERDNS > $ENV
-if [ ! $? ]; then
+if [ -z "${POWERDNS_API_KEY}" ]; then
     echo "PowerDNS Vars are being loaded" >> $LOG
     . $HOME/.pdnsrc
 fi
-rm -f $ENV
 
+echo $TSTAMP_START > $LOG
 echo "Scanning BC zones for changes" | tee -a $LOG
 
 # relatively slow process ~ 2 minutes
