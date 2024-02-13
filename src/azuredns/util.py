@@ -268,7 +268,7 @@ def get_azure_private_zones(src="file"):
         with open(fname) as fd:
             azones = json.load(fd)
     elif src == "bc":
-        azones = get_bc_private_zones()
+        azones = get_bc_private_zones_by_recursion()
     elif src == "azure":
         azure_dir = f"{config.Root}/azure-qa-zones"
         yaml_files = os.listdir(azure_dir)

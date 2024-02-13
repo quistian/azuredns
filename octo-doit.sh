@@ -28,8 +28,13 @@ echo "Scanning BC zones for changes" | tee -a $LOG
 # relatively slow process ~ 2 minutes
 # used to find out which records in which zones have changed since the last
 # sweep
-octodns-sync --quiet --log-stream-stdout --config-file config/bc2pdns.yml --doit | tee -a $LOG
+octodns-sync --log-stream-stdout --config-file config/bc2pdns.yml --doit | tee -a $LOG
+# octodns-sync --log-stream-stdout --config-file config/bc2pdns.yml 234.privatelink.openai.azure.com. --doit | tee -a $LOG
 # pdns to yaml is much faster than bc to yaml
+#
+#
+#
+exit
 
 if ! grep -s 'No changes were planned' $LOG; then
     cat $LOG | sed -n 's/^\* [0-9][0-9][0-9]\.//p' | sort | uniq > $TMP_CHANGED_ZONES
@@ -56,7 +61,7 @@ if ! grep -s 'No changes were planned' $LOG; then
     #   echo "QA Yaml to Azure QA"
     #   octodns-sync --quiet --log-stream-stdout --config-file config/prod2azure.yaml $z. >> $LOG
     done
-    doas -u ansible ansible-playbook -K -v -t vars,unbound-data -l dns1,dns4,dns5 ~ansible/systems/unbound.yaml | tee -a $LOG
+    doas -u ansible ansible-playbook -v -t vars,unbound-data -l dns1,dns4,dns5 ~ansible/systems/unbound.yaml | tee -a $LOG
 fi
 
 TSTAMP_STOP=`date +"%Y-%m-%dT%H-%M-%S"`

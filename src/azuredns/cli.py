@@ -89,7 +89,6 @@ value = argument(
 
 # @run commands: add, delete, list, modify, view,
 
-
 @run.command()
 @pass_context
 @fqdn
@@ -102,7 +101,6 @@ def test(ctx, fqdn, addr):
     return
     util.get_cname_rrs()
 
-
 @run.command()
 @pass_context
 @fqdn
@@ -112,9 +110,7 @@ def hrids(ctx, fqdn, addr):
     print(ids)
     print(fqdn, addr)
 
-
 # list subcommand
-
 
 @run.command()
 @pass_context
@@ -173,7 +169,6 @@ def list(ctx, target, fqdn):
             print(azone)
     elif target == "cnames":
         util.gen_cname_rrs(fqdn)
-
 
 @run.command()
 @pass_context
