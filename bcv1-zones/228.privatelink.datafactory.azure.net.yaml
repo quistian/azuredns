@@ -1,0 +1,8 @@
+Q228_test:
+  type: A
+  values:
+  - 10.141.72.133
+n228_test:
+  type: A
+  values:
+  - 10.141.15.1

@@ -1,0 +1,12 @@
+Q569_test:
+  type: A
+  values:
+  - 10.141.147.144
+n569_test:
+  type: A
+  values:
+  - 10.140.28.214
+q569_abcd:
+  type: A
+  values:
+  - 10.141.12.14

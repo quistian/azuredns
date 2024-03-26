@@ -1,0 +1,49 @@
+---
+n031_test:
+  type: A
+  value: 10.141.203.1
+n228_test:
+  type: A
+  value: 10.141.53.213
+n234_test:
+  type: A
+  value: 10.141.185.99
+n277_test:
+  type: A
+  value: 10.141.31.142
+n278-eisss-sqldns-sql:
+  type: A
+  value: 10.140.56.28
+n301_test:
+  type: A
+  value: 10.141.73.231
+n569_test:
+  type: A
+  value: 10.141.54.96
+n574_test:
+  type: A
+  value: 10.141.51.50
+p228aeadm-fase-fit-sql-rg02:
+  type: A
+  value: 10.140.37.4
+q031_test:
+  type: A
+  value: 10.141.188.197
+q228_jc:
+  type: A
+  value: 10.141.110.52
+q228_test:
+  type: A
+  value: 10.141.110.51
+q234_test:
+  type: A
+  value: 10.141.246.136
+q277_test:
+  type: A
+  value: 10.141.122.125
+q569_test:
+  type: A
+  value: 10.141.94.5
+q574_test:
+  type: A
+  value: 10.141.187.136

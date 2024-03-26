@@ -1,0 +1,7 @@
+---
+n278-eisss-sqldns-sql:
+  type: A
+  value: 10.140.56.28
+q278-eis-sharedsql-cc-sqlmi01.b674f74a0cf8:
+  type: A
+  value: 10.141.32.100

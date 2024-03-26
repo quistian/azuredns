@@ -1,0 +1,10 @@
+---
+ab123:
+  type: A
+  value: 10.141.0.1
+n277_test:
+  type: A
+  value: 10.140.130.222
+q277_test:
+  type: A
+  value: 10.141.204.86

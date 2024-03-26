@@ -1,0 +1,13 @@
+---
+n278_test:
+  type: A
+  value: 10.141.235.194
+q278_hamster:
+  type: A
+  value: 10.141.222.111
+q278_pdns_add:
+  type: A
+  value: 10.141.22.44
+q278_test:
+  type: A
+  value: 10.141.122.88

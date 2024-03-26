@@ -1,0 +1,7 @@
+---
+n031_test:
+  type: A
+  value: 10.141.242.186
+q031_test_rps:
+  type: A
+  value: 10.141.8.8

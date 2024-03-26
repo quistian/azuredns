@@ -63,7 +63,6 @@ def run(ctx: Context, silent, verbose):
         click.echo(f"action: {ctx.invoked_subcommand}")
     util.dns_init()
 
-
 # common options to share between subcommands
 # the zone or leaf to act upon
 fqdn = argument(
@@ -329,6 +328,12 @@ def mod_zone(ctx, deployable, fqdn):
     else:
         props = api.Z_Props_Not_Deployable
     util.modify_zone(fqdn, props)
+
+@run.command()
+@pass_context
+@fqdn
+def add_zone(ctx, fqdn):
+    util.add_zone_if_new(fqdn)
 
 @run.command()
 @pass_context

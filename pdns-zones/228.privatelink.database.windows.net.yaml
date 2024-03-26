@@ -1,0 +1,13 @@
+---
+n228_test:
+  type: A
+  value: 10.141.53.213
+p228aeadm-fase-fit-sql-rg02:
+  type: A
+  value: 10.140.37.4
+q228_jc:
+  type: A
+  value: 10.141.110.52
+q228_test:
+  type: A
+  value: 10.141.110.51

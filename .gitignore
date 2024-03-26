@@ -15,9 +15,16 @@ __pycache__/*
 .DS_Store
 
 # DNS data files and directories
-bc-zones/
-qa-zones/
-prod-zones/
+
+# azure-prod-zones/
+# azure-qa-zones/
+bc-old-zones/
+# bcv2-zones/
+# leaf-zones/
+# merged-zones/
+# normalized-zones/
+# pdns-merged-zones/
+# pdns-zones/
 
 # Project files
 .ropeproject

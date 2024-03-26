@@ -1,5 +1,5 @@
 providers:
-  bluecat:
+  bcv1:
     class: octodns_bluecat.BlueCatProvider
     endpoint: env/BAM_ENDPOINT
     username: env/BAM_USER

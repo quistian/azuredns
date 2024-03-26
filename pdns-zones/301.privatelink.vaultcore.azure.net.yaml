@@ -1,0 +1,7 @@
+---
+n301_test:
+  type: A
+  value: 10.141.135.62
+q301dw2-cc-akv01:
+  type: A
+  value: 10.141.100.28

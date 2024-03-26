@@ -1,0 +1,8 @@
+Q277_test:
+  type: A
+  values:
+  - 10.141.52.63
+n277_test:
+  type: A
+  values:
+  - 10.141.244.223

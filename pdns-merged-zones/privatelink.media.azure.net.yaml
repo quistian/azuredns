@@ -1,0 +1,46 @@
+---
+n031_test:
+  type: A
+  value: 10.141.107.190
+n228_test:
+  type: A
+  value: 10.141.42.211
+n234_test:
+  type: A
+  value: 10.141.101.166
+n277_test:
+  type: A
+  value: 10.141.41.136
+n278_test:
+  type: A
+  value: 10.141.148.239
+n301_test:
+  type: A
+  value: 10.141.27.56
+n569_test:
+  type: A
+  value: 10.141.31.148
+n574_test:
+  type: A
+  value: 10.141.203.19
+q031_test:
+  type: A
+  value: 10.141.120.142
+q228_test:
+  type: A
+  value: 10.141.240.32
+q234_test:
+  type: A
+  value: 10.141.41.114
+q277_test:
+  type: A
+  value: 10.141.138.241
+q278_test:
+  type: A
+  value: 10.141.127.42
+q569_test:
+  type: A
+  value: 10.141.231.176
+q574_test:
+  type: A
+  value: 10.141.199.156

@@ -1,0 +1,8 @@
+Q234_test:
+  type: A
+  values:
+  - 10.141.180.65
+n234_test:
+  type: A
+  values:
+  - 10.141.238.45

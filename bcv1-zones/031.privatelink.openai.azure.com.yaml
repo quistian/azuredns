@@ -1,0 +1,12 @@
+Q031_test:
+  type: A
+  values:
+  - 10.141.96.222
+n031_test:
+  type: A
+  values:
+  - 10.140.158.14
+q031_frodo:
+  type: A
+  values:
+  - 10.141.141.141

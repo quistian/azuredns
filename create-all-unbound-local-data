@@ -1,0 +1,9 @@
+#!/bin/sh
+
+azurecli zones bc > bc-zones
+
+for z in `cat bc-zones`
+do
+echo $z
+azurecli list -t cnames $z  > /home/ansible/systems/files/unbound/local-zone-data/$z
+done

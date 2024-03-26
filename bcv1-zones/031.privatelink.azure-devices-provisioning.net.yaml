@@ -1,0 +1,8 @@
+Q031_test:
+  type: A
+  values:
+  - 10.141.50.212
+n031_test:
+  type: A
+  values:
+  - 10.141.150.63

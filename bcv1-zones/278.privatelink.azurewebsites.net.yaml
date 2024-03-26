@@ -1,0 +1,12 @@
+Q278_test:
+  type: A
+  values:
+  - 10.141.112.29
+n278-eisss-app01:
+  type: A
+  values:
+  - 10.140.56.29
+n278_test:
+  type: A
+  values:
+  - 10.141.213.82

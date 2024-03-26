@@ -1,0 +1,49 @@
+providers:
+  bluecat-v1:
+    class: octodns_bluecat_v1.BlueCatProvider
+    endpoint: env/BAM_ENDPOINT
+    username: env/BAM_USER
+    password: env/BAM_PW
+    token: env/BAM_TOKEN
+    confname: env/BAM_CONF
+    viewname: env/BAM_VIEW
+  bluecat-v2:
+    class: octodns_bluecat_v2.BlueCatv2Provider
+    endpoint: env/BAM_DEV_ENDPOINT
+    username: env/BAM_DEV_USER
+    password: env/BAM_DEV_PW
+    confname: env/BAM_CONF
+    viewname: env/BAM_VIEW
+    cert: env/BAM_CERT
+      
+#  powerdns:
+#    class: octodns_powerdns.PowerDnsProvider
+#
+#    host: mirror.eis.utoronto.ca
+#    port: 8081
+#    api_key: env/POWERDNS_API_KEY
+#    scheme: http
+
+  yaml:
+    class: octodns.provider.yaml.YamlProvider
+    directory: ./bc-zones
+    default_ttl: 3600
+    enforce_order: True
+
+processors:
+  only-a-and-aaaa:
+    class: octodns.processor.filter.TypeAllowlistFilter
+    allowlist:
+      - A
+      - AAAA
+  no-root-ns:
+    class: octodns.processor.filter.IgnoreRootNsFilter
+
+zones:
+  '*':
+    sources:
+      - bluecat-v1
+    processors:
+      - only-a-and-aaaa
+    targets:
+      - bluecat-v2

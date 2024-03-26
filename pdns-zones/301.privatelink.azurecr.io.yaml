@@ -1,0 +1,7 @@
+---
+n301_test:
+  type: A
+  value: 10.141.157.42
+q301_test:
+  type: A
+  value: 10.141.171.66

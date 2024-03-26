@@ -417,9 +417,7 @@ def create_zone_in_an_iterative_manner(zone):
                 print(f"Created zone {tok} with entity properties: {e}")
         pid = cid
 
-
 # create cname inclusion file for unbound on a per zone basis
-
 
 def gen_cname_rrs(zone):
     with open(f"{config.Path}/azure-priv-pub.json") as fd:

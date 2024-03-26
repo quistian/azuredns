@@ -1,0 +1,12 @@
+Q277_test:
+  type: A
+  values:
+  - 10.141.204.86
+ab123:
+  type: A
+  values:
+  - 10.141.0.1
+n277_test:
+  type: A
+  values:
+  - 10.140.130.222
