@@ -12,13 +12,12 @@ Usage: azurecli [OPTIONS] COMMAND [ARGS]...
   CLI interface to both BAM and Azure DNS
 
 Options:
-  -s, --silent                Minimize the output from commands. Silence is
-                              golden
+  -s, --silent                Minimize the output from commands. Silence is golden
   -v, -d, --verbose, --debug  Show what is going on for debugging purposes
   --help                      Show this message and exit.
 
 Commands:
-  add       Add an Azure A record
+  add       Add an Azure Zone or Resource Record
   delete    Delete an Azure A record
   modify    Modify an Azure A record
   hrids

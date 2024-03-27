@@ -1,14 +1,16 @@
 import re
+
 from os.path import exists
 from pprint import pprint
 
 import click
-from click import Context, argument, group, option, pass_context
+from click import Choice, Context, argument, group, option, pass_context
 
 from azuredns import api, config, util
 
 SUPPORTED_SRCS = ["bc-yaml", "local", "yaml", "bc", "bam", "bluecat"]
-
+SUPPORTED_OBJS = ['zone', 'domain', 'rr', 'RR']
+SUPPORTED_RR_TYPES = ['A', 'AAAA', 'TXT']
 
 def validate_fqdn(ctx, param, value):
     if value == "rights":
@@ -65,6 +67,7 @@ def run(ctx: Context, silent, verbose):
 
 # common options to share between subcommands
 # the zone or leaf to act upon
+
 fqdn = argument(
     "fqdn",
     type=click.STRING,
@@ -80,10 +83,18 @@ addr = argument(
     callback=validate_ip,
 )
 
+# generic string
 value = argument(
     "value",
     type=click.STRING,
     default="zones",
+)
+
+dnsobj = argument(
+        'dnsobj',
+        type=click.STRING,
+        required=True,
+        default="A",
 )
 
 # @run commands: add, delete, list, modify, view,
@@ -281,14 +292,30 @@ def sync(ctx, fqdn, source, destination):
 
 @run.command()
 @pass_context
-@fqdn
-@addr
-def add(ctx, fqdn, addr):
-    """Add an Azure A record"""
+@option('--zone', '--domain', '-z',
+    required=False,
+    default='bozo.int',
+    callback=validate_fqdn,
+    help='The name of the zone to be added',
+)
+@option('--rr', '--resource-record', '-r',
+    nargs=3,
+    required=False,
+    default=('A', 'test.bozo.int', '1.2.3.4'),
+    help='DNS resource record tuple: TYPE FQDN VALUE',
+)
+def add(ctx, zone, rr):
+    """ Add an Azure zone or RR record"""
     if ctx.obj["DEBUG"]:
-        click.echo(f"    fqdn: {fqdn} value: {addr}\n")
-    util.add_A_rr(fqdn, addr)
-
+        click.echo(f"zone: {zone} rr: {rr}\n")
+    (rr_type, fqdn, val) = rr
+    if zone != 'bozo.int':
+        util.add_zone_if_new(zone)
+    elif rr_type in ["A", "AAAA", "TXT"] and fqdn != 'test.bozo.int':
+        if rr_type == "A":
+            util.add_A_rr(fqdn, val)
+        else:
+            print(f'RR of type {rr_type} is not yet supported') 
 
 @run.command()
 @pass_context
@@ -329,11 +356,6 @@ def mod_zone(ctx, deployable, fqdn):
         props = api.Z_Props_Not_Deployable
     util.modify_zone(fqdn, props)
 
-@run.command()
-@pass_context
-@fqdn
-def add_zone(ctx, fqdn):
-    util.add_zone_if_new(fqdn)
 
 @run.command()
 @pass_context

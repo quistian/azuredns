@@ -17,10 +17,10 @@ if [ -z "${BAM_VIEW}" ]; then
     echo "BlueCat Vars are being loaded" >> $LOG
     . $HOME/.bamrc
 fi
-if [ -z "${POWERDNS_API_KEY}" ]; then
-    echo "PowerDNS Vars are being loaded" >> $LOG
-    . $HOME/.pdnsrc
-fi
+#if [ -z "${POWERDNS_API_KEY}" ]; then
+#    echo "PowerDNS Vars are being loaded" >> $LOG
+#    . $HOME/.pdnsrc
+#fi
 
 echo $TSTAMP_START > $LOG
 echo "Scanning BC zones for changes" | tee -a $LOG
@@ -28,13 +28,12 @@ echo "Scanning BC zones for changes" | tee -a $LOG
 # relatively slow process ~ 2 minutes
 # used to find out which records in which zones have changed since the last
 # sweep
-octodns-sync --log-stream-stdout --config-file config/bc2pdns.yml --doit | tee -a $LOG
+octodns-sync --log-stream-stdout --config-file config/bcv1_to_bcv2.yml --doit | tee -a $LOG
 # octodns-sync --log-stream-stdout --config-file config/bc2pdns.yml 234.privatelink.openai.azure.com. --doit | tee -a $LOG
 # pdns to yaml is much faster than bc to yaml
 #
 #
 #
-exit
 
 if ! grep -s 'No changes were planned' $LOG; then
     cat $LOG | sed -n 's/^\* [0-9][0-9][0-9]\.//p' | sort | uniq > $TMP_CHANGED_ZONES
@@ -49,19 +48,20 @@ if ! grep -s 'No changes were planned' $LOG; then
         z=`echo $zdot | sed 's/\.$//'`
         echo "processing $z" | tee -a $LOG
         # move data from powerdns -> merge it -> local yaml directory
-        echo "PowerDNS to merged Yaml"
-        octodns-sync --quiet --log-stream-stdout --config-file config/pdns2yaml.yml $zdot --doit | tee -a $LOG
+        echo "BC v2 API to merged Yaml"
+        octodns-sync --quiet --log-stream-stdout --config-file config/bcv2_merge_to_yaml.yml $zdot --doit | tee -a $LOG
         echo "merged to QA Yaml"
         octodns-sync --quiet --log-stream-stdout --config-file config/merged2qa.yaml $zdot --doit | tee -a $LOG
         echo "merged to PROD Yaml"
         octodns-sync --quiet --log-stream-stdout --config-file config/merged2prod.yaml $zdot --doit | tee -a $LOG
         echo "QA Yaml to Azure QA"
-        octodns-sync --quiet --log-stream-stdout --config-file config/qa2azure.yaml $zdot --force --doit | tee -a $LOG
+    #    octodns-sync --quiet --log-stream-stdout --config-file config/qa2azure.yaml $zdot --force --doit | tee -a $LOG
         sh -x gen-unbound-zone-data.sh $z | tee -a $LOG
     #   echo "QA Yaml to Azure QA"
     #   octodns-sync --quiet --log-stream-stdout --config-file config/prod2azure.yaml $z. >> $LOG
     done
-    doas -u ansible ansible-playbook -v -t vars,unbound-data -l dns1,dns4,dns5 ~ansible/systems/unbound.yaml | tee -a $LOG
+
+    # doas -u ansible ansible-playbook -v -t vars,unbound-data -l dns1,dns4,dns5 ~ansible/systems/unbound.yaml | tee -a $LOG
 fi
 
 TSTAMP_STOP=`date +"%Y-%m-%dT%H-%M-%S"`

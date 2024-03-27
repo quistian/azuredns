@@ -49,7 +49,6 @@ def recurse(eid):
             for ent in ents:
                 recurse(ent["id"])
 
-
 def recurse_2_leafs(eid):
     ents = api.get_entities(eid, api.Z_Type)
     if len(ents):
@@ -545,8 +544,10 @@ def zone_exists(zone):
 
 
 def add_A_rr(fqdn, ip):
-    fqdn = canonicalize(fqdn)
-    ent_id = api.add_generic_record(config.ViewId, fqdn, "A", ip)
+    canonical_fqdn = canonicalize(fqdn)
+    if config.Debug:
+        print(f'add_A_rr: fqdn: {fqdn}, ip: {ip}, canonical fqdn: {canonical_fqdn}')
+    ent_id = api.add_generic_record(config.ViewId, canonical_fqdn, "A", ip)
     return ent_id
 
 
