@@ -764,10 +764,13 @@ def modify_zone(zone, props):
         print(f"{zone} does not exist")
 
 
-def delete_zone(zone):
+def old_delete_zone(zone):
+    """ Only seems to work for the top level """
     deleted = False
     ents = api.get_entities(config.ViewId, api.Z_Type)
     for ent in ents:
+        if config.Debug:
+            print(ent)
         zid = ent["id"]
         zname = ent["name"]
         if zname == zone:
@@ -776,6 +779,15 @@ def delete_zone(zone):
             api.delete_entity(zid)
     if not deleted:
         print(f"zone {zone} has already been deleted or does not exist")
+
+def delete_zone(zone):
+    zid = zone_exists(zone)
+    if zid:
+        if config.Debug:
+            print(f'Deleting zone: {zone} with zone_id {zid}')
+        api.delete_entity(zid)
+    else:
+        print(f'Can not delete non existent zone: {zone}')
 
 
 """
