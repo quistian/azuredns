@@ -55,13 +55,16 @@ if ! grep -s 'No changes were planned' $LOG; then
         echo "merged to PROD Yaml"
         octodns-sync --quiet --log-stream-stdout --config-file config/merged2prod.yaml $zdot --doit | tee -a $LOG
         echo "QA Yaml to Azure QA"
-    #    octodns-sync --quiet --log-stream-stdout --config-file config/qa2azure.yaml $zdot --force --doit | tee -a $LOG
+        octodns-sync --quiet --log-stream-stdout --config-file config/qa2azure.yaml $zdot --force --doit | tee -a $LOG
+        echo "Prod Yaml to Azure Prod"
+        octodns-sync --quiet --log-stream-stdout --config-file config/prod2azure.yaml $zdot --doit >> $LOG
         sh -x gen-unbound-zone-data.sh $z | tee -a $LOG
     #   echo "QA Yaml to Azure QA"
-    #   octodns-sync --quiet --log-stream-stdout --config-file config/prod2azure.yaml $z. >> $LOG
     done
 
-    # doas -u ansible ansible-playbook -v -t vars,unbound-data -l dns1,dns4,dns5 ~ansible/systems/unbound.yaml | tee -a $LOG
+    # Restart unbound and dnsdist for any changes
+    doas -u ansible ansible-playbook -v -t vars,unbound-data -l dns1,dns4,dns5 ~ansible/systems/unbound.yaml | tee -a $LOG
+    # doas -u ansible ansible-playbook -v -t vars,dnsdist-data -l dns1,dns4,dns5 ~ansible/systems/dns.yaml | tee -a $LOG
 fi
 
 TSTAMP_STOP=`date +"%Y-%m-%dT%H-%M-%S"`

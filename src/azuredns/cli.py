@@ -52,18 +52,27 @@ def validate_value(ctx, param, value):
     is_flag=True,
     help="Show what is going on for debugging purposes",
 )
+@option(
+        "-w",
+        "--switch",
+        "--flip",
+        "flip",
+        is_flag=True,
+        help="Use the mirrored BAM flip",
+)
 @pass_context
-def run(ctx: Context, silent, verbose):
+def run(ctx: Context, silent, verbose, flip):
     """CLI interface to both BAM and Azure DNS"""
     ctx.obj = dict()
     ctx.obj["SILENT"] = silent
     ctx.obj["DEBUG"] = verbose
     config.Silent = silent
     config.Debug = verbose
+    config.Flip = flip
 
     if verbose:
         click.echo(f"action: {ctx.invoked_subcommand}")
-    util.dns_init()
+    util.dns_init(flip)
 
 # common options to share between subcommands
 # the zone or leaf to act upon
@@ -134,6 +143,7 @@ def hrids(ctx, fqdn, addr):
     help="Source of contents of a leaf or merged zone, e.g. azure, yaml, bc",
 )
 def list(ctx, target, fqdn):
+    """ List the contents of a leaf or merged zone """
     if config.Debug:
         print(f"fqdn: {fqdn} target: {target}")
     if target == "bc" or target == "bluecat":
@@ -222,7 +232,6 @@ def zones(ctx, target, value):
     for zone in zones:
         print(zone)
 
-
 @run.command()
 @fqdn
 @pass_context
@@ -308,7 +317,7 @@ def add(ctx, zone, rr):
     """ Add an Azure zone or RR record"""
     if ctx.obj["DEBUG"]:
         click.echo(f"zone: {zone} rr: {rr}\n")
-    (rr_type, fqdn, val) = rr
+    (fqdn, rr_type, val) = rr
     if zone != 'bozo.int':
         util.add_zone_if_new(zone)
     elif rr_type in ["A", "AAAA", "TXT"] and fqdn != 'test.bozo.int':
@@ -319,25 +328,38 @@ def add(ctx, zone, rr):
 
 @run.command()
 @pass_context
-@fqdn
-@addr
-def delete(ctx, fqdn, addr):
-    """Delete an Azure A record"""
+@option('--zone', '--domain', '-z',
+    required=False,
+    default='bozo.int',
+    callback=validate_fqdn,
+    help='The name of the zone to be deleted',
+)
+@option('--rr', '--resource-record', '-r',
+    nargs=3,
+    required=False,
+    default=('A', 'test.bozo.int', '1.2.3.4'),
+    help='DNS resource record tuple: TYPE FQDN VALUE to be deleted',
+)
+def delete(ctx, zone, rr):
+    """Delete an Azure Zone or Resource record"""
     if ctx.obj["DEBUG"]:
-        click.echo(f"    fqdn: {fqdn} value: {addr}\n")
-    util.del_A_rr(fqdn, addr)
-
+        click.echo(f"zone: {zone} rr: {rr}\n")
+    (fqdn, rr_type, val) = rr
+    if zone != 'bozo.int':
+        util.delete_zone(zone)
+    elif rr_type in ["A", "AAAA", "TXT"] and fqdn != 'test.bozo.int':
+        if rr_type == "A":
+            util.del_A_rr(fqdn, val)
 
 @run.command()
 @pass_context
 @fqdn
 @addr
 def modify(ctx, fqdn, addr):
-    """Modify an Azure A record"""
+    """ Modify an Azure A record """
     if ctx.obj["DEBUG"]:
         click.echo(f"Modifying fqdn: {fqdn} value: {addr}\n")
     util.mod_A_rr(fqdn, addr)
-
 
 @run.command()
 @pass_context
@@ -356,12 +378,19 @@ def mod_zone(ctx, deployable, fqdn):
         props = api.Z_Props_Not_Deployable
     util.modify_zone(fqdn, props)
 
-
 @run.command()
 @pass_context
-@fqdn
-def dump(ctx,fqdn):
-    util.dump_dns_data()
+@argument(
+    "zone",
+    type=click.STRING,
+    default=".",
+    required=True,
+)
+def dump(ctx,zone):
+    """ Dumps all zone data starting from a given starting point """
+    if ctx.obj["DEBUG"]:
+        click.echo(f"Dumping {zone}")
+    util.dump_dns_data(zone)
 
 if __name__ == "__run__":
     run()

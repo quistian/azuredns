@@ -666,7 +666,6 @@ When the record is to be added or modified
    {'id': 163642, 'name': 'a', 'type': 'GenericRecord', 'properties': {'comments': 'A solo A Resource Record', 'absoluteName': 'a.b.c.d', 'type': 'A', 'rdata': '1.2.3.4'}}
 """
 
-
 def mod_A_rr(fqdn, ip):
     """Modify a given Leaf Zone A record. Accept leaf and non leaf form"""
     if config.Debug:
@@ -826,20 +825,29 @@ def old_del_A_rr(fqdn, ip):
                     api.delete_entity(ent["id"])
 
 
-def dump_dns_data():
+def dump_dns_data(zone):
     rrs = list()
+
+    if zone == ".":
+        entity_id = config.ViewId
+    else:
+        entity_id = get_zone_id(zone)
+
     select = {
         "selector": "get_entitytree",
-        "startEntityId": config.ViewId,
+        "startEntityId": entity_id,
         "types": "GenericRecord,HostRecord,AliasRecord,TXTRecord,MXRecord",
         "children_only": False,
     }
-    for e in api.export_entities(selection=select):
-        print(e)
-        rrs.append(e)
-    with open(f"{config.Path}/rrs.json", "w") as rr_fd:
-        json.dump(rrs, rr_fd, indent=4, sort_keys=True)
 
+    for e in api.export_entities(selection=select):
+        if e['type'] == 'GenericRecord':
+            props = e['properties']
+            if props['type'] == "A":
+                print(f'{props["absoluteName"]}~{props["rdata"]}')
+        rrs.append(e)
+#    with open(f"{config.Path}/rrs.json", "w") as rr_fd:
+#        json.dump(rrs, rr_fd, indent=4, sort_keys=True)
 
 """
 Looking for the following data structure to write out to the octodns yaml file
@@ -1019,8 +1027,8 @@ def gen_azure_priv_pub_json(src):
 
 
 # Get things going... Initialize the BAM connection and set a few variables.
-def dns_init():
-    view_id = api.bam_init()
+def dns_init(flip):
+    view_id = api.bam_init(flip)
     cwd = os.getcwd()
     home_dir = os.path.expanduser("~")
     config.Root = f"{home_dir}/src/azure/azuredns"

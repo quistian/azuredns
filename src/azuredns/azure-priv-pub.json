@@ -48,6 +48,7 @@
     "privatelink.openai.azure.com": "openai.azure.com",
     "privatelink.afs.azure.net": "afs.azure.net",
     "privatelink.datafactory.azure.net": "datafactory.azure.net",
+    "canadacentral.privatelink.datafactory.azure.net": "canadacentral.datafactory.azure.net",
     "privatelink.adf.azure.com": "adf.azure.com",
     "privatelink.redis.cache.windows.net": "redis.cache.windows.net",
     "privatelink.redisenterprise.cache.azure.net": "redisenterprise.cache.azure.net",

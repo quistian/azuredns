@@ -296,7 +296,7 @@ def get_zones_by_hint(zone):
 # {'id': 100919, 'name': 'ca', 'type': 'Zone', 'properties': {'deployable': 'false', 'dynamicUpdate': 'false', 'absoluteName': 'ca'}}
 
 
-def bam_init():
+def bam_init(flip):
     global Clnt
 
     unix_ver = os.uname().sysname
@@ -308,13 +308,20 @@ def bam_init():
         ca_bundle = "/etc/group"
 
     home_dir = os.path.expanduser("~")
+
     load_dotenv(f"{home_dir}/.bamrc")
     #    load_dotenv(f"{home_dir}/.psqlrc")
     #    load_dotenv(f"{home_dir}/.azurerc")
-    url = os.environ.get("BAM_API_URL")
-    uname = os.environ.get("BAM_USER")
-    pw = os.environ.get("BAM_PW")
+    if flip:
+        server = os.environ.get("BAM_DEV_ENDPOINT")
+        uname = os.environ.get("BAM_DEV_USER")
+        pw = os.environ.get("BAM_DEV_PW")
+    else:
+        server = os.environ.get("BAM_ENDPOINT")
+        uname = os.environ.get("BAM_USER")
+        pw = os.environ.get("BAM_PW")
 
+    url = f'https://{server}/Services/REST/v1/'
     try:
         Clnt = Client(url, verify=ca_bundle)
         Clnt.login(uname, pw)
@@ -322,6 +329,7 @@ def bam_init():
         config.ConfId = conf_ent["id"]
         view_ent = Clnt.get_entity_by_name(config.ConfId, config.View, V_Type)
         if config.Debug:
+            print(f"Bam URL: {url}")
             print(f"Bam version: {Clnt.system_version}")
             print(f"BAM Configuration: {conf_ent}")
             print(f"BAM View: {view_ent}")
@@ -329,7 +337,6 @@ def bam_init():
         return config.ViewId
     except ErrorResponse as e:
         print(f"Top Level Error: {e.message}")
-
 
 """
 When the record is to be added:

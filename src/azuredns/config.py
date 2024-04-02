@@ -8,7 +8,8 @@ Conf = "Test"
 View = "Azure"
 
 Silent = True
-Debug = True
+Debug = False
+Flip = False
 
 Path = "/tmp"
 Root = "/tmp"
