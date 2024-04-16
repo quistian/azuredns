@@ -122,11 +122,25 @@ def test(ctx, fqdn, addr):
 
 @run.command()
 @pass_context
+@argument(
+    "source",
+    type=click.STRING,
+    default="http",
+)
+def priv_pub_names(ctx, source):
+    """ Generate current Azure Private to Public DNS mapping """
+    mapping = util.gen_azure_priv_pub_json(source)
+    print(f'For source: {source}')
+    print(mapping)
+
+@run.command()
+@pass_context
 @fqdn
 @addr
 def hrids(ctx, fqdn, addr):
     ids = util.get_hr_nums()
-    print(ids)
+    for idx in ids:
+        print(idx)
     print(fqdn, addr)
 
 # list subcommand

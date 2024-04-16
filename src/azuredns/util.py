@@ -622,15 +622,22 @@ def del_A_rr(fqdn, ip):
     if not legit_hostname(host):
         print(f"{host} is not an Azure qualified host name")
         return False
-    elif toks[0] in get_active_hrids():
-        hrid = toks.pop(0)
-    else:
+    if toks[0] == 'privatelink':
         hrid = host[1:4]
-    zone = ".".join(toks)
-    leaf_zone = f"{hrid}.{zone}"
+        if hrid not in get_active_hrids():
+            print(f"Non existant HRID: {hrid}")
+            return False
+        priv_zone = ".".join(toks)
+    else:
+        hrid = toks.pop(0)
+        if hrid not in get_active_hrids():
+            print(f"Non existant HRID: {hrid}")
+            return False
+        priv_zone = ".".join(toks)
+    leaf_zone = f"{hrid}.{priv_zone}"
 
-    if zone not in get_azure_private_zones():
-        print(f"{zone} is not an Azure resource/zone name")
+    if priv_zone not in get_azure_private_zones():
+        print(f"{priv_zone} is not an Azure resource/zone name")
         return False
     else:
         zid = zone_exists(leaf_zone)
@@ -978,7 +985,7 @@ def gen_azure_priv_pub_json(src):
         page = requests.get(Azure_Resource_URL)
         if config.Debug:
             print("Raw html")
-            print(page.text)
+            pprint(page.text)
         with open(Fname, "w") as fp:
             fp.write(page.text)
 

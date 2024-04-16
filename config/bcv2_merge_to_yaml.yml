@@ -1,0 +1,22 @@
+providers:
+  bcv2merge:
+    class: octodns_bluecat_merge.BlueCatv2MergeProvider
+    endpoint: env/BAM_DEV_ENDPOINT
+    username: env/BAM_DEV_USER
+    password: env/BAM_DEV_PW
+    confname: env/BAM_CONF
+    viewname: env/BAM_VIEW
+    cert: env/BAM_CERT
+
+  yaml:
+    class: octodns.provider.yaml.YamlProvider
+    directory: ./merged-zones
+    default_ttl: 3600
+    enforce_order: True
+
+zones:
+  '*':
+    sources:
+      - bcv2merge
+    targets:
+      - yaml
