@@ -105,5 +105,5 @@
     "privatelink.{partitionId}.azurestaticapps.net":  "{partitionId}.azurestaticapps.net",
     "privatelink.servicebus.windows.net":  "servicebus.windows.net",
     "privatelink.azure-devices.us":  "azure-devices.us",
-    "privatelink.servicebus.windows.us":  "servicebus.usgovcloudapi.net",
+    "privatelink.servicebus.windows.us":  "servicebus.usgovcloudapi.net"
 }

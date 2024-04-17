@@ -234,7 +234,7 @@ def get_yaml_file(fname):
 
 # conn = psycopg2.conn(dbname='obm', user='eng_ro_api', password='w7NDGTzm')
 # Returns all defined HRID numbers as per the current NetDisco postgres DB
-def get_hr_nums():
+def get_hrid_nums():
     hrids = []
 
     home_dir = os.path.expanduser("~")
@@ -263,6 +263,7 @@ def get_hr_nums():
 def get_azure_private_zones(src="file"):
     azones = list()
     if src == "file":
+        fname = f"{config.Path}/azure-priv-pub.json"
         fname = f"{config.Path}/azure-resource-names.json"
         with open(fname) as fd:
             azones = json.load(fd)
@@ -615,6 +616,7 @@ def del_A_rr(fqdn, ip):
     hname.azure_resource_zone
     Does not care at the present time about the value of the IP address
     """
+    hrids = get_hrid_nums()
     if config.Debug:
         print(f"To delete: {fqdn}: {ip}")
     toks = fqdn.split(".")
@@ -624,13 +626,13 @@ def del_A_rr(fqdn, ip):
         return False
     if toks[0] == 'privatelink':
         hrid = host[1:4]
-        if hrid not in get_active_hrids():
+        if int(hrid) not in hrids:
             print(f"Non existant HRID: {hrid}")
             return False
         priv_zone = ".".join(toks)
     else:
         hrid = toks.pop(0)
-        if hrid not in get_active_hrids():
+        if int(hrid) not in hrids:
             print(f"Non existant HRID: {hrid}")
             return False
         priv_zone = ".".join(toks)

@@ -1,6 +1,8 @@
 #!/bin/sh
 
-TMP_CHANGED_ZONES=/tmp/azure-changed-zones.$$
+LEAF_CHANGED_ZONES=/tmp/leaf-changed-zones.$$
+CHANGED_ZONES=/tmp/azure-changed-zones.$$
+
 LOG="./bc-current-scan.log"
 LOGDIR="./logs"
 TSTAMP_START=`date +"%Y-%m-%dT%H-%M-%S"`
@@ -23,60 +25,81 @@ fi
 #    . $HOME/.pdnsrc
 #fi
 
-
 echo $TSTAMP_START > $LOG
 echo "Scanning BC zones for changes" | tee -a $LOG
 
-( azurecli dump "."; azurecli --flip dump "." ) |
-tr [A-Z] [a-z] | sort | uniq -u |
-awk -F~ ' { print(substr($1, index($1,".")+1)) "." } ' |
-uniq | tee -a $LOG
+LAST_CHANGED=$LOGDIR/last_changed.log
+SNAPSHOT=$LOGDIR/snapshot.log
+LAST_RRs=$LOGDIR/last_rrs.log
 
-# relatively slow process ~ 2 minutes
-# used to find out which records in which zones have changed since the last
-# sweep
-# octodns-sync --log-stream-stdout --config-file config/bcv1_to_bcv2.yml --doit | tee -a $LOG
-# octodns-sync --log-stream-stdout --config-file config/bc2pdns.yml 234.privatelink.openai.azure.com. --doit | tee -a $LOG
-# pdns to yaml is much faster than bc to yaml
-#
-#if ! grep -s 'No changes were planned' $LOG; then
-#    cat $LOG | sed -n 's/^\* [0-9][0-9][0-9]\.//p' | sort | uniq > $TMP_CHANGED_ZONES
+echo 'Current BC Zone Data' >> $LOG
+azurecli dump "." | tr '[A-Z]' '[a-z]' | sort | tee $SNAPSHOT >> $LOG
+cat $LAST_CHANGED | grep '~10.14' | tr '[A-Z]' '[a-z]' | sort | uniq > $LAST_RRs
 
-if grep -s 'privatelink' $LOG > $TMP_CHANGED_ZONES; then
+# Format of diff file:
+# 1189c1189
+# < q237_new.237.privatelink.openai.azure.com~10.141.11.22
+# ---
+# > q237_gnu.237.privatelink.openai.azure.com~10.141.221.112
 
-#       Old method for moving RRs:
-#       azurecli sync -s leaf -d merged $z | tee -a $LOG
-#       azurecli sync -s merged -d normalized $z | tee -a $LOG
+if ! cmp -s $SNAPSHOT $LAST_RRs; then
+    diff $SNAPSHOT $LAST_RRs |
+    grep '~' |
+    tr [A-Z] [a-z] | sort | uniq -u |
+    cut -d' ' -f2 | cut -d~ -f1 |
+    awk '{
+        n = split($1, a, ".")
+        i = 2
+        j = a[i++]
+        while (i <= n ) {
+            j = j "." a[i++]
+        }
+        print j "."
+    }' | sort | uniq > $LEAF_CHANGED_ZONES
 
-    for leaf in `cat $TMP_CHANGED_ZONES`
+# cat $LEAF_CHANGED_ZONES
+# 237.privatelink.openai.azure.com.
+# 278.privatelink.openai.azure.com.
+    exit
+
+    for leaf in `cat $LEAF_CHANGED_ZONES`
     do
         zdot=`echo $leaf | awk '{print(substr($0, index($0,".")+1))}'`
-        zone=`echo $zdot | awk '{print(substr($0, 1, length($0)-1))}'`
-        echo "processing $leaf and $zdot" | tee -a $LOG
-        echo "BC auth to  BC v2" | tee -a $LOG
+        echo $zdot >> $CHANGED_ZONES
+        echo "processing $leaf | tee -a $LOG
+        echo "syncing BC auth to  BC v2" | tee -a $LOG
         octodns-sync --log-stream-stdout --config-file config/bcv1_to_bcv2.yml $leaf --doit | tee -a $LOG
-        echo "BC v2 API to merged Yaml" | tee -a $LOG
-        octodns-sync --log-stream-stdout --config-file config/bcv2_merge_to_yaml.yml $zdot --doit | tee -a $LOG
-        echo "Merged Yaml to QA Yaml" | tee -a $LOG
-        octodns-sync --log-stream-stdout --config-file config/merged2qa.yaml $zdot --doit | tee -a $LOG
-        echo "Merge Yaml  to PROD Yaml" | tee -a $LOG
-        octodns-sync --log-stream-stdout --config-file config/merged2prod.yaml $zdot --doit | tee -a $LOG
-        echo "QA Yaml to Azure QA" | tee -a $LOG
-        octodns-sync --log-stream-stdout --config-file config/qa2azure.yaml $zdot --force --doit | tee -a $LOG
-        echo "Prod Yaml to Azure Prod" | tee -a $LOG
-        octodns-sync --log-stream-stdout --config-file config/prod2azure.yaml $zdot --doit >> $LOG
-        sh -x gen-unbound-zone-data.sh $zone | tee -a $LOG
     done
 
+    for zone in `cat $CHANGED_ZONES | sort | uniq`
+    do
+        echo "processing $zone | tee -a $LOG
+        echo "syncing BC v2 and merging leaf zones to local Yaml" | tee -a $LOG
+        octodns-sync --log-stream-stdout --config-file config/bcv2_merge_to_yaml.yml $zone --doit | tee -a $LOG
+        echo "syncing merged Yaml to QA Yaml" | tee -a $LOG
+        octodns-sync --log-stream-stdout --config-file config/merged2qa.yaml $zone --doit | tee -a $LOG
+        echo "syncing merged Yaml  to PROD Yaml" | tee -a $LOG
+        octodns-sync --log-stream-stdout --config-file config/merged2prod.yaml $zone --doit | tee -a $LOG
+        echo "syncing QA Yaml to Azure QA Tennant" | tee -a $LOG
+        octodns-sync --log-stream-stdout --config-file config/qa2azure.yaml $zone --force --doit | tee -a $LOG
+        echo "syncing Prod Yaml to Azure Prod Tennant" | tee -a $LOG
+        octodns-sync --log-stream-stdout --config-file config/prod2azure.yaml $zone --doit >> $LOG
+    done
+
+    echo "generating new unbound data for local pub to priv CNAMEs" | tee -a $LOG
+    sh -x gen-unbound-zone-data.sh $zone | tee -a $LOG
     # Restart unbound and dnsdist for any changes
     doas -u ansible ansible-playbook -t vars,unbound-data -l dns1,dns4,dns5 ~ansible/systems/unbound.yaml | tee -a $LOG
     # doas -u ansible ansible-playbook -v -t vars,dnsdist-data -l dns1,dns4,dns5 ~ansible/systems/dns.yaml | tee -a $LOG
+else
+    echo "No Changes" >> $LOG
 fi
 
 TSTAMP_STOP=`date +"%Y-%m-%dT%H-%M-%S"`
 echo $TSTAMP_STOP >> $LOG
+TSTF="${LOGDIR}/scan_${TSTAMP_START}_${TSTAMP_STOP}.log"
+cp $LOG $TSTF
+rm $LAST_CHANGED
+ln -s $TSTF $LAST_CHANGED
 
-TSTF="scan_${TSTAMP_START}_${TSTAMP_STOP}.log"
-cp $LOG $LOGDIR/$TSTF
-
-rm -f $TMP_CHANGED_ZONES
+rm -f $LEAF_CHANGED_ZONES

@@ -138,7 +138,7 @@ def priv_pub_names(ctx, source):
 @fqdn
 @addr
 def hrids(ctx, fqdn, addr):
-    ids = util.get_hr_nums()
+    ids = util.get_hrid_nums()
     for idx in ids:
         print(idx)
     print(fqdn, addr)

@@ -2,6 +2,7 @@
 
 import io
 
+URL = 'https://raw.githubusercontent.com/MicrosoftDocs/azure-docs/main/articles/private-link/private-endpoint-dns.md'
 In = 'private-endpoint-dns.md'
 Tab = '    '
 
