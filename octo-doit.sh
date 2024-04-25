@@ -33,9 +33,13 @@ echo $TSTAMP_START > $LOG
 echo "Scanning BC zones for changes" | tee -a $LOG
 
 echo 'Current BC Zone Data' >> $LOG
+echo 'with time stamps before and after the dump' >> $LOG
+date >> $LOG
 azurecli dump "." | tr '[A-Z]' '[a-z]' | sort | tee $SNAPSHOT >> $LOG
+date >> $LOG
 cat $LAST_CHANGED | grep '~10.14' | tr '[A-Z]' '[a-z]' | sort | uniq > $LAST_RRs
 
+#
 # Format of diff file:
 # 1189c1189
 # < q237_new.237.privatelink.openai.azure.com~10.141.11.22

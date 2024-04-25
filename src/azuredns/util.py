@@ -529,6 +529,9 @@ def add_zone_if_new(zone):
         zone_id = data[0]["id"]
     return zone_id
 
+def count(entity, detail):
+    ents = dump_zones(entity, detail)
+    return ents
 
 # return entity Id if zone exists
 
@@ -845,6 +848,39 @@ def old_del_A_rr(fqdn, ip):
                         print(f"Deleting Generic Record Entity: {ent}")
                     api.delete_entity(ent["id"])
 
+def dump_zones(ztype, counts):
+    """ Dumps all zones azure private or leaf  """
+    ents = []
+    azure_zones = {}
+    leaf_zones = {}
+    print(ztype, counts)
+    entity_id = config.ViewId
+    select = {
+        "selector": "get_entitytree",
+        "startEntityId": entity_id,
+        "types": "Zone",
+    }
+    for ent in api.export_entities(selection=select):
+        ents.append(ent)
+    for e in ents:
+        cnt = -1
+        zid = e['id']
+        name = e['name']
+        fqdn = e['properties']['absoluteName']
+        if name == 'privatelink':
+            if counts:
+                subzones = api.get_entities(zid, api.Z_Type)
+                cnt = len(subzones)
+            azure_zones[fqdn] = cnt
+        elif name.isdigit():
+            if counts:
+                rrs = get_leaf_zone_rrs(zid)
+                cnt = len(rrs)
+            leaf_zones[fqdn] = cnt
+    if ztype == 'leaf':
+        return leaf_zones
+    else:
+        return azure_zones
 
 def dump_dns_data(zone):
     rrs = list()
@@ -966,6 +1002,7 @@ def gen_azure_priv_pub_json(src):
     )
     Fname = "azure-resource-page.html"
     JsonFile = "azure-resource-private-public-names.json"
+    JsonFile = f"{config.Path}/azure-resource-names.json"
 
     mappings = {
         "{dnsPrefix}": ["ca"],
@@ -979,9 +1016,10 @@ def gen_azure_priv_pub_json(src):
 
     priv2pub = dict()
 
-    if src == "http" or (
-        not exists(Fname)
-    ):  # get the data remotely regardless of a local file
+    if src == 'json':
+        with open(JsonFile) as fd:
+            data = json.load(fd)
+    elif src == "http" or ( not exists(Fname)):  # get the data remotely regardless of a local file
         if config.Debug:
             print(f"Getting Azure resources via {Azure_Resource_URL}")
         page = requests.get(Azure_Resource_URL)
@@ -990,61 +1028,50 @@ def gen_azure_priv_pub_json(src):
             pprint(page.text)
         with open(Fname, "w") as fp:
             fp.write(page.text)
-
-    if src == "file":
+    elif src == "soup":
         file_is_local = True
-
-    with open(Fname) as fp:
-        soup = BeautifulSoup(fp, "html.parser")
-
-    tbody_tag = soup.tbody
-    #   trs = tbodies[0].find_all('tr')
-    trs = tbody_tag.find_all("tr")
-    for tr in trs:
-        tds = tr.find_all("td")
-        priv = tds[2].contents
-        pub = tds[3].contents
-        if config.Debug:
-            print("before:")
-            print(priv)
-            print(pub)
-        lpriv = len(priv)
-        if lpriv > 1:
-            tmpl = list()
-            for i in priv:
-                if not isinstance(i, Tag):
-                    tmpl.append(str(i).strip())
-            priv = tmpl
-            tmpl = list()
-            for i in pub:
-                if not isinstance(i, Tag):
-                    tmpl.append(str(i).strip())
-            pub = tmpl
-        if config.Debug:
-            print("after:")
-            print(priv)
-            print(pub)
-        for priv_name, pub_name in zip(priv, pub):
+        with open(Fname) as fp:
+            soup = BeautifulSoup(fp, "html.parser")
+        trs = tbody_tag.find_all("tr")
+        for tr in trs:
+            tds = tr.find_all("td")
+            priv = tds[2].contents
+            pub = tds[3].contents
             if config.Debug:
-                print(f"Private name: {priv_name}")
-                print(f"Public name: {pub_name}")
-            for key in mappings.keys():
-                if key in priv_name or key in pub_name:
-                    for new in mappings[key]:
-                        priv = priv_name.replace(key, new)
-                        priv_name = priv
-                        pub = pub_name.replace(key, new)
-                        pub_name = pub
-            priv2pub[priv_name] = pub_name
-    # Serializing json
-    json_obj = json.dumps(priv2pub, indent=4)
-    return json_obj
-
-
-"""
-    with open(JsonFile, "w") as outfile:
-        outfile.write(json_obj)
-"""
+                print("before:")
+                print(priv)
+                print(pub)
+            lpriv = len(priv)
+            if lpriv > 1:
+                tmpl = list()
+                for i in priv:
+                    if not isinstance(i, Tag):
+                        tmpl.append(str(i).strip())
+                priv = tmpl
+                tmpl = list()
+                for i in pub:
+                    if not isinstance(i, Tag):
+                        tmpl.append(str(i).strip())
+                pub = tmpl
+            if config.Debug:
+                print("after:")
+                print(priv)
+                print(pub)
+            for priv_name, pub_name in zip(priv, pub):
+                if config.Debug:
+                    print(f"Private name: {priv_name}")
+                    print(f"Public name: {pub_name}")
+                for key in mappings.keys():
+                    if key in priv_name or key in pub_name:
+                        for new in mappings[key]:
+                            priv = priv_name.replace(key, new)
+                            priv_name = priv
+                            pub = pub_name.replace(key, new)
+                            pub_name = pub
+                priv2pub[priv_name] = pub_name
+            # Serializing json
+        data = json.dumps(priv2pub, indent=4)
+    return data
 
 
 # Get things going... Initialize the BAM connection and set a few variables.

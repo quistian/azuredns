@@ -125,23 +125,20 @@ def test(ctx, fqdn, addr):
 @argument(
     "source",
     type=click.STRING,
-    default="http",
+    default="json",
 )
 def priv_pub_names(ctx, source):
-    """ Generate current Azure Private to Public DNS mapping """
+    """ Generate current Azure Private to Public DNS mapping from Source: json, http soup """
     mapping = util.gen_azure_priv_pub_json(source)
-    print(f'For source: {source}')
-    print(mapping)
+    for key in mapping:
+        print(f'{key},{mapping[key]}')
 
 @run.command()
 @pass_context
-@fqdn
-@addr
-def hrids(ctx, fqdn, addr):
+def hrids(ctx):
     ids = util.get_hrid_nums()
     for idx in ids:
         print(idx)
-    print(fqdn, addr)
 
 # list subcommand
 
@@ -322,15 +319,15 @@ def sync(ctx, fqdn, source, destination):
     help='The name of the zone to be added',
 )
 @option('--rr', '--resource-record', '-r',
-    nargs=3,
     required=False,
-    default=('A', 'test.bozo.int', '1.2.3.4'),
-    help='DNS resource record tuple: TYPE FQDN VALUE',
+    nargs=3,
+    default=('test.bozo.int', 'A', '1.2.3.4'),
+    help='DNS resource record tuple: FQDN TYPE VALUE',
 )
 def add(ctx, zone, rr):
-    """ Add an Azure zone or RR record"""
+    """ Add an Azure zone or RR record """
     if ctx.obj["DEBUG"]:
-        click.echo(f"zone: {zone} rr: {rr}\n")
+        click.echo(f"add arguments: zone {zone} rr {rr}\n")
     (fqdn, rr_type, val) = rr
     if zone != 'bozo.int':
         util.add_zone_if_new(zone)
@@ -405,6 +402,35 @@ def dump(ctx,zone):
     if ctx.obj["DEBUG"]:
         click.echo(f"Dumping {zone}")
     util.dump_dns_data(zone)
+
+@run.command()
+@pass_context
+@option(
+    "-d",
+    "--detail",
+    "--debug",
+    "--verbose",
+    "detail",
+    is_flag=True,
+    help="When set should the number of subzones or rrs under each zone", 
+)
+@argument(
+    "obj",
+    type=click.STRING,
+    default="azure",
+    required=True,
+)
+def count(ctx,obj,detail):
+    """ Counts the number of Azure Private zones: [azure] Leaf zones: [leaf] Resource records: [rrs] """
+    if ctx.obj["DEBUG"]:
+        click.echo(f"Counting {obj}")
+    objs = util.count(obj,detail)
+    for obj in objs:
+        if detail:
+            print(obj,objs[obj])
+        else:
+            print(obj)
+    print(len(objs))
 
 if __name__ == "__run__":
     run()
