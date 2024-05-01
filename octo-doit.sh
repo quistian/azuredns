@@ -2,6 +2,7 @@
 
 LEAF_CHANGED_ZONES=/tmp/leaf-changed-zones.$$
 CHANGED_ZONES=/tmp/azure-changed-zones.$$
+TMP_CHANGED_ZONES=/tmp/tmp-changed-zones.$$
 
 LOG="./bc-current-scan.log"
 LOGDIR="./logs"
@@ -61,31 +62,37 @@ if ! cmp -s $SNAPSHOT $LAST_RRs; then
         print j "."
     }' | sort | uniq > $LEAF_CHANGED_ZONES
 
-# 237.privatelink.openai.azure.com.
-# 278.privatelink.openai.azure.com.
-
     for leaf in `cat $LEAF_CHANGED_ZONES`
     do
         zdot=`echo $leaf | awk '{print(substr($0, index($0,".")+1))}'`
-        echo $zdot >> $CHANGED_ZONES
+        echo $zdot >> $TMP_CHANGED_ZONES
+    done
+    cat $TMP_CHANGED_ZONES | sort | uniq > $CHANGED_ZONES
+
+#   more $LEAF_CHANGED_ZONES
+#   more $CHANGED_ZONES
+#   exit
+
+    for leaf in `cat $LEAF_CHANGED_ZONES`
+    do
         echo "processing $leaf" | tee -a $LOG
         echo "syncing BC auth to  BC v2" | tee -a $LOG
-        octodns-sync --log-stream-stdout --config-file config/bcv1_to_bcv2.yml $leaf --doit | tee -a $LOG
+        octodns-sync --log-stream-stdout --config-file config/bcv1_to_bcv2.yml $leaf --doit | grep -v 'adding dynamic zone' |  tee -a $LOG
     done
 
-    for zdot in `cat $CHANGED_ZONES | sort | uniq`
+    for zdot in `cat $CHANGED_ZONES`
     do
         echo "processing $zdot" | tee -a $LOG
         echo "syncing BC v2 and merging leaf zones to local Yaml" | tee -a $LOG
-        octodns-sync --log-stream-stdout --config-file config/bcv2_merge_to_yaml.yml $zdot --doit | tee -a $LOG
-        echo "syncing merged Yaml to QA Yaml" | tee -a $LOG
-        octodns-sync --log-stream-stdout --config-file config/merged2qa.yaml $zdot --doit | tee -a $LOG
-        echo "syncing merged Yaml  to PROD Yaml" | tee -a $LOG
-        octodns-sync --log-stream-stdout --config-file config/merged2prod.yaml $zdot --doit | tee -a $LOG
-        echo "syncing QA Yaml to Azure QA Tennant" | tee -a $LOG
-        octodns-sync --log-stream-stdout --config-file config/qa2azure.yaml $zdot --force --doit | tee -a $LOG
-        echo "syncing Prod Yaml to Azure Prod Tennant" | tee -a $LOG
-        octodns-sync --log-stream-stdout --config-file config/prod2azure.yaml $zdot --doit >> $LOG
+        octodns-sync --log-stream-stdout --config-file config/bcv2_merge_to_yaml.yml $zdot --doit | grep -v 'adding dynamic zone' | tee -a $LOG
+        echo "syncing merged Yaml to QA Only Yaml" | tee -a $LOG
+        octodns-sync --log-stream-stdout --config-file config/merged2qa.yaml $zdot --doit | grep -v 'adding dynamic zone' | tee -a $LOG
+        echo "syncing merged Yaml to PROD Only Yaml" | tee -a $LOG
+        octodns-sync --log-stream-stdout --config-file config/merged2prod.yaml $zdot --doit | grep -v 'adding dynamic zone' | tee -a $LOG
+        echo "syncing QA Yaml to Azure QA" | tee -a $LOG
+        octodns-sync --log-stream-stdout --config-file config/qa2azure.yaml $zdot --doit | grep -v 'adding dynamic zone' | tee -a $LOG
+        echo "syncing PROD Yaml to Azure PROD" | tee -a $LOG
+        octodns-sync --log-stream-stdout --config-file config/prod2azure.yaml $zdot --doit | grep -v 'adding dynamic zone' | tee -a $LOG
         zone=`echo $zdot | sed -e 's/.$//'`
         echo "generating unbound data for local pub to priv CNAMEs for zone $zone" | tee -a $LOG
         sh -x gen-unbound-zone-data.sh $zone | tee -a $LOG

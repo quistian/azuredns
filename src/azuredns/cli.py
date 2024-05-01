@@ -349,7 +349,7 @@ def add(ctx, zone, rr):
     nargs=3,
     required=False,
     default=('A', 'test.bozo.int', '1.2.3.4'),
-    help='DNS resource record tuple: TYPE FQDN VALUE to be deleted',
+    help='DNS resource record tuple: FQDN TYPE VALUE to be deleted',
 )
 def delete(ctx, zone, rr):
     """Delete an Azure Zone or Resource record"""

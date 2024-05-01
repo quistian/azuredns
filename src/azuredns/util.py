@@ -627,7 +627,7 @@ def del_A_rr(fqdn, ip):
     if not legit_hostname(host):
         print(f"{host} is not an Azure qualified host name")
         return False
-    if toks[0] == 'privatelink':
+    if not toks[0].isnumeric():
         hrid = host[1:4]
         if int(hrid) not in hrids:
             print(f"Non existant HRID: {hrid}")

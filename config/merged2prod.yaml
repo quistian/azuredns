@@ -16,6 +16,10 @@ processors:
     class: octodns.processor.filter.NameAllowlistFilter
     allowlist:
       - /^[np]\d{3}[_-a-z]*/
+  prod-addrs-only:
+    class: octodns.processor.filter.NetworkValueAllowlistFilter
+    allowlist:
+      - 10.140.0.0/16
 
 zones:
   # This is a dynamic zone config. The source(s), here `config`, will be
@@ -26,5 +30,6 @@ zones:
       - config-merged
     processors:
       - only-these
+      - prod-addrs-only
     targets:
       - config-prod
