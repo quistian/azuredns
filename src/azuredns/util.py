@@ -882,6 +882,47 @@ def dump_zones(ztype, counts):
     else:
         return azure_zones
 
+"""
+{
+    'comments': 'Needed for Azure',
+    'linkedRecordName': 'amcs-prod-global-handler.trafficmanager.net',
+    'absoluteName': 'global.handler.control.278.privatelink.monitor.azure.com',
+    'parentId': 2865523,
+    'parentType': 'Zone'
+}
+
+properties for GenericRecord:
+
+{
+ 'id': 3039630,
+ 'name': 'q278eisss-vwandrbackend-cc-app01',
+ 'properties': {
+                'absoluteName': 'q278eisss-vwandrbackend-cc-app01.278.scm.privatelink.azurewebsites.net',
+                'parentId': 2865797,
+                'parentType': 'Zone',
+                'rdata': '10.141.32.84',
+                'type': 'A'
+                },
+ 'type': 'GenericRecord'
+}
+
+properties for AliasRecord / CNAME:
+
+{
+'id': 3042043,
+ 'name': 'global.handler.control',
+ 'properties': {
+                'absoluteName': 'global.handler.control.278.privatelink.monitor.azure.com',
+                'comments': 'Needed for Azure',
+                'linkedRecordName': 'amcs-prod-global-handler.trafficmanager.net',
+                'parentId': 2865523,
+                'parentType': 'Zone'
+               },
+ 'type': 'AliasRecord'
+}
+
+"""
+
 def dump_dns_data(zone):
     rrs = list()
 
@@ -898,11 +939,18 @@ def dump_dns_data(zone):
     }
 
     for e in api.export_entities(selection=select):
-        if e['type'] == 'GenericRecord':
-            props = e['properties']
+        if config.Debug:
+            pprint(e)
+        typ = e['type']
+        props = e['properties']
+        fqdn = props['absoluteName']
+        if typ == 'GenericRecord':
             if props['type'] == "A":
-                print(f'{props["absoluteName"]}~{props["rdata"]}')
+                print(f'{fqdn}~A~{props["rdata"]}')
+        elif typ == 'AliasRecord':
+            print(f'{fqdn}~CNAME~{props["linkedRecordName"]}')
         rrs.append(e)
+
 #    with open(f"{config.Path}/rrs.json", "w") as rr_fd:
 #        json.dump(rrs, rr_fd, indent=4, sort_keys=True)
 

@@ -67,7 +67,7 @@ select_criteria is a dictionary:
 def export_entities(
     selection={"selector": "search", "types": "Zone", "keyword": "*"},
     start=0,
-    count=5000,
+    count=10000,
 ):
     ent_iterator = Clnt.export_entities(selection, start, count)
     return ent_iterator

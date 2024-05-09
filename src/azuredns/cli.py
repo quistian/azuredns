@@ -348,7 +348,7 @@ def add(ctx, zone, rr):
 @option('--rr', '--resource-record', '-r',
     nargs=3,
     required=False,
-    default=('A', 'test.bozo.int', '1.2.3.4'),
+    default=('test.bozo.int', 'A', '1.2.3.4'),
     help='DNS resource record tuple: FQDN TYPE VALUE to be deleted',
 )
 def delete(ctx, zone, rr):

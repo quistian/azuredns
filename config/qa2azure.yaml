@@ -13,6 +13,13 @@ providers:
     directory: ./qa-zones
     enforce_order: true
 
+processors:
+  only-a-aaaa-rrs:
+    class: octodns.processor.filter.TypeAllowlistFilter
+    allowlist:
+      - A
+      - AAAA
+
 zones:
   # This is a dynamic zone config. The source(s), here `config`, will be
   # queried for a list of zone names and each will dynamically be set up to
@@ -20,5 +27,7 @@ zones:
   '*':
     sources:
       - config-qa
+    processors:
+      - only-a-aaaa-rrs
     targets:
       - azure-qa

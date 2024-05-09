@@ -2,3 +2,24 @@
 global.handler.control:
   type: CNAME
   value: amcs-prod-global-handler.trafficmanager.net.
+n228_test:
+  type: A
+  value: 10.140.75.166
+n234_test:
+  type: A
+  value: 10.140.71.69
+n277_test:
+  type: A
+  value: 10.140.126.98
+n278_test:
+  type: A
+  value: 10.140.130.196
+n301_test:
+  type: A
+  value: 10.140.20.78
+n569_test:
+  type: A
+  value: 10.140.214.40
+n574_test:
+  type: A
+  value: 10.140.24.35
