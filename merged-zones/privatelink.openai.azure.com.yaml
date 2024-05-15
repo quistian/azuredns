@@ -1,0 +1,106 @@
+---
+ab123:
+  type: A
+  value: 10.141.0.1
+n228_test:
+  type: A
+  value: 10.140.164.98
+n234_test:
+  type: A
+  value: 10.140.94.76
+n277_test:
+  type: A
+  value: 10.140.130.222
+n278_test:
+  type: A
+  value: 10.140.217.168
+n301_hotdog:
+  type: A
+  value: 10.140.44.55
+n569_test:
+  type: A
+  value: 10.140.28.214
+q130_test:
+  type: A
+  value: 10.141.33.44
+q228_ttc:
+  type: A
+  value: 10.141.47.200
+q237-test:
+  type: A
+  value: 10.141.10.5
+q237_gnu:
+  type: A
+  value: 10.141.221.112
+q250_first:
+  type: A
+  value: 10.141.111.123
+q250_test2:
+  type: A
+  value: 10.141.11.222
+q273-txt-rr:
+  type: TXT
+  value: Brian Mulroney is now resurrected
+q277_gaga:
+  type: A
+  value: 10.141.41.1
+q277_rps_test:
+  type: A
+  value: 10.141.1.41
+q277_test:
+  type: A
+  value: 10.141.204.86
+q278-test:
+  type: A
+  value: 10.141.1.178
+q278_gogo:
+  type: A
+  value: 10.141.114.114
+q278_hugo:
+  type: A
+  value: 10.141.4.4
+q278_rps:
+  type: A
+  value: 10.141.141.141
+q278_summer_rain:
+  type: A
+  value: 10.141.100.100
+q278_test_rr:
+  type: A
+  value: 10.141.111.222
+q278_the_beast:
+  type: A
+  value: 10.141.6.6
+q278_tps:
+  type: A
+  value: 10.141.7.6
+q278_winter_snow:
+  type: A
+  value: 10.141.10.10
+q301:
+  type: A
+  value: 10.141.22.22
+q399-test:
+  type: A
+  value: 10.141.12.23
+q434-bozo-2:
+  type: A
+  value: 10.141.10.10
+q434-test-2:
+  type: A
+  value: 10.141.10.5
+q434-txt-rr:
+  type: TXT
+  value: Brian Mulroney is now resurrected
+q434-ztxt2-rr:
+  type: TXT
+  value: Pierre Trudeau is no longer resurrected
+q569_abcd:
+  type: A
+  value: 10.141.12.14
+q569_rps_test:
+  type: A
+  value: 10.141.55.66
+q569_test:
+  type: A
+  value: 10.141.147.144

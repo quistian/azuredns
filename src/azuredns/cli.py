@@ -328,14 +328,14 @@ def add(ctx, zone, rr):
     """ Add an Azure zone or RR record """
     if ctx.obj["DEBUG"]:
         click.echo(f"add arguments: zone {zone} rr {rr}\n")
-    (fqdn, rr_type, val) = rr
-    if zone != 'bozo.int':
-        util.add_zone_if_new(zone)
-    elif rr_type in ["A", "AAAA", "TXT"] and fqdn != 'test.bozo.int':
+    if zone == 'bozo.int':
+        (fqdn, rr_type, val) = rr
         if rr_type == "A":
             util.add_A_rr(fqdn, val)
         else:
             print(f'RR of type {rr_type} is not yet supported') 
+    else:
+        util.add_zone_if_new(zone)
 
 @run.command()
 @pass_context

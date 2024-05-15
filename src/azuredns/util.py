@@ -509,11 +509,16 @@ def get_leaf_names(zone):
 
 def get_leaf_zone_rrs(pid):
     rrs = dict()
-    rr_ents = api.get_entities(pid, api.RR_Type)
-    for rr_ent in rr_ents:
+    generic_ents = api.get_entities(pid, api.Generic_Type)
+    for rr_ent in generic_ents:
+        if config.Debug:
+            print(rr_ent)
         name = rr_ent["name"]
-        ip = rr_ent["properties"]["rdata"]
-        rrs[name] = {"type": "A", "values": [ip]}
+        props = rr_ent["properties"]
+        fqdn = props["absoluteName"]
+        typ = props["type"]
+        rdata = props["rdata"]
+        rrs[name] = {"fqdn": fqdn, "type": typ, "values": [rdata]}
     return rrs
 
 
@@ -535,7 +540,6 @@ def count(entity, detail):
 
 # return entity Id if zone exists
 
-
 def zone_exists(zone):
     data = api.get_zones_by_hint(zone)
     if len(data):
@@ -544,18 +548,56 @@ def zone_exists(zone):
         return False
 
 
-# adds an Azure record in the proper BlueCat Location
+"""
+Adds an Azure record in the proper BlueCat Location
+Takes any thing before privatelink as a hostname even if it includes dots
+E.g.
 
+n234_bozo.scm.privatelink.azurewebsites.net
+has a hostname which includes .scm
+
+""" 
+
+#   ent_id = api.add_generic_record(config.ViewId, canonical_fqdn, "A", ip)
 
 def add_A_rr(fqdn, ip):
-    canonical_fqdn = canonicalize(fqdn)
+    ent_id = 0
+    (host, leaf_zone) = canonicalize(fqdn)
+    canonical_fqdn = f'{host}.{leaf_zone}'
     if config.Debug:
-        print(f'add_A_rr: fqdn: {fqdn}, ip: {ip}, canonical fqdn: {canonical_fqdn}')
-    ent_id = api.add_generic_record(config.ViewId, canonical_fqdn, "A", ip)
+        print(f'add_A_rr: input fqdn: {fqdn}, canoncial fqdn, {canonical_fqdn}')
+        print(f'host: {host}, leaf: {leaf_zone}, ip: {ip}')
+    zid = zone_exists(leaf_zone)
+    if zid:
+        rrs = get_leaf_zone_rrs(zid)
+        if host in rrs.keys():
+            print(f"The following A record already exists: {rrs[host]}")
+        else:
+            props = {
+                'type': 'A',
+                'rdata': ip,
+            }
+            a_rr_entity = api.APIEntity(
+                name=host,
+                type=api.Generic_Type,
+                properties=props
+            )
+            ent_id = api.add_entity(zid, a_rr_entity)
+            if config.Debug:
+                print(f"Added A record for {host} at {leaf_zone} with value {ip}")
+                print(f"New Entity ID: {ent_id}")
+    else:
+        print(f"The leaf zone: {leaf_zone} does not yet exist")
     return ent_id
 
+"""
 
-def canonicalize(fqdn):
+Adds a leaf subdomain into a FQDN if it does not already have one
+The addition is just before the privatelink subdomain.
+
+"""
+
+def old_canonicalize(fqdn):
     toks = fqdn.split(".")
     hname = toks[0].lower()
     toks[0] = hname
@@ -564,6 +606,26 @@ def canonicalize(fqdn):
         toks.insert(1, nums)
     return ".".join(toks)
 
+def canonicalize(fqdn: str) -> None:
+    toks = fqdn.split(".")
+    idx = toks.index("privatelink")
+    hrnum = toks[0][1:4]
+    if toks[idx-1] != hrnum:
+        toks.insert(idx, hrnum)
+    idx = toks.index(hrnum)
+    hname = ".".join(toks[:idx])
+    leaf = ".".join(toks[idx:])
+    return(hname, leaf)
+
+def main():
+    canonical('n234_test.privatelink.web.net')
+    canonical('n234_test.234.privatelink.web.net')
+    canonical('n234_test.scm.privatelink.web.net')
+    canonical('n234_test.scm.234.privatelink.web.net')
+                
+
+if __name__ == '__main__':
+    main()
 
 def long_form_add_A_rr(fqdn, ip):
     toks = fqdn.split(".")
@@ -576,8 +638,9 @@ def long_form_add_A_rr(fqdn, ip):
     else:
         hrnum = host[1:4]
         leaf_zone = f"{hrnum}.{zone}"
-        if zone_exists(leaf_zone):
-            rrs = get_leaf_bc_azure_zone(leaf_zone)
+        zid = zone_exists(leaf_zone)
+        if zid:
+            rrs = get_leaf_zone_rrs(zid)
             if host in rrs.keys():
                 print(f"{fqdn} already has an A record")
             else:

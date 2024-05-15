@@ -1,0 +1,40 @@
+---
+n228_test:
+  type: A
+  value: 10.140.171.220
+n234_test:
+  type: A
+  value: 10.140.93.102
+n277_test:
+  type: A
+  value: 10.140.202.31
+n278_test:
+  type: A
+  value: 10.140.98.236
+n301_test:
+  type: A
+  value: 10.140.84.17
+n569_test:
+  type: A
+  value: 10.140.214.141
+n574_test:
+  type: A
+  value: 10.140.134.14
+q228_test:
+  type: A
+  value: 10.141.162.188
+q234_test:
+  type: A
+  value: 10.141.117.223
+q277_test:
+  type: A
+  value: 10.141.138.78
+q278_test:
+  type: A
+  value: 10.141.91.172
+q569_test:
+  type: A
+  value: 10.141.242.96
+q574_test:
+  type: A
+  value: 10.141.239.28

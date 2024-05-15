@@ -1,0 +1,22 @@
+---
+bozo:
+  type: A
+  value: 10.141.22.22
+doghaus:
+  ttl: 4321
+  type: A
+  value: 128.100.102.17
+generic:
+  type: A
+  values:
+  - 128.100.103.10
+  - 128.100.56.135
+mx:
+  type: A
+  value: 128.100.103.17
+q278_test:
+  type: A
+  value: 10.141.1.2
+tootoo:
+  type: A
+  value: 10.140.111.111

@@ -1,0 +1,28 @@
+---
+q228_test:
+  type: A
+  value: 10.141.34.90
+q234_test:
+  type: A
+  value: 10.141.209.220
+q277_test:
+  type: A
+  value: 10.141.179.51
+q278_gogo:
+  type: A
+  value: 10.141.2.3
+q278_qa_test:
+  type: A
+  value: 10.141.111.123
+q278_so_lucky:
+  type: A
+  value: 10.141.7.7
+q278_test:
+  type: A
+  value: 10.141.193.128
+q569_test:
+  type: A
+  value: 10.141.71.33
+q574_test:
+  type: A
+  value: 10.141.55.168

@@ -1,0 +1,57 @@
+n031_test:
+  type: A
+  value: 10.140.68.30
+n228_test:
+  type: A
+  value: 10.140.12.53
+n234-eddn-bursarywebapp-01:
+  type: A
+  value: 10.140.52.20
+n234-eddn-bursarywebapp-01.scm:
+  type: A
+  value: 10.140.52.20
+n277_test:
+  type: A
+  value: 10.140.186.54
+n278-eisss-app01:
+  type: A
+  value: 10.140.56.29
+n278_test:
+  type: A
+  value: 10.140.213.82
+n301_test:
+  type: A
+  value: 10.140.115.163
+n569_test:
+  type: A
+  value: 10.140.20.12
+n574_test:
+  type: A
+  value: 10.140.30.251
+q031_test:
+  type: A
+  value: 10.141.131.199
+q228_test:
+  type: A
+  value: 10.141.44.104
+q234_test:
+  type: A
+  value: 10.141.163.138
+q277_test:
+  type: A
+  value: 10.141.99.145
+q278_test:
+  type: A
+  value: 10.141.112.29
+q278eisss-vwandrbackend-cc-app01:
+  type: A
+  value: 10.141.32.84
+q278eisss-vwandrbackend-cc-app01.scm:
+  type: A
+  value: 10.141.32.84
+q569_test:
+  type: A
+  value: 10.141.185.231
+q574_test:
+  type: A
+  value: 10.141.167.205

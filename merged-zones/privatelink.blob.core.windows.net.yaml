@@ -1,0 +1,28 @@
+---
+n278_test:
+  type: A
+  value: 10.140.228.121
+n301_test:
+  type: A
+  value: 10.140.42.2
+n569_test:
+  type: A
+  value: 10.140.1.2
+q228_test:
+  type: A
+  value: 10.141.129.246
+q234_test:
+  type: A
+  value: 10.141.50.190
+q277_test:
+  type: A
+  value: 10.141.134.90
+q278_test:
+  type: A
+  value: 10.141.175.62
+q574:
+  type: A
+  value: 10.141.22.33
+q574_test:
+  type: A
+  value: 10.141.93.79
