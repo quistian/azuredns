@@ -1,5 +1,7 @@
 #!/bin/sh
 
+DEBUG=0
+
 LEAF_CHANGED_ZONES=/tmp/leaf-changed-zones.$$
 CHANGED_ZONES=/tmp/azure-changed-zones.$$
 TMP_CHANGED_ZONES=/tmp/tmp-changed-zones.$$
@@ -42,23 +44,25 @@ cat $LAST_CHANGED | grep '~10.14' | tr '[A-Z]' '[a-z]' | sort | uniq > $LAST_RRs
 
 #
 # Format of diff file:
-# 1189c1189
-# < q237_new.237.privatelink.openai.azure.com~10.141.11.22
-# ---
-# > q237_gnu.237.privatelink.openai.azure.com~10.141.221.112
+#
+# < global.handler.control.278.privatelink.monitor.azure.com~cname~amcs-prod-global-handler.trafficmanager.net
+# < q278-eisss-cc-kv01.278.privatelink.vaultcore.azure.net~a~10.141.32.76
+
 
 if ! cmp -s $SNAPSHOT $LAST_RRs; then
     diff $SNAPSHOT $LAST_RRs |
-    grep '~' |
-    tr [A-Z] [a-z] | sort | uniq -u |
+    grep '~a~' |
+    sort | uniq -u |
     cut -d' ' -f2 | cut -d~ -f1 |
     awk '{
         n = split($1, a, ".")
-        i = 2
-        j = a[i++]
-        while (i <= n ) {
-            j = j "." a[i++]
+        for (i=1; i<=n; i++) {
+            if ( a[i] == "privatelink" ) {
+                k = i - 1
+            }
         }
+        for( j=a[k++]; k <= n; k++)
+            j = j "." a[k]
         print j "."
     }' | sort | uniq > $LEAF_CHANGED_ZONES
 
@@ -69,30 +73,31 @@ if ! cmp -s $SNAPSHOT $LAST_RRs; then
     done
     cat $TMP_CHANGED_ZONES | sort | uniq > $CHANGED_ZONES
 
-#   more $LEAF_CHANGED_ZONES
-#   more $CHANGED_ZONES
-#   exit
+    if [ $DEBUG -gt "0" ]; then
+        echo 'Changed Leaf Zones'
+        cat $LEAF_CHANGED_ZONES
+        echo
+        echo 'Changed Privatelink Zones'
+        cat $CHANGED_ZONES
+        exit
+    fi
 
     for leaf in `cat $LEAF_CHANGED_ZONES`
     do
         echo "processing $leaf" | tee -a $LOG
-        echo "syncing BC auth to  BC v2" | tee -a $LOG
-        octodns-sync --log-stream-stdout --config-file config/bcv1_to_bcv2.yml $leaf --doit | grep -v 'adding dynamic zone' |  tee -a $LOG
+        echo "syncing BC v1 proteus to local leaf yaml directory" | tee -a $LOG
+#       octodns-sync --log-stream-stdout --config-file config/bcv1_to_bcv2.yml $leaf --doit | grep -v 'adding dynamic zone' |  tee -a $LOG
+        octodns-sync --log-stream-stdout --config-file config/bcv1_to_yaml.yml $leaf --doit | grep -v 'adding dynamic zone' |  tee -a $LOG
     done
 
-    for zdot in `cat $CHANGED_ZONES`
+    for zdot in `cat $CHANGED_ZONES | grep -v azurewebsites`
     do
-        echo "processing $zdot" | tee -a $LOG
-        echo "syncing BC v2 and merging leaf zones to local Yaml" | tee -a $LOG
-        octodns-sync --log-stream-stdout --config-file config/bcv2_merge_to_yaml.yml $zdot --doit | grep -v 'adding dynamic zone' | tee -a $LOG
-        echo "syncing merged Yaml to QA Only Yaml" | tee -a $LOG
-        octodns-sync --log-stream-stdout --config-file config/merged2qa.yaml $zdot --doit | grep -v 'adding dynamic zone' | tee -a $LOG
-        echo "syncing merged Yaml to PROD Only Yaml" | tee -a $LOG
-        octodns-sync --log-stream-stdout --config-file config/merged2prod.yaml $zdot --doit | grep -v 'adding dynamic zone' | tee -a $LOG
-        echo "syncing QA Yaml to Azure QA" | tee -a $LOG
-        octodns-sync --log-stream-stdout --config-file config/qa2azure.yaml $zdot --doit | grep -v 'adding dynamic zone' | tee -a $LOG
-        echo "syncing PROD Yaml to Azure PROD" | tee -a $LOG
-        octodns-sync --log-stream-stdout --config-file config/prod2azure.yaml $zdot --doit | grep -v 'adding dynamic zone' | tee -a $LOG
+        echo "Merging $zdot" | tee -a $LOG
+        python yaml-merge.py $zdot
+        echo "syncing merged Yaml to QA Azure" | tee -a $LOG
+        octodns-sync --log-stream-stdout --config-file config/merged-qa-to-azure.yaml $zdot --doit | grep -v 'adding dynamic zone' | tee -a $LOG
+        echo "syncing merged Yaml to Prod Azure" | tee -a $LOG
+        octodns-sync --log-stream-stdout --config-file config/merged-prod-to-azure.yaml $zdot --doit | grep -v 'adding dynamic zone' | tee -a $LOG
         zone=`echo $zdot | sed -e 's/.$//'`
         echo "generating unbound data for local pub to priv CNAMEs for zone $zone" | tee -a $LOG
         sh -x gen-unbound-zone-data.sh $zone | tee -a $LOG
