@@ -518,7 +518,10 @@ def get_leaf_zone_rrs(pid):
         fqdn = props["absoluteName"]
         typ = props["type"]
         rdata = props["rdata"]
-        rrs[name] = {"fqdn": fqdn, "type": typ, "values": [rdata]}
+        ttl = config.Def_TTL
+        if 'ttl' in props:
+            ttl = props["ttl"]
+        rrs[name] = {"fqdn": fqdn, "ttl": ttl, "type": typ, "values": [rdata]}
     return rrs
 
 
@@ -1007,11 +1010,16 @@ def dump_dns_data(zone):
         typ = e['type']
         props = e['properties']
         fqdn = props['absoluteName']
+        ttl = config.Def_TTL
         if typ == 'GenericRecord':
             if props['type'] == "A":
-                print(f'{fqdn}~A~{props["rdata"]}')
+                if 'ttl' in props:
+                    ttl = props['ttl']
+                print(f'{fqdn}~A~{props["rdata"]}~{ttl}')
         elif typ == 'AliasRecord':
-            print(f'{fqdn}~CNAME~{props["linkedRecordName"]}')
+            if 'ttl' in e:
+                ttl = e['ttl']
+            print(f'{fqdn}~CNAME~{props["linkedRecordName"]}~{ttl}')
         rrs.append(e)
 
 #    with open(f"{config.Path}/rrs.json", "w") as rr_fd:

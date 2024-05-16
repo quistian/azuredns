@@ -7,9 +7,11 @@ ViewId = 0
 Conf = "Test"
 View = "Azure"
 
-Silent = True
 Debug = False
 Flip = False
+TTL = False
+
+Def_TTL = 3600
 
 Path = "/tmp"
 Root = "/tmp"

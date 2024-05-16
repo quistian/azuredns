@@ -6,14 +6,19 @@ LEAF_CHANGED_ZONES=/tmp/leaf-changed-zones.$$
 CHANGED_ZONES=/tmp/azure-changed-zones.$$
 TMP_CHANGED_ZONES=/tmp/tmp-changed-zones.$$
 
-LOG="./bc-current-scan.log"
-LOGDIR="./logs"
+BASEDIR=/home/russ/src/Azure/az-dns
+LOG="$BASEDIR/bc-current-scan.log"
+LOGDIR="$BASEDIR/logs"
 LAST_CHANGED=$LOGDIR/last_changed.log
 SNAPSHOT=$LOGDIR/snapshot.log
 LAST_RRs=$LOGDIR/last_rrs.log
 
 TSTAMP_START=`date +"%Y-%m-%dT%H-%M-%S"`
 TSTAMP=$TSTAMP_START
+
+TMP_UNBOUND_DATA=/tmp/unbound-local-zone-data.$$
+UNBOUND_DIR=/home/ansible/systems/files/unbound
+UNBOUND_DATA_DIR="$UNBOUND_DIR/local-zone-data"
 
 # Load in the appropriate environment variables for octodns modules
 #
@@ -38,7 +43,7 @@ echo "Scanning BC zones for changes" | tee -a $LOG
 echo 'Current BC Zone Data' >> $LOG
 echo 'with time stamps before and after the dump' >> $LOG
 date >> $LOG
-azurecli dump "." | tr '[A-Z]' '[a-z]' | sort | tee $SNAPSHOT >> $LOG
+azurecli dump "." | tr '[A-Z]' '[a-z]' | grep -v '~cname' | sort | tee $SNAPSHOT >> $LOG
 date >> $LOG
 cat $LAST_CHANGED | grep '~10.14' | tr '[A-Z]' '[a-z]' | sort | uniq > $LAST_RRs
 
@@ -98,10 +103,17 @@ if ! cmp -s $SNAPSHOT $LAST_RRs; then
         octodns-sync --log-stream-stdout --config-file config/merged-qa-to-azure.yaml $zdot --doit | grep -v 'adding dynamic zone' | tee -a $LOG
         echo "syncing merged Yaml to Prod Azure" | tee -a $LOG
         octodns-sync --log-stream-stdout --config-file config/merged-prod-to-azure.yaml $zdot --doit | grep -v 'adding dynamic zone' | tee -a $LOG
+
         zone=`echo $zdot | sed -e 's/.$//'`
-        echo "generating unbound data for local pub to priv CNAMEs for zone $zone" | tee -a $LOG
-        sh -x gen-unbound-zone-data.sh $zone | tee -a $LOG
+        DST="$UNBOUND_DATA_DIR/$zone"
+        test -f $DST || touch $DST
+        echo "creating pub -> pri CNAME records for $zone" | tee -a $LOG
+        azurecli list -t cnames $zone  > $DST
     done
+
+    echo "generating unbound configuration data for local pub to priv CNAMEs" | tee -a $LOG
+    cd $UNBOUND_DATA_DIR
+    cat *.io *.com *.net *.ms  > $UNBOUND_DIR/local-zone-data.conf
 
     # Restart unbound and dnsdist for any changes
     doas -u ansible ansible-playbook -t vars,unbound-data -l dns1,dns4,dns5 ~ansible/systems/unbound.yaml | tee -a $LOG

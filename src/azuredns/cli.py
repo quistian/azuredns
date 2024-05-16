@@ -38,12 +38,6 @@ def validate_value(ctx, param, value):
 
 @group()
 @option(
-    "-s",
-    "--silent",
-    is_flag=True,
-    help="Minimize the output from commands. Silence is golden",
-)
-@option(
     "-v",
     "--verbose",
     "--debug",
@@ -60,15 +54,22 @@ def validate_value(ctx, param, value):
         is_flag=True,
         help="Use the mirrored BAM flip",
 )
+@option(
+        "-t",
+        "--ttl",
+        "ttl",
+        is_flag=True,
+        default=False,
+        help="Show TTL values with all RRs",
+)
 @pass_context
-def run(ctx: Context, silent, verbose, flip):
+def run(ctx: Context, verbose, flip, ttl):
     """CLI interface to both BAM and Azure DNS"""
     ctx.obj = dict()
-    ctx.obj["SILENT"] = silent
     ctx.obj["DEBUG"] = verbose
-    config.Silent = silent
     config.Debug = verbose
     config.Flip = flip
+    config.TTL = ttl
 
     if verbose:
         click.echo(f"action: {ctx.invoked_subcommand}")
