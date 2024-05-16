@@ -428,7 +428,12 @@ def gen_cname_rrs(zone):
             pub_zone = priv_pub[zone]
             data = get_yaml_file(yamlf)
             for hname in data:
-                print(f'local-data: "{hname}.{pub_zone}. CNAME {hname}.{zone}."')
+                rrdata = data[hname]
+                if 'ttl' in rrdata:
+                    ttl = rrdata['ttl']
+                else:
+                    ttl = config.Def_TTL
+                print(f'local-data: "{hname}.{pub_zone}. {ttl} CNAME {hname}.{zone}."')
         else:
             print(f"# {yamlf} does not yet exist")
     else:
