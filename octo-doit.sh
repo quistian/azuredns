@@ -1,7 +1,5 @@
 #!/bin/sh
 
-DEBUG=0
-
 LEAF_CHANGED_ZONES=/tmp/leaf-changed-zones.$$
 CHANGED_ZONES=/tmp/azure-changed-zones.$$
 TMP_CHANGED_ZONES=/tmp/tmp-changed-zones.$$
@@ -20,8 +18,20 @@ TMP_UNBOUND_DATA=/tmp/unbound-local-zone-data.$$
 UNBOUND_DIR=/home/ansible/systems/files/unbound
 UNBOUND_DATA_DIR="$UNBOUND_DIR/local-zone-data"
 
+# process command line flags
+# ARGS=$(getopt -a --options vd --long "verbose,debug" -- "$@")
+
+optstring=":vd"
+while getopts $optstring option
+do
+    case $option in
+        d|debug) DEBUG=true ;;
+        v|verbose) VERBOSE=1 ;;
+        ?) echo "Invalid option: -$OPTARG Use: -d to set DEBUG or -v to set VERBOSE" >&2; exit 1 ;;
+    esac
+done
+
 # Load in the appropriate environment variables for octodns modules
-#
 if [ -z "${AZURE_QA_USER_ID}"  ]; then
     echo "Azure Vars are being loaded" >> $LOG
     . $HOME/.azureexportrc
@@ -78,7 +88,9 @@ if ! cmp -s $SNAPSHOT $LAST_RRs; then
     done
     cat $TMP_CHANGED_ZONES | sort | uniq > $CHANGED_ZONES
 
-    if [ $DEBUG -gt "0" ]; then
+    if [[ -n $DEBUG ]]; then
+        echo "number of args $#"
+        diff $SNAPSHOT $LAST_RRs
         echo 'Changed Leaf Zones'
         cat $LEAF_CHANGED_ZONES
         echo
@@ -95,7 +107,7 @@ if ! cmp -s $SNAPSHOT $LAST_RRs; then
         octodns-sync --log-stream-stdout --config-file config/bcv1_to_yaml.yml $leaf --doit | grep -v 'adding dynamic zone' |  tee -a $LOG
     done
 
-    for zdot in `cat $CHANGED_ZONES | grep -v azurewebsites`
+    for zdot in `cat $CHANGED_ZONES`
     do
         echo "Merging $zdot" | tee -a $LOG
         python yaml-merge.py $zdot

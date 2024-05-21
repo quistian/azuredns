@@ -82,8 +82,8 @@ fqdn = argument(
     "fqdn",
     type=click.STRING,
     default="bozo.the.clown.ca",
-    required=True,
-    callback=validate_fqdn,
+    required=False,
+#   callback=validate_fqdn,
 )
 
 addr = argument(
@@ -134,12 +134,6 @@ def priv_pub_names(ctx, source):
     for key in mapping:
         print(f'{key},{mapping[key]}')
 
-@run.command()
-@pass_context
-def hrids(ctx):
-    ids = util.get_hrid_nums()
-    for idx in ids:
-        print(idx)
 
 # list subcommand
 
@@ -155,19 +149,23 @@ def hrids(ctx):
     help="Source of contents of a leaf or merged zone, e.g. azure, yaml, bc",
 )
 def list(ctx, target, fqdn):
-    """ List the contents of a leaf or merged zone """
+    """ List the contents of a zone, leaf or merged, or hrids  """
     if config.Debug:
         print(f"fqdn: {fqdn} target: {target}")
     if target == "bc" or target == "bluecat":
         if util.is_leaf(fqdn):
             rrs = util.get_leaf_bc_azure_zone(fqdn)
-            pprint(rrs)
+            for hname in rrs:
+                rr = rrs[hname]
+                print(rr['fqdn'], rr['ttl'], rr['type'], rr['values'][0])
         else:
-            data = util.get_merged_bc_azure_zone(fqdn)
-            print(f"Merged content of {fqdn}")
-            zdata = util.fmt(fqdn, data)
-            for leaf_fqdn in zdata:
-                print(leaf_fqdn, zdata[leaf_fqdn])
+            rrs = util.get_merged_bc_azure_zone(fqdn)
+            for hname in rrs:
+                rr = rrs[hname]
+                toks = rr['fqdn'].split('.')
+                del toks[1]
+                fqdn = '.'.join(toks)
+                print(fqdn, rr['ttl'], rr['type'], rr['values'][0])
     elif target == "leaf":
         toks = fqdn.split(".")
         hrids = util.get_active_hrids()
@@ -201,6 +199,12 @@ def list(ctx, target, fqdn):
             print(azone)
     elif target == "cnames":
         util.gen_cname_rrs(fqdn)
+    elif target == 'active-hrids':
+        hrids = util.get_active_hrids()
+        print(hrids)
+    elif target == 'all-hrids':
+        ids = util.get_hrid_nums()
+        print(sorted(ids))
 
 @run.command()
 @pass_context
@@ -365,13 +369,20 @@ def delete(ctx, zone, rr):
 
 @run.command()
 @pass_context
+@option(
+        "--ttl",
+        "-t",
+        required=False,
+        default=3600,
+        help='The TTL value of the modified RR'
+)
 @fqdn
 @addr
-def modify(ctx, fqdn, addr):
+def modify(ctx, fqdn, addr, ttl):
     """ Modify an Azure A record """
     if ctx.obj["DEBUG"]:
         click.echo(f"Modifying fqdn: {fqdn} value: {addr}\n")
-    util.mod_A_rr(fqdn, addr)
+    util.mod_A_rr(fqdn, addr, ttl)
 
 @run.command()
 @pass_context
@@ -402,36 +413,9 @@ def dump(ctx,zone):
     """ Dumps all zone data starting from a given starting point """
     if ctx.obj["DEBUG"]:
         click.echo(f"Dumping {zone}")
-    util.dump_dns_data(zone)
-
-@run.command()
-@pass_context
-@option(
-    "-d",
-    "--detail",
-    "--debug",
-    "--verbose",
-    "detail",
-    is_flag=True,
-    help="When set should the number of subzones or rrs under each zone", 
-)
-@argument(
-    "obj",
-    type=click.STRING,
-    default="azure",
-    required=True,
-)
-def count(ctx,obj,detail):
-    """ Counts the number of Azure Private zones: [azure] Leaf zones: [leaf] Resource records: [rrs] """
-    if ctx.obj["DEBUG"]:
-        click.echo(f"Counting {obj}")
-    objs = util.count(obj,detail)
-    for obj in objs:
-        if detail:
-            print(obj,objs[obj])
-        else:
-            print(obj)
-    print(len(objs))
+    rrs = util.dump_dns_data(zone)
+    for rr in rrs:
+        print(rr)
 
 if __name__ == "__run__":
     run()

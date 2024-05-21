@@ -65,7 +65,7 @@ select_criteria is a dictionary:
 
 # returns an iterator, not the data itself
 def export_entities(
-    selection={"selector": "search", "types": "Zone", "keyword": "*"},
+    selection={"selector": "search", "types": "Zone,View", "keyword": "*"},
     start=0,
     count=10000,
 ):

@@ -35,7 +35,7 @@ def caller():
 
 
 # prints out zone names using recursion
-def recurse(eid):
+def recurse(eid: int) -> str:
     ents = api.get_entities(eid, api.Z_Type)
     if len(ents):  # subzones exist
         hname = ents[0]["name"]
@@ -49,7 +49,7 @@ def recurse(eid):
             for ent in ents:
                 recurse(ent["id"])
 
-def recurse_2_leafs(eid):
+def recurse_2_leafs(eid: int) -> None:
     ents = api.get_entities(eid, api.Z_Type)
     if len(ents):
         for ent in ents:
@@ -72,16 +72,16 @@ The Zone entity looks like:
 """
 
 
-def gen_bc_leaf_zones():
+def gen_bc_leaf_zones() -> list:
     leafs = []
     entities_iterator = api.export_entities()
     for ent in entities_iterator:
-        if re.match(ThreeDigits, ent["name"]):
+        if ent['View'] == config.ViewId and re.match(ThreeDigits, ent["name"]):
             leafs.append(ent["properties"]["absoluteName"])
     return leafs
 
 
-def gen_bc_azure_zones():
+def gen_bc_azure_zones() -> list:
     azurezones = []
     for leaf in gen_bc_leaf_zones():
         toks = leaf.split(".")
@@ -463,7 +463,7 @@ def get_cname_rrs():
 
 
 # ent: [{'id': 2865570, 'name': 'privatelink', 'type': 'Zone', 'properties': {'absoluteName': 'privatelink.openai.azure.com'}}]
-def get_merged_bc_azure_zone(zone):
+def get_merged_bc_azure_zone(zone: str) -> dict:
     zone_rrs = dict()
     ents = has_subzones(zone)
     if ents:
@@ -749,7 +749,7 @@ When the record is to be added or modified
    {'id': 163642, 'name': 'a', 'type': 'GenericRecord', 'properties': {'comments': 'A solo A Resource Record', 'absoluteName': 'a.b.c.d', 'type': 'A', 'rdata': '1.2.3.4'}}
 """
 
-def mod_A_rr(fqdn, ip):
+def mod_A_rr(fqdn, ip, ttl):
     """Modify a given Leaf Zone A record. Accept leaf and non leaf form"""
     if config.Debug:
         print(f"To modify: {fqdn}: {ip}")
@@ -773,7 +773,7 @@ def mod_A_rr(fqdn, ip):
     else:
         zid = zone_exists(leaf_zone)
         if zid:
-            rr_ents = api.get_entities(zid, api.RR_Type)
+            rr_ents = api.get_entities(zid, api.Generic_Type)
             found = False
             for rr_ent in rr_ents:
                 if host.lower() == rr_ent["name"].lower():
@@ -782,9 +782,10 @@ def mod_A_rr(fqdn, ip):
                         print(f"matching rr entity: {rr_ent}")
                     rr_id = rr_ent["id"]
                     rr_ent["properties"]["rdata"] = ip
+                    rr_ent["properties"]["ttl"] = ttl
                     api.update_entity(rr_ent)
                     print(
-                        f"Updated A record {fqdn} with addr {ip} which was in {leaf_zone}"
+                        f"Updated A record {fqdn} with addr {ip} and ttl {ttl} which was in {leaf_zone}"
                     )
                     if config.Debug:
                         rr_new = api.get_entity_by_id(rr_id)
@@ -994,38 +995,38 @@ properties for AliasRecord / CNAME:
 
 """
 
-def dump_dns_data(zone):
-    rrs = list()
-
+def dump_dns_data(zone: str) -> list:
+    rrs = []
     if zone == ".":
         entity_id = config.ViewId
     else:
         entity_id = get_zone_id(zone)
-
     select = {
         "selector": "get_entitytree",
         "startEntityId": entity_id,
-        "types": "GenericRecord,HostRecord,AliasRecord,TXTRecord,MXRecord",
+        "types": "GenericRecord,AliasRecord",
         "children_only": False,
     }
-
     for e in api.export_entities(selection=select):
         if config.Debug:
             pprint(e)
-        typ = e['type']
+        bc_typ = e['type']
+        ttl = config.Def_TTL
         props = e['properties']
         fqdn = props['absoluteName']
-        ttl = config.Def_TTL
-        if typ == 'GenericRecord':
-            if props['type'] == "A":
-                if 'ttl' in props:
-                    ttl = props['ttl']
-                print(f'{fqdn}~A~{props["rdata"]}~{ttl}')
-        elif typ == 'AliasRecord':
+        if bc_typ == 'GenericRecord':
+            rr_type = props['type']
+            value = props['rdata']
+            if 'ttl' in props:
+                ttl = props['ttl']
+        elif bc_typ == 'AliasRecord':
+            rr_type = 'CNAME'
+            value = props['linkedRecordName']
             if 'ttl' in e:
                 ttl = e['ttl']
-            print(f'{fqdn}~CNAME~{props["linkedRecordName"]}~{ttl}')
-        rrs.append(e)
+        rr= f'{fqdn}~{rr_type}~{value}~{ttl}'
+        rrs.append(rr)
+    return rrs
 
 #    with open(f"{config.Path}/rrs.json", "w") as rr_fd:
 #        json.dump(rrs, rr_fd, indent=4, sort_keys=True)
