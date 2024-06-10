@@ -43,7 +43,6 @@ zones:
       - config-merged
     processors:
       - only_a_cname_rrs
-      - qa_hnames_only
       - qa_addrs_only
     targets:
       - azure-qa

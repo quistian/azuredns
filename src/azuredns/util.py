@@ -568,13 +568,13 @@ has a hostname which includes .scm
 
 #   ent_id = api.add_generic_record(config.ViewId, canonical_fqdn, "A", ip)
 
-def add_A_rr(fqdn, ip):
+def add_A_rr(fqdn, ip, ttl):
     ent_id = 0
     (host, leaf_zone) = canonicalize(fqdn)
     canonical_fqdn = f'{host}.{leaf_zone}'
     if config.Debug:
         print(f'add_A_rr: input fqdn: {fqdn}, canoncial fqdn, {canonical_fqdn}')
-        print(f'host: {host}, leaf: {leaf_zone}, ip: {ip}')
+        print(f'host: {host}, leaf: {leaf_zone}, ip: {ip} ttl {ttl}')
     zid = zone_exists(leaf_zone)
     if zid:
         rrs = get_leaf_zone_rrs(zid)
@@ -584,6 +584,7 @@ def add_A_rr(fqdn, ip):
             props = {
                 'type': 'A',
                 'rdata': ip,
+                'ttl': ttl,
             }
             a_rr_entity = api.APIEntity(
                 name=host,
@@ -718,7 +719,7 @@ def del_A_rr(fqdn, ip):
     else:
         zid = zone_exists(leaf_zone)
         if zid:
-            rr_ents = api.get_entities(zid, api.RR_Type)
+            rr_ents = api.get_entities(zid, api.Generic_Type)
             found = False
             for rr_ent in rr_ents:
                 if config.Debug:
@@ -897,7 +898,7 @@ Fetch an RR entity given a type, and property
 def get_RRs(zone):
     zid = zone_exists(zone)
     if zid:
-        ents = api.get_entities(zid, api.RR_Type)
+        ents = api.get_entities(zid, api.Generic_Type)
     return ents
 
 
@@ -911,7 +912,7 @@ def old_del_A_rr(fqdn, ip):
     zone = ".".join(toks[1:])
     zid = zone_exists(zone)
     if zid:
-        ents = api.get_entities(zid, api.RR_Type)
+        ents = api.get_entities(zid, api.Generic_Type)
         for ent in ents:
             if ent["name"] == hname:
                 props = ent["properties"]

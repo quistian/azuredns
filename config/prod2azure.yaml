@@ -19,6 +19,8 @@ processors:
     allowlist:
       - A
       - AAAA
+  no-root-ns:
+    class: octodns.processor.filter.IgnoreRootNsFilter
 
 zones:
   # This is a dynamic zone config. The source(s), here `config`, will be
@@ -29,5 +31,6 @@ zones:
       - config-prod
     processors:
       - only-a-aaaa-rrs
+      - no-root-ns
     targets:
       - azure-prod

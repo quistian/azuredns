@@ -1,6 +1,5 @@
 octodns >= 1.5
-octodns-powerdns >= 0.0.5
+wheel
 octodns-bluecat-v1 @ git+ssh://git@github.com/EIS-ITS/octodns-bluecat-integrity-v1-api
-octodns-bluecat-v2 @ git+ssh://git@github.com/EIS-ITS/octodns-bluecat-integrity-v2-api
-octodns-bluecat-merge @ git+ssh://git@github.com/EIS-ITS/octodns-bluecat-integrity-merge.git
-octodns-powerdnsmerge @ git+ssh://git@github.com/EIS-ITS/octodns-powerdns-merge
+# octodns-bluecat-v2 @ git+ssh://git@github.com/EIS-ITS/octodns-bluecat-integrity-v2-api
+# octodns-bluecat-merge @ git+ssh://git@github.com/EIS-ITS/octodns-bluecat-integrity-merge.git

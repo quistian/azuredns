@@ -327,16 +327,22 @@ def sync(ctx, fqdn, source, destination):
     required=False,
     nargs=3,
     default=('test.bozo.int', 'A', '1.2.3.4'),
-    help='DNS resource record tuple: FQDN TYPE VALUE',
+    help='DNS resource record tuple: FQDN TYPE VALUE e.g. bozo.cnr.com A 10.11.22.33',
 )
-def add(ctx, zone, rr):
+@option(
+        "--ttl", "-t",
+        required=False,
+        default=3600,
+        help='The TTL value of the modified RR. Optional. Default is 1 hr or 3600 secs'
+)
+def add(ctx, zone, rr, ttl):
     """ Add an Azure zone or RR record """
     if ctx.obj["DEBUG"]:
-        click.echo(f"add arguments: zone {zone} rr {rr}\n")
+        click.echo(f"add arguments: zone {zone} rr {rr} ttl {ttl}\n")
     if zone == 'bozo.int':
         (fqdn, rr_type, val) = rr
         if rr_type == "A":
-            util.add_A_rr(fqdn, val)
+            util.add_A_rr(fqdn, val, ttl)
         else:
             print(f'RR of type {rr_type} is not yet supported') 
     else:
@@ -374,12 +380,18 @@ def delete(ctx, zone, rr):
         "-t",
         required=False,
         default=3600,
-        help='The TTL value of the modified RR'
+        help='The TTL value of the modified RR. Optional, Default is 3600 seconds'
 )
 @fqdn
 @addr
 def modify(ctx, fqdn, addr, ttl):
-    """ Modify an Azure A record """
+    """ Modify an Azure A record
+    Takes as arguments: fqdn IPaddress TTL
+    The fqdn will be changed from whatever it is presently to:
+    fqdn TTL A IPaddr
+    """
+
+
     if ctx.obj["DEBUG"]:
         click.echo(f"Modifying fqdn: {fqdn} value: {addr}\n")
     util.mod_A_rr(fqdn, addr, ttl)
