@@ -6,12 +6,13 @@
 
 URL="https://raw.githubusercontent.com/MicrosoftDocs/azure-docs/main/articles/private-link/private-endpoint-dns.md"
 
-curl $URL |
+curl --silent $URL | tee priv-pub-azure.md |
 grep '^>|' | grep privatelink |
 grep -v '\.cn ' |
 grep -v 'usgovcloudapi' |
 sed -e 's/ //g' |
-sed -e 's:<sup>1</sub>::g' |
+sed -e 's:<sup>1</sup>::g' |
+sort | uniq | tee temp.tmp |
 awk -F\| '
 {
     if ( $0 !~ /<.*br.*>/ ) {
@@ -38,10 +39,12 @@ END { print "}" }
 '
 
 exit 
+
+#
 # Echo deal with <br/>
 #
-cat private-endpoint-dns.md |
-grep '^>|' | grep privatelink |
-grep -v '\.cn ' | grep -v '\.us ' | grep -v 'usgovcloud' |
-grep '</*br/*>'
+#cat private-endpoint-dns.md |
+#grep '^>|' | grep privatelink |
+#grep -v '\.cn ' | grep -v '\.us ' | grep -v 'usgovcloud' |
+#grep '</*br/*>'
 # egrep -v 'blob|table|vault|queue|web' 
